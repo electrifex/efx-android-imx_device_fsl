@@ -151,7 +151,8 @@ BOARD_BOOTCONFIG += androidboot.lcd_density=200
 BOARD_BOOTCONFIG += androidboot.wificountrycode=US
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf
 
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+
+BOARD_KERNEL_CMDLINE += androidboot.selinux=enforce
 
 ifeq ($(PRODUCT_IMX_CAR),true)
 # automotive config
