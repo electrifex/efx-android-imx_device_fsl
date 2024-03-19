@@ -11,6 +11,7 @@ vendor.all.car                      u:object_r:vendor_public_default_prop:s0
 vendor.all.setup_main.ready         u:object_r:vendor_public_default_prop:s0
 vendor.all.zygote_auto.ready        u:object_r:vendor_public_default_prop:s0
 vendor.sys.hwc.disable              u:object_r:vendor_public_default_prop:s0
+vendor.sys.hwc.disable              u:object_r:vendor_public_default_prop:s0
 vendor.hwc.disable.overlay          u:object_r:vendor_public_default_prop:s0
 vendor.hwc.prefer.2d-composition    u:object_r:vendor_public_default_prop:s0
 vendor.2d.ocl.enable                u:object_r:vendor_public_default_prop:s0
@@ -211,6 +212,7 @@ vendor.sys.SECOND_DISPLAY_ENABLED          u:object_r:vendor_public_default_prop
 vendor.AQROOT                              u:object_r:vendor_public_default_prop:s0
 vendor.CL_NOPREPROCESS                     u:object_r:vendor_public_default_prop:s0
 ro.boot.wifivendor                         u:object_r:vendor_public_default_prop:s0
+vendor.androidui.overlay                   u:object_r:vendor_public_default_prop:s0
 
 # vendor_wifi_version
 vendor.wlan.driver.version    u:object_r:vendor_wifi_version:s0

@@ -96,16 +96,18 @@ set imx8mq_uboot_feature=dual trusty-dual evk-uuu trusty-secure-unlock-dual wevk
 set imx8qxp_uboot_feature=dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock c0 c0-dual trusty-c0-dual mek-c0-uuu
 set imx8qm_uboot_feature=dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock md hdmi xen
 set imx93_uboot_feature=dual trusty-dual evk-uuu
+set imx95_uboot_feature=dual trusty-dual evk-uuu
 set imx7ulp_uboot_feature=evk-uuu
 
 set imx8mm_dtb_feature=ddr4 m4 mipi-panel mipi-panel-rm67191 8mic
 set imx8mn_dtb_feature=mipi-panel mipi-panel-rm67191 rpmsg ddr4 ddr4-mipi-panel ddr4-mipi-panel-rm67191 ddr4-rpmsg 8mic
 set imx8mp_dtb_feature=rpmsg lvds-panel lvds mipi-panel mipi-panel-rm67191 basler powersave powersave-non-rpmsg basler-ov5640 ov5640 dual-basler os08a20-ov5640 os08a20 sof revb4 rpmsg-revb4 lvds-panel-revb4 lvds-revb4 mipi-panel-revb4 mipi-panel-rm67191-revb4 basler-revb4 powersave-revb4 powersave-non-rpmsg-revb4 basler-ov5640-revb4 ov5640-revb4 sof-revb4 dual-basler-revb4 os08a20-ov5640-revb4 os08a20-revb4
 set imx8mq_dtb_feature=wevk dual mipi-panel mipi-panel-rm67191 mipi
-set imx8qxp_dtb_feature=sof
-set imx8qm_dtb_feature=hdmi hdmi-rx mipi-panel mipi-panel-rm67191 md xen esai sof
+set imx8qxp_dtb_feature=sof mipi-panel mipi-panel-rm67191 lvds0-panel
+set imx8qm_dtb_feature=hdmi hdmi-rx mipi-panel mipi-panel-rm67191 md xen sof lvds1-panel revd mipi-panel-revd mipi-panel-rm67191-revd hdmi-revd hdmi-rx-revd md-revd lvds1-panel-revd sof-revd
 set imx8ulp_dtb_feature=hdmi epdc 9x9 9x9-hdmi sof lpa lpd
 set imx93_dtb_feature=
+set imx95_dtb_feature=mipi mipi-ap1302
 set imx7ulp_dtb_feature=evk-mipi evk mipi
 
 set all_cmd_options=-h -f -c -u -d -a -b -m -mo -e -D -t -y -p -i -daemon -dryrun -usb
@@ -313,6 +315,13 @@ if not [%soc_name:imx93=%] == [%soc_name%] (
     set board=evk
     goto :device_info_end
 )
+if not [%soc_name:imx95=%] == [%soc_name%] (
+    set vid=0x1fc9& set pid=00x0152& set chip=MX95
+    set uboot_env_start=0x3800& set uboot_env_len=0x20
+    set emmc_num=0& set sd_num=1
+    set board=evk
+    goto :device_info_end
+)
 if not [%soc_name:imx7ulp=%] == [%soc_name%] (
     set vid=0x1fc9& set pid=0x0126& set chip=MX7ULP
     set uboot_env_start=0x700& set uboot_env_len=0x10
@@ -404,6 +413,7 @@ if [%soc_name%] == [imx8mn] goto :with_sdps
 if [%soc_name%] == [imx8mp] goto :with_sdps
 if [%soc_name%] == [imx8ulp] goto :with_sdps
 if [%soc_name%] == [imx93] goto :with_sdps
+if [%soc_name%] == [imx95] goto :with_sdps
 goto :without_sdps
 :with_sdps
 set sdp=SDPS
@@ -615,6 +625,8 @@ echo                           ^|   imx8qm    ^|  dual trusty-dual mek-uuu trust
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx93     ^|  dual trusty-dual evk-uuu                                                                          ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
+echo                           ^|   imx95     ^|  dual trusty-dual evk-uuu                                                                          ^|
+echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx7ulp   ^|  evk-uuu                                                                                           ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo
@@ -634,9 +646,9 @@ echo                           ^|             ^|  lvds-revb4 mipi-panel-revb4 mi
 echo                           ^|             ^|  powersave-non-rpmsg-revb4 basler-ov5640-revb4 ov5640.img-revb4 sof-revb4 dual-basler-revb4        ^|
 echo                           ^|             ^|  os08a20-ov5640-revb4 os08a20-revb4                                                                ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8qxp   ^|  sof                                                                                               ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx8mq    ^|  wevk dual mipi-panel mipi-panel-rm67191 mipi                                                      ^|
+echo                           +-------------+----------------------------------------------------------------------------------------------------+
+echo                           ^|   imx8qxp   ^|  sof                                                                                               ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx8qm    ^|  hdmi mipi-panel mipi-panel-rm67191 md xen esai sof                                                ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
@@ -644,9 +656,7 @@ echo                           ^|   imx8ulp   ^|  hdmi epdc 9x9 9x9-hdmi sof lpa
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx93     ^|                                                                                                    ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8ulp   ^|  hdmi epdc 9x9 9x9-hdmi sof lpa lpd                                                                ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx93     ^|                                                                                                    ^|
+echo                           ^|   imx95     ^| mipimipi-ap1302                                                                                    ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx7ulp   ^|  evk-mipi evk mipi                                                                                 ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
@@ -721,7 +731,7 @@ echo %sdp%: boot -f %bootloader_used_by_uuu%.link >> %tmp_dir%uuu.lst
 
 
 :: for uboot by uuu which enabled SPL
-if not [%soc_name:imx8m=%] == [%soc_name%] (
+if [%soc_name:imx8q=%] == [%soc_name%] (
     :: for images need SDPU
     echo SDPU: delay 1000 >> %tmp_dir%uuu.lst
     echo SDPU: write -f %bootloader_used_by_uuu%.link -offset 0x57c00 >> %tmp_dir%uuu.lst

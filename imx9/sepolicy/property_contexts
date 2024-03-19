@@ -1,7 +1,7 @@
 vendor.wc_transport.                u:object_r:vendor_wc_prop:s0
 persist.vendor.usb.config           u:object_r:vendor_usb_config_prop:s0
-vendor.usb.config                   u:object_r:vendor_usb_config_prop:s0
 vendor.sys.usb.adb.disabled         u:object_r:vendor_usb_config_prop:s0
+vendor.usb.config                   u:object_r:vendor_usb_config_prop:s0
 vendor.powerhal.                    u:object_r:vendor_power_hal_prop:s0
 
 ro.boot.vendor.sysrq                u:object_r:vendor_public_default_prop:s0
@@ -170,6 +170,7 @@ vendor.DISABLE_FLOAT_FEATURE                     u:object_r:vendor_public_defaul
 vendor.MODEL_BLOCK_LEVEL                         u:object_r:vendor_public_default_prop:s0
 vendor.USE_GPU_INFERENCE                         u:object_r:vendor_public_default_prop:s0
 
+ro.boot.lpa.enable                  u:object_r:vendor_public_default_prop:s0
 vendor.audio.lpa.enable             u:object_r:vendor_public_default_prop:s0
 vendor.gralloc.drm.device           u:object_r:vendor_public_default_prop:s0
 vendor.gralloc.trace                u:object_r:vendor_public_default_prop:s0
@@ -208,9 +209,12 @@ vendor.CL_NOPREPROCESS                     u:object_r:vendor_public_default_prop
 vendor.wlan.driver.version    u:object_r:vendor_wifi_version:s0
 vendor.wlan.firmware.version  u:object_r:vendor_wifi_version:s0
 
+# vendor_camera_prop
+vendor.camera.mjpg.decoder    u:object_r:vendor_camera_prop:s0
+
 # vendor verbose logging prop
 persist.vendor.verbose_logging_enabled u:object_r:vendor_logging_prop:s0
 ro.vendor.build_id                     u:object_r:vendor_public_default_prop:s0
 
-# vendor_camera_prop
-vendor.camera.mjpg.decoder    u:object_r:vendor_camera_prop:s0
+# extend feature for secure ui
+ro.boot.androidui.overlay              u:object_r:vendor_public_default_prop:s0

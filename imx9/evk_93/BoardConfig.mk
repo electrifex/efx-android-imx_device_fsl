@@ -23,6 +23,8 @@ TARGET_HAVE_VULKAN := true
 SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX93
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = false
 SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
+SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_CODEC = false
+SOONG_CONFIG_IMXPLUGIN_POWERSAVE = false
 
 # -------@block_memory-------
 USE_ION_ALLOCATOR := true
@@ -106,16 +108,9 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 # NXP 8987 wifi support dual interface
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 
-# NXP wifi previous pwrseq_simple start
-BOARD_VENDOR_KERNEL_MODULES += \
-    $(KERNEL_OUT)/drivers/mmc/core/pwrseq_simple.ko
-
 # NXP camera driver module
 BOARD_VENDOR_KERNEL_MODULES += \
-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8962.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
-    $(KERNEL_OUT)/drivers/firmware/imx/el_enclave.ko \
-    $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp-fsb-s400.ko
+    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko
 
 # NXP 8987 wifi driver module
 BOARD_VENDOR_KERNEL_MODULES += \

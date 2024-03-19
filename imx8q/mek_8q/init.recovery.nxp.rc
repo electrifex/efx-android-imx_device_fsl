@@ -5,4 +5,4 @@ on init
     setprop sys.usb.configfs 1
 
 on post-fs-data
-    setprop sys.usb.controller "5b130000.usb"
+    setprop sys.usb.controller "5b120000.usb"

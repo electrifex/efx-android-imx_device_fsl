@@ -65,11 +65,11 @@ ifeq ($(PRODUCT_IMX_CAR),true)
   TARGET_KERNEL_DEFCONFIG := gki_defconfig
   TARGET_KERNEL_GKI_DEFCONF:= imx8q_car_gki.fragment
 else
+  TARGET_KERNEL_DEFCONFIG := gki_defconfig
   ifeq ($(LOADABLE_KERNEL_MODULE),true)
-    TARGET_KERNEL_DEFCONFIG := gki_defconfig
     TARGET_KERNEL_GKI_DEFCONF:= imx8q_gki.fragment
   else
-    TARGET_KERNEL_DEFCONFIG := imx_v8_android_defconfig
+    TARGET_KERNEL_GKI_DEFCONF := imx_v8_android_defconfig
     TARGET_KERNEL_ADDITION_DEFCONF := android_addition_defconfig
   endif # LOADABLE_KERNEL_MODULE
 endif # PRODUCT_IMX_CAR

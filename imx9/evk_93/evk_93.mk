@@ -105,14 +105,6 @@ PRODUCT_PACKAGES += \
     tune2fs.vendor_ramdisk
 endif
 
-# IIO sensor HAL
-PRODUCT_PACKAGES += \
-    android.hardware.sensors-service.multihal \
-    android.hardware.sensors@2.1-nxp-IIO-Subhal
-
-PRODUCT_COPY_FILES += \
-    vendor/nxp-opensource/imx/iio_sensor/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
-
 #Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
 TARGET_USE_DYNAMIC_PARTITIONS ?= true
 
@@ -176,7 +168,7 @@ endif
 # Keymaster HAL
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
-    android.hardware.security.keymint-service.trusty
+    android.hardware.security.keymint-service.rust.trusty
 endif
 
 PRODUCT_PACKAGES += \
@@ -267,6 +259,12 @@ PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 
 # -------@block_display-------
+PRODUCT_PACKAGES += \
+    libedid
+
+PRODUCT_PACKAGES += \
+    libdisplayutils \
+    libfsldisplay
 
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
@@ -371,8 +369,8 @@ PRODUCT_COPY_FILES += \
     $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/epdc/epdc_ED060XH2C1.fw.nonrestricted:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/epdc/epdc_ED060XH2C1.fw
 
 # NXP ap1302 camera Firmware
-PRODUCT_COPY_FILES += \
-    vendor/nxp/fsl-proprietary/isp/ap1302/ap1302.fw:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/imx/camera/ap1302.fw
+PRODUCT_PACKAGES += \
+    ap1302.fw
 
 # -------@block_bluetooth-------
 
