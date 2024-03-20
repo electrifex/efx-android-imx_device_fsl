@@ -6,14 +6,19 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 endif
-endif
+endif # IMX8_BUILD_32BIT_ROOTFS
+
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic.mk)
 ifeq ($(PRODUCT_IMX_CAR),true)
 $(call inherit-product, packages/services/Car/car_product/build/car.mk)
+$(call inherit-product, packages/services/Car/cpp/telemetry/cartelemetryd/products/telemetry.mk)
 endif
-$(call inherit-product, $(TOPDIR)frameworks/base/data/sounds/AllAudio.mk)
+
+# Use updatable apex.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
+
+$(call inherit-product, $(TOPDIR)frameworks/base/data/sounds/AllAudio.mk)
 
 # Installs gsi keys into ramdisk.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
@@ -21,6 +26,7 @@ PRODUCT_PACKAGES += \
     adb_debug.prop
 
 # -------@block_common_config-------
+
 # overrides
 PRODUCT_BRAND := Android
 PRODUCT_MANUFACTURER := nxp
@@ -31,22 +37,18 @@ TARGET_BOARD_PLATFORM := imx
 PRODUCT_SHIPPING_API_LEVEL := 34
 
 # -------@block_app-------
-PRODUCT_PACKAGES += \
-    imx-chip-tool \
-
 PRODUCT_PROPERTY_OVERRIDES += \
     pm.dexopt.boot=quicken
-
-# Enforce privapp-permissions whitelist
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.control_privapp_permissions=enforce
 
 # add dmabufheap debug info
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.c2.use_dmabufheaps=1
 
-# -------@block_multimedia_codec-------
+# Enforce privapp-permissions whitelist
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.control_privapp_permissions=enforce
 
+# -------@block_multimedia_codec-------
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
     Gallery2
@@ -87,7 +89,6 @@ PRODUCT_PACKAGES += \
     lib_mp4_parser_arm11_elinux.3.0 \
     lib_mpg2_parser_arm11_elinux.3.0 \
     lib_ogg_parser_arm11_elinux.3.0
-
 
 # Omx excluded libs
 PRODUCT_PACKAGES += \
@@ -135,9 +136,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PREBUILT_FSL_IMX_CODEC := true
 
-# -------@enable isp copy-------
-PREBUILT_FSL_IMX_ISP := true
-
 # -------@block_storage-------
 
 TARGET_USERIMAGES_USE_F2FS := true
@@ -148,22 +146,25 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/imx9/com.example.android.systemupdatersample.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/com.example.android.systemupdatersample.xml
 
-
 # A/B OTA
 PRODUCT_PACKAGES += \
     android.hardware.boot-service.default \
     android.hardware.boot-service.default_recovery \
     update_engine \
     update_engine_client \
-    update_engine_sideload \
     update_verifier
+
+ifneq ($(PRODUCT_IMX_CAR),true)
+PRODUCT_PACKAGES += \
+    update_engine_sideload
+endif
 
 PRODUCT_HOST_PACKAGES += \
     brillo_update_payload
 
 # Support Dynamic partition userspace fastboot
 PRODUCT_PACKAGES += \
-    fastbootd \
+    fastbootd
 
 # enable incremental installation
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -184,12 +185,12 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     apexd.config.loop_wait.attempts=99
 
 # -------@block_ethernet-------
-
+ifneq ($(PRODUCT_IMX_CAR),true)
 #PRODUCT_PACKAGES += \
     ethernet
+endif
 
 # -------@block_camera-------
-ifneq ($(PRODUCT_IMX_CAR),true)
 ifneq ($(POWERSAVE),true)
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.7-service-google \
@@ -199,24 +200,6 @@ PRODUCT_PACKAGES += \
     lib_profiler \
     libimxcamerahwl_impl \
     libimageprocess
-
-# libcamera HAL requests provider 2.4
-PRODUCT_PACKAGES += \
-    android.hardware.camera.provider@2.4-service_64 \
-    android.hardware.camera.provider@2.4-impl \
-    android.hardware.camera.provider@2.4 \
-    android.hardware.camera.provider@2.4-legacy \
-    android.hardware.camera.provider@2.4-external \
-    android.hardware.camera.device@3.5 \
-    camera.device@1.0-impl \
-    camera.device@3.2-impl \
-    camera.device@3.3-impl \
-    camera.device@3.4-external-impl \
-    camera.device@3.4-impl \
-    camera.device@3.5-external-impl \
-    camera.device@3.5-impl \
-    android.hardware.camera.device@3.6 \
-    camera.device@3.6-external-impl
 
 # external camera, AIDL
 PRODUCT_PACKAGES += \
@@ -230,8 +213,14 @@ PRODUCT_PACKAGES += \
 
 # external camera feature demo
 PRODUCT_PACKAGES += \
-     Camera2Basic
+    Camera2
 endif
+
+ifeq ($(PRODUCT_IMX_CAR),true)
+PRODUCT_PACKAGES += \
+    android.hardware.automotive.evs@EvsEnumeratorHw \
+    cardisplayproxyd \
+    evs_service
 endif
 
 # -------@block_display-------
@@ -301,7 +290,6 @@ PRODUCT_PACKAGES += \
     tinyplay \
     tinypcminfo
 
-
 PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
@@ -317,7 +305,9 @@ PRODUCT_PACKAGES += \
     libtinycompress \
     cplay
 
+ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_VENDOR_PROPERTIES += ro.config.ringtone=Ring_Synth_04.ogg
+endif
 
 # -------@block_wifi-------
 PRODUCT_PACKAGES += \

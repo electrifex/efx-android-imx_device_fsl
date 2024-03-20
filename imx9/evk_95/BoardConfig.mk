@@ -102,12 +102,15 @@ BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 
 # -------@block_treble-------
 # Vendor Interface manifest and compatibility
-ifeq ($(POWERSAVE),true)
-    DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest_powersave.xml
+ifeq ($(PRODUCT_IMX_CAR),true)
+    DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest_car.xml
 else
-    DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest.xml
+    ifeq ($(POWERSAVE),true)
+        DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest_powersave.xml
+    else
+        DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest.xml
+    endif
 endif
-
 DEVICE_MATRIX_FILE := $(IMX_DEVICE_PATH)/compatibility_matrix.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(IMX_DEVICE_PATH)/device_framework_matrix.xml
 
@@ -135,32 +138,49 @@ BOARD_KERNEL_BASE := 0x90400000
 CMASIZE=1184M
 # NXP default config
 BOARD_KERNEL_CMDLINE := init=/init firmware_class.path=/vendor/firmware loop.max_part=7 bootconfig
-BOARD_BOOTCONFIG += androidboot.console=ttyLP0 androidboot.hardware=nxp
+BOARD_BOOTCONFIG += androidboot.hardware=nxp
 
 # memory config
 BOARD_KERNEL_CMDLINE += transparent_hugepage=never
 BOARD_KERNEL_CMDLINE += swiotlb=65536
 
 # display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=240
+BOARD_BOOTCONFIG += androidboot.lcd_density=200
 
 # wifi config
-BOARD_BOOTCONFIG += androidboot.wificountrycode=CN
-BOARD_KERNEL_CMDLINE +=  moal.mod_para=wifi_mod_para.conf
+BOARD_BOOTCONFIG += androidboot.wificountrycode=US
+BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf
 
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
-# powersave config
-ifeq ($(POWERSAVE),true)
-    BOARD_BOOTCONFIG += androidboot.powersave.usb=true androidboot.powersave.uclamp=true androidboot.powersave.lpa=true
+
+ifeq ($(PRODUCT_IMX_CAR),true)
+# automotive config
+#BOARD_KERNEL_CMDLINE += video=HDMI-A-2:d
+else
+    BOARD_BOOTCONFIG += androidboot.console=ttyLP0
+    # powersave config
+    ifeq ($(POWERSAVE),true)
+        BOARD_BOOTCONFIG += androidboot.powersave.usb=true androidboot.powersave.uclamp=true androidboot.powersave.lpa=true
+    endif
 endif
 
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
 
-TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-mipi:imx95-19x19-evk-adv7535.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-mipi-ap1302:imx95-19x19-evk-adv7535-ap1302.dtb
+ifeq ($(PRODUCT_IMX_CAR),true)
+  ifeq ($(PRODUCT_IMX_CAR_M4),true)
+
+  else #PRODUCT_IMX_CAR_M4
+    TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-mipi:imx95-19x19-evk-adv7535.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-mipi-ap1302:imx95-19x19-evk-adv7535-ap1302.dtb
+  endif #PRODUCT_IMX_CAR_M4
+else
+  TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-mipi:imx95-19x19-evk-adv7535.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-mipi-ap1302:imx95-19x19-evk-adv7535-ap1302.dtb
+endif
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
@@ -168,3 +188,17 @@ ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx9/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy
+
+ifeq ($(PRODUCT_IMX_CAR),true)
+BOARD_SEPOLICY_DIRS += \
+     $(CONFIG_REPO_PATH)/imx9/sepolicy_car \
+     $(IMX_DEVICE_PATH)/sepolicy_car \
+     device/generic/car/common/sepolicy \
+     vendor/nxp-opensource/imx/evs/sepolicy \
+     vendor/nxp-opensource/imx/vehicle/sepolicy
+endif
+
+# -------@block_camera-------
+ifeq ($(PRODUCT_IMX_CAR),true)
+BOARD_HAVE_IMX_EVS := true
+endif

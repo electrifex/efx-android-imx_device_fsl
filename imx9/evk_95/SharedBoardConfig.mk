@@ -1,3 +1,16 @@
+# -------@block_common_config-------
+# after selecting the target by "lunch" command, TARGET_PRODUCT will be set
+ifeq ($(TARGET_PRODUCT),evk_95_car)
+  PRODUCT_IMX_CAR := true
+  PRODUCT_IMX_CAR_M4 := true
+# Enable dual bootloader feature
+  PRODUCT_IMX_DUAL_BOOTLOADER := true
+endif
+ifeq ($(TARGET_PRODUCT),evk_95_car2)
+  PRODUCT_IMX_CAR := true
+  # the env setting in mek_8q_car to make the build without M4 image
+  PRODUCT_IMX_CAR_M4 := false
+endif
 # -------@block_kernel_bootimg-------
 KERNEL_NAME := Image.lz4
 TARGET_KERNEL_ARCH := arm64
