@@ -172,9 +172,8 @@ ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(PRODUCT_IMX_CAR_M4),true)
 
   else #PRODUCT_IMX_CAR_M4
-    TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk.dtb
-    TARGET_BOARD_DTS_CONFIG += imx95-mipi:imx95-19x19-evk-adv7535.dtb
-    TARGET_BOARD_DTS_CONFIG += imx95-mipi-ap1302:imx95-19x19-evk-adv7535-ap1302.dtb
+    TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car2.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-mipi:imx95-19x19-evk-car2-adv7535.dtb
   endif #PRODUCT_IMX_CAR_M4
 else
   TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk.dtb
