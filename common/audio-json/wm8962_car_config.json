@@ -1,5 +1,6 @@
 {
   "driver_name": "wm8962-audio",
+  "bus_name": "bus0_media_out",
   "supported_out_devices": ["speaker", "wired_headphone", "wired_headset", "line"],
   "supported_in_devices": ["builtin_mic", "wired_headset"],
   "support_lpa": 1,
