@@ -60,7 +60,7 @@ PRODUCT_COPY_FILES += \
 # -------@block_app-------
 
 #Enable this to choose 32 bit user space build
-IMX9_BUILD_32BIT_ROOTFS := false
+IMX_BUILD_32BIT_ROOTFS := false
 
 # Set permission for GMS packages
 PRODUCT_COPY_FILES += \
@@ -197,7 +197,8 @@ PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 #Oemlock HAL support
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock-service.imx
+    android.hardware.oemlock-service.imx \
+    android.hardware.oemlock-service-software.imx
 endif
 
 # Specify rollback index for boot and vbmeta partition
@@ -290,40 +291,6 @@ PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
 # -------@block_gpu-------
-#
-#PRODUCT_PACKAGES += \
-#    libEGL_VIVANTE \
-#    libGLESv1_CM_VIVANTE \
-#    libGLESv2_VIVANTE \
-#    gralloc_viv.$(TARGET_BOARD_PLATFORM) \
-#    libGAL \
-#    libGLSLC \
-#    libVSC \
-#    libgpuhelper \
-#    libSPIRV_viv \
-#    libvulkan_VIVANTE \
-#    vulkan.$(TARGET_BOARD_PLATFORM) \
-#    libCLC \
-#    libLLVM_viv \
-#    libOpenCL \
-#    libg2d-viv \
-#    libOpenVX \
-#    libOpenVXU \
-#    libNNVXCBinary-evis \
-#    libNNVXCBinary-evis2 \
-#    libNNVXCBinary-lite \
-#    libOvx12VXCBinary-evis \
-#    libOvx12VXCBinary-evis2 \
-#    libOvx12VXCBinary-lite \
-#    libNNGPUBinary-evis \
-#    libNNGPUBinary-evis2 \
-#    libNNGPUBinary-lite \
-#    libNNGPUBinary-ulite \
-#    libNNGPUBinary-nano \
-#    libNNArchPerf \
-#    libarchmodelSw
-#
-
 # ANGLE OpenGL implementation based on SwiftShader Vulkan
 PRODUCT_PACKAGES += \
     libEGL_angle \
@@ -363,10 +330,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     external/wireless-regdb/regulatory.db:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/regulatory.db \
     external/wireless-regdb/regulatory.db.p7s:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/regulatory.db.p7s
-
-# EPDC firmware
-PRODUCT_COPY_FILES += \
-    $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/epdc/epdc_ED060XH2C1.fw.nonrestricted:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/epdc/epdc_ED060XH2C1.fw
 
 # NXP ap1302 camera Firmware
 PRODUCT_PACKAGES += \
@@ -411,7 +374,7 @@ PRODUCT_PACKAGES += \
     c2_component_register_ra
 
 ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
-ifneq ($(IMX9_BUILD_32BIT_ROOTFS),true)
+ifneq ($(IMX_BUILD_32BIT_ROOTFS),true)
 INSTALL_64BIT_LIBRARY := true
 endif
 endif

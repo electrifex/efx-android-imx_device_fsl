@@ -109,9 +109,6 @@ WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 BOARD_HAVE_BLUETOOTH_NXP := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 
-# -------@block_sensor-------
-BOARD_USE_SENSOR_FUSION := true
-
 # -------@block_kernel_bootimg-------
 BOARD_KERNEL_BASE := 0x40400000
 

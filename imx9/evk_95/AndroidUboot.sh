@@ -39,7 +39,13 @@ build_imx_uboot()
 {
 	echo Building i.MX U-Boot with firmware
 	cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}
-	cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/m33_image.bin ${BOARD_MKIMAGE_PATH}
+	cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/oei-m33-tcm.bin ${BOARD_MKIMAGE_PATH}
+	if [ `echo $2 | cut -d '-' -f2` = "trusty" ]; then
+		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/m33_image_tee.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
+	else
+		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
+	fi
+	cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_mcu_demo.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
 	cp ${FSL_PROPRIETARY_PATH}/ele/mx95a0-ahab-container.img ${BOARD_MKIMAGE_PATH}/mx95a0-ahab-container.img
 	cp ${UBOOT_OUT}/u-boot.$1 ${BOARD_MKIMAGE_PATH}
 	cp ${UBOOT_OUT}/spl/u-boot-spl.bin ${BOARD_MKIMAGE_PATH}
@@ -69,7 +75,7 @@ build_imx_uboot()
 	# codebase, so mkimage_imx8 will be generated under Android codebase top dir.
 	pwd_backup=${PWD}
 	PWD=${PWD}/${IMX_MKIMAGE_PATH}/imx-mkimage/
-	make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
+	make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all LPDDR_TYPE=lpddr5 OEI=YES || exit 1
 	PWD=${pwd_backup}
 
 	if [ `echo $2 | rev | cut -d '-' -f1 | rev` != "dual" ]; then

@@ -1,13 +1,16 @@
 include $(CONFIG_REPO_PATH)/common/build/build_info.mk
 # -------@block_infrastructure-------
-ifneq ($(IMX9_BUILD_32BIT_ROOTFS),true)
-ifneq ($(filter TRUE true 1,$(IMX9_BUILD_64BIT_ROOTFS)),)
+ifneq ($(IMX_BUILD_32BIT_ROOTFS),true)
+ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 endif
-endif # IMX8_BUILD_32BIT_ROOTFS
-
+else
+ifneq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
+$(error IMX_BUILD_32BIT_ROOTFS and IMX_BUILD_32BIT_64BIT_ROOTFS CANNOT be both set)
+endif
+endif
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic.mk)
 ifeq ($(PRODUCT_IMX_CAR),true)
@@ -148,7 +151,7 @@ PRODUCT_COPY_FILES += \
 
 # A/B OTA
 PRODUCT_PACKAGES += \
-    android.hardware.boot-service.default \
+    com.android.hardware.boot \
     android.hardware.boot-service.default_recovery \
     update_engine \
     update_engine_client \
@@ -173,6 +176,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # enable FUSE passthrough
 PRODUCT_PRODUCT_PROPERTIES += \
     persist.sys.fuse.passthrough.enable=true
+
+# RKPD
+PRODUCT_PRODUCT_PROPERTIES += \
+    remote_provisioning.enable_rkpd=true \
+    remote_provisioning.hostname=remoteprovisioning.googleapis.com
 
 # health
 PRODUCT_PACKAGES += \
@@ -199,6 +207,7 @@ PRODUCT_PACKAGES += \
     libgooglecamerahalutils \
     lib_profiler \
     libimxcamerahwl_impl \
+    libimxcamerahalhwl_impl \
     libimageprocess
 
 # external camera, AIDL
@@ -227,7 +236,8 @@ endif
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
     CubeLiveWallpapers \
-    LiveWallpapersPicker
+    LiveWallpapersPicker \
+    WallpaperPicker
 endif
 
 PRODUCT_SOONG_NAMESPACES += external/mesa3d

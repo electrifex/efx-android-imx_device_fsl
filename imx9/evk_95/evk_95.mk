@@ -144,10 +144,10 @@ ifneq ($(filter TRUE true 1,$(IMX_OTA_POSTINSTALL)),)
     POSTINSTALL_OPTIONAL_vendor=false
 
   PRODUCT_COPY_FILES += \
-    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx8mp-trusty-dual.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
+    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx95-trusty-dual.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
   ifeq ($(BUILD_ENCRYPTED_BOOT),true)
     PRODUCT_COPY_FILES += \
-      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx8mp-trusty-dual.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
+      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx95-trusty-dual.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
   endif
 endif
 
@@ -202,7 +202,8 @@ PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 #Oemlock HAL support
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock-service.imx
+    android.hardware.oemlock-service.imx \
+    android.hardware.oemlock-service-software.imx
 endif
 
 # Add Trusty OS backed gatekeeper and secure storage proxy
@@ -244,13 +245,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 #DRM Widevine 1.4 L1 support
 PRODUCT_PACKAGES += \
-    android.hardware.drm-service.widevine \
     android.hardware.drm-service.clearkey \
     libwvdrmcryptoplugin \
-    libwvaidl \
-    liboemcrypto \
+    libwvaidl
 
-$(call inherit-product-if-exists, vendor/nxp-private/widevine/nxp_widevine_tee_8mp.mk)
+TARGET_BUILD_WIDEVINE :=
+TARGET_BUILD_WIDEVINE_USE_PREBUILT := true
+$(call inherit-product-if-exists, vendor/nxp-private/widevine/apex/device.mk)
 
 # -------@block_audio-------
 
@@ -261,6 +262,8 @@ PRODUCT_COPY_FILES += \
 endif
 
 PRODUCT_COPY_FILES += \
+    $(CONFIG_REPO_PATH)/common/audio-json/cs42888_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42888_config.json \
+    $(CONFIG_REPO_PATH)/common/audio-json/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
 
@@ -316,24 +319,21 @@ PRODUCT_COPY_FILES += \
 # -------@block_camera-------
 
 PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/camera_config_imx95.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
     $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
 PRODUCT_PACKAGES += \
     ap130x_ar0144_single_fw.bin
 
-# Enable vendor/nxp/fsl-proprietary/libcamera/Android.mk
-PREBUILT_LIBCAMERA := true
+PREBUILT_LIBCAMERA := false
 PRODUCT_PACKAGES += \
     capture \
     libcamera-base \
     libcamera \
-    camera.nxp \
-    camera_hal.yaml \
-    libc++_shared \
     libyaml
 
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
-PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
+PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera-hal
 
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
@@ -345,6 +345,15 @@ endif
 
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
+# -----some limiataion of overlay/g2d in hwcomposer3 --------
+SOONG_CONFIG_NAMESPACES += nxp_hwc
+SOONG_CONFIG_nxp_hwc += overlay_ip
+SOONG_CONFIG_nxp_hwc_overlay_ip := DPU
+
+PRODUCT_PACKAGES += \
+        android.hardware.graphics.composer3-service.imx \
+        libg2d-dpu
+
 # define frame buffer count
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.max_frame_buffer_acquired_buffers=3
@@ -353,55 +362,33 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
-# Multi-Display launcher
-PRODUCT_PACKAGES += \
-    MultiDisplay
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
 
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
 
 # -------@block_gpu-------
+# include wsialloc gralloc device config
+-include $(IMX_WSI_ALLOC_PATH)/android/gralloc.device.mk
+
 PRODUCT_PACKAGES += \
     mali_csffw.bin \
-    arm.graphics-V4-ndk \
+    gpu.xml \
     arm.graphics-V5-ndk \
-    arm.graphics-V2-ndk \
-    arm.graphics-V3-ndk \
-    arm.graphics-V1-ndk \
-    arm.mali.platform-V1-ndk \
     arm.mali.platform-V2-ndk \
-    arm.mali.platform-V3-ndk \
     libarm_egl_properties_sysprop \
     libarm_gralloc_properties_sysprop \
     libarm_mali_config_sysprops \
-    hwcomposer.drm_mappermetadata \
     libGLES_mali \
     libOpenCL \
     vulkan.mali
 
 
-GRALLOC_HWC_FB_DISABLE_AFBC:=1
-SOONG_CONFIG_NAMESPACES += arm_gralloc
-SOONG_CONFIG_arm_gralloc +=  gralloc_hwc_fb_disable_afbc
-SOONG_CONFIG_arm_gralloc +=  gralloc_use_ion_dma_heap
-SOONG_CONFIG_arm_gralloc +=  gralloc_use_contiguous_display_memory
-SOONG_CONFIG_arm_gralloc +=  gralloc_hwc_fb_disable_afbc
-SOONG_CONFIG_arm_gralloc +=  gralloc_hwc_force_bgra_8888
-SOONG_CONFIG_arm_gralloc_gralloc_hwc_fb_disable_afbc := 1
-SOONG_CONFIG_arm_gralloc_gralloc_use_ion_dma_heap := 1
-SOONG_CONFIG_arm_gralloc_gralloc_use_contiguous_display_memory := 1
-SOONG_CONFIG_arm_gralloc_gralloc_hwc_fb_disable_afbc := 0
-SOONG_CONFIG_arm_gralloc_gralloc_hwc_force_bgra_8888 := 1
-
 PRODUCT_PACKAGES += \
         android.hardware.graphics.allocator-service \
         android.hardware.graphics.allocator-V2-arm \
-        android.hardware.graphics.composer@2.1-impl \
-        android.hardware.graphics.composer@2.1-service \
         android.hardware.graphics.mapper@4.0-impl-arm
-
-TARGET_VENDOR_PROP += device/nxp/imx9/evk_95/arm.egl.config.prop
-TARGET_VENDOR_PROP += device/nxp/imx9/evk_95/arm.gralloc.usage.prop
 
 PRODUCT_VENDOR_PROPERTIES += \
     ro.hardware.egl = mali \
@@ -499,6 +486,13 @@ ifeq ($(LOW_MEMORY),true)
 $(call inherit-product, build/target/product/go_defaults.mk)
 endif
 
+# -------@block_neural_network-------
+
+# Neural Network HAL and lib
+PRODUCT_PACKAGES += \
+    NeutronFirmware.elf \
+    NeutronKernels.bin
+
 # Tensorflow lite camera demo
 PRODUCT_PACKAGES += \
                     tflitecamerademo
@@ -557,9 +551,6 @@ PRODUCT_COPY_FILES += \
 endif
 
 PRODUCT_COPY_FILES += \
-    vendor/nxp/fsl-proprietary/gpu-mali/gpu.xml:$(TARGET_COPY_OUT_VENDOR)/etc/gralloc/gpu.xml
-
-PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.output.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
@@ -597,7 +588,7 @@ endif
 
 # trusty loadable apps
 PRODUCT_COPY_FILES += \
-    vendor/nxp/fsl-proprietary/uboot-firmware/imx8m/confirmationui-imx8mp.app:/vendor/firmware/tee/confirmationui.app
+    vendor/nxp/fsl-proprietary/uboot-firmware/imx95/confirmationui-imx95.app:/vendor/firmware/tee/confirmationui.app
 
 # Keymint configuration
 PRODUCT_COPY_FILES += \
@@ -605,7 +596,11 @@ PRODUCT_COPY_FILES += \
 
 ifneq ($(PRODUCT_IMX_CAR),true)
 # Included GMS package
+ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_ROOTFS) $(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
+$(call inherit-product-if-exists, vendor/partner_gms/products/gms_64bit_only.mk)
+else
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
+endif
 PRODUCT_SOONG_NAMESPACES += vendor/partner_gms
 else
 # Included GAS package

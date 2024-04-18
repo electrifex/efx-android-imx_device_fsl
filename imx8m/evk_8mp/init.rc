@@ -67,13 +67,13 @@ on init && property:vendor.skip.charger_not_need=0 && property:ro.boot.powersave
 
 on late-fs && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
     start storageproxyd
-    start vendor.oemlock-1-0
     start vendor.confirmationui_default
 
 on late-fs && property:vendor.skip.charger_not_need=0
-    # Start keymaster/gatekeeper service
+    # Start keymaster/gatekeeper/oemlock service
     start vendor.gatekeeper-${ro.boot.keystore}
     start vendor.keymint-${ro.boot.keystore}
+    start vendor.oemlock-1-0-${ro.boot.keystore}
     setprop vendor.powerhal.init 1
 
     # Wait for keymaster
@@ -91,6 +91,9 @@ on early-boot && property:vendor.skip.charger_not_need=0
 
     # Default g2d [dpu|pxp|viv] lib to be used
     setprop vendor.imx.default-g2d viv
+
+    #viv sdk dir
+    setprop vendor.VIVANTE_SDK_DIR /vendor/etc/viv_sdk
 
     # fsl omx graphic manager media framework property
     setprop vendor.rw.VIDEO_RENDER_NAME video_render.surface

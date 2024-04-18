@@ -129,9 +129,6 @@ WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 BOARD_HAVE_BLUETOOTH_NXP := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 
-# -------@block_sensor-------
-BOARD_USE_SENSOR_FUSION := true
-
 # -------@block_kernel_bootimg-------
 BOARD_KERNEL_BASE := 0x90400000
 
@@ -143,14 +140,14 @@ BOARD_BOOTCONFIG += androidboot.hardware=nxp
 # memory config
 BOARD_KERNEL_CMDLINE += transparent_hugepage=never
 BOARD_KERNEL_CMDLINE += swiotlb=65536
+BOARD_KERNEL_CMDLINE += cma=$(CMASIZE)@0x800M-0xFF0M
 
 # display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=200
+BOARD_BOOTCONFIG += androidboot.lcd_density=200 androidboot.dpu_composition=0
 
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=US
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf
-
 
 BOARD_KERNEL_CMDLINE += androidboot.selinux=enforce
 

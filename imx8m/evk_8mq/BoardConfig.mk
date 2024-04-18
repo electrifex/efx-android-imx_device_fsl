@@ -121,9 +121,6 @@ WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 BOARD_HAVE_BLUETOOTH_NXP := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 
-# -------@block_sensor-------
-BOARD_USE_SENSOR_FUSION := true
-
 # -------@block_kernel_bootimg-------
 BOARD_KERNEL_BASE := 0x40400000
 
@@ -203,6 +200,3 @@ BOARD_SEPOLICY_DIRS := \
 # change of ERR11171 when IMX_ANDROID_BUILD=true. This results in the failure of
 # cpuidle on imx8mq, therefore Android disables cpuidle on evk_8mq.
 BOARD_KERNEL_CMDLINE += cpuidle.off=1
-
-BOARD_BOOTCONFIG += \
-       androidboot.vendor.apex.com.google.android.widevine=com.google.android.widevine

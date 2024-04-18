@@ -25,6 +25,11 @@ BOARD_VENDOR_KERNEL_MODULES += \
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/arm/midgard/mali_kbase.ko
 
+#neutron driver module
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/remoteproc/imx_neutron_rproc.ko \
+    $(KERNEL_OUT)/drivers/staging/neutron/neutron.ko
+
 #AP1302 driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/media/i2c/ap130x.ko
@@ -39,4 +44,4 @@ PRODUCT_IMX_TRUSTY := true
 
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
-#BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx8mp-trusty-dual.img
+BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
