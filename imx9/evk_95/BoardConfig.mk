@@ -149,8 +149,6 @@ BOARD_BOOTCONFIG += androidboot.lcd_density=200 androidboot.dpu_composition=0
 BOARD_BOOTCONFIG += androidboot.wificountrycode=US
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf
 
-BOARD_KERNEL_CMDLINE += androidboot.selinux=enforce
-
 ifeq ($(PRODUCT_IMX_CAR),true)
 # automotive config
 #BOARD_KERNEL_CMDLINE += video=HDMI-A-2:d
@@ -167,16 +165,23 @@ BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
 
 ifeq ($(PRODUCT_IMX_CAR),true)
-  ifeq ($(PRODUCT_IMX_CAR_M4),true)
+  ifeq ($(PRODUCT_IMX_CAR_M7),true)
 
-  else #PRODUCT_IMX_CAR_M4
+  else #PRODUCT_IMX_CAR_M7
     TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car2.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-mipi:imx95-19x19-evk-car2-adv7535.dtb
-  endif #PRODUCT_IMX_CAR_M4
+  endif #PRODUCT_IMX_CAR_M7
 else
-  TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk.dtb
-  TARGET_BOARD_DTS_CONFIG += imx95-mipi:imx95-19x19-evk-adv7535.dtb
-  TARGET_BOARD_DTS_CONFIG += imx95-mipi-ap1302:imx95-19x19-evk-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-adv7535-it6263-lvds1-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-mipi-panel:imx95-19x19-evk-rm692c9.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-lvds0:imx95-19x19-evk-it6263-lvds0.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-lvds-dualdisp:imx95-19x19-evk-it6263-lvds-two-disp.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-lvds-panel:imx95-19x19-evk-jdi-wuxga-lvds-panel.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-cs42888:imx95-19x19-evk-adv7535-ap1302-cs42888.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-titan:imx95-19x19-titan-lt8912-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-titan-adv7535:imx95-19x19-titan-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-titan-lvds-panel:imx95-19x19-titan-lt8912-lvds-panel-ap1302.dtb
 endif
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
@@ -197,5 +202,5 @@ endif
 
 # -------@block_camera-------
 ifeq ($(PRODUCT_IMX_CAR),true)
-BOARD_HAVE_IMX_EVS := true
+  BOARD_HAVE_IMX_EVS := true
 endif

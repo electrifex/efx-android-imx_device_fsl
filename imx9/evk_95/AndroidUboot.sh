@@ -40,7 +40,7 @@ build_imx_uboot()
 	echo Building i.MX U-Boot with firmware
 	cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}
 	cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/oei-m33-tcm.bin ${BOARD_MKIMAGE_PATH}
-	if [ `echo $2 | cut -d '-' -f2` = "trusty" ]; then
+	if [ "${PRODUCT_IMX_CAR}" = "true" ] && [ `echo $2 | cut -d '-' -f2` = "trusty" ]; then
 		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/m33_image_tee.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
 	else
 		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
@@ -57,7 +57,7 @@ build_imx_uboot()
 
 	# build ATF based on whether tee is involved
 	make -C ${IMX_PATH}/arm-trusted-firmware/ PLAT=`echo $2 | cut -d '-' -f1` clean
-	if [ `echo $2 | cut -d '-' -f2` = "trusty" ] && [ `echo $2 | rev | cut -d '-' -f1` != "uuu" ]; then
+	if ([ "${PRODUCT_IMX_CAR}" = "true" ] || [ `echo $2 | cut -d '-' -f2` = "trusty" ]) && [ `echo $2 | rev | cut -d '-' -f1` != "uuu" ]; then
 		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/tee-imx95.bin ${BOARD_MKIMAGE_PATH}/tee.bin
 		make -C ${IMX_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` bl31 -B SPD=trusty 1>/dev/null || exit 1
 	else
