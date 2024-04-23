@@ -17,6 +17,8 @@
     {"name": "Digital Capture Volume", "type": "int", "val": 108}
   ],
 
+  "out_volume_min": 0,
+  "out_volume_max": 127,
   "out_volume_ctl": [
     "Headphone Volume"
   ]
