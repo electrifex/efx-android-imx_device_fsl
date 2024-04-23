@@ -464,9 +464,6 @@ PRODUCT_PACKAGES += \
     c2_component_register_ms \
     c2_component_register_ra
 
-PRODUCT_PACKAGES += \
-    DirectAudioPlayer
-
 ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
 ifneq ($(IMX8_BUILD_32BIT_ROOTFS),true)
 INSTALL_64BIT_LIBRARY := true
@@ -492,10 +489,6 @@ endif
 PRODUCT_PACKAGES += \
     NeutronFirmware.elf \
     NeutronKernels.bin
-
-# Tensorflow lite camera demo
-PRODUCT_PACKAGES += \
-                    tflitecamerademo
 
 # -------@block_miscellaneous-------
 
