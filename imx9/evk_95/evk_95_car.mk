@@ -36,8 +36,8 @@ ENABLE_CAMERA_SERVICE ?= true
 PRODUCT_PACKAGES += \
     android.hardware.broadcastradio-service.default \
     android.hardware.gnss-service.example \
-    android.hardware.automotive.vehicle@V3-default-service
-#    android.hardware.automotive.vehicle@V1-imx-service
+    android.hardware.automotive.vehicle@V1-imx-service
+
 
 # broadcast radio feature
 PRODUCT_COPY_FILES += \
