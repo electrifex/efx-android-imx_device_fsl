@@ -179,8 +179,11 @@ ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(PRODUCT_IMX_CAR_M7),true)
     #TODO Car image type is not supported yet
   else #PRODUCT_IMX_CAR_M7
-    TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car2.dtb
-    TARGET_BOARD_DTS_CONFIG += imx95-mipi:imx95-19x19-evk-car2-adv7535.dtb
+    TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car2-adv7535.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-car2-adv7535-it6263-lvds1.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-lvds0:imx95-19x19-evk-car2-it6263-lvds0.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-titan:imx95-19x19-titan-car2-lt8912.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-titan-adv7535:imx95-19x19-titan-car2-adv7535.dtb
   endif #PRODUCT_IMX_CAR_M7
 else
   TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-adv7535-ap1302.dtb
