@@ -200,29 +200,29 @@ endif
 
 # -------@block_camera-------
 ifneq ($(POWERSAVE),true)
-PRODUCT_PACKAGES += \
-    android.hardware.camera.provider@2.7-service-google \
-    android.hardware.camera.provider@2.7-impl-google \
-    libgooglecamerahal \
-    libgooglecamerahalutils \
-    lib_profiler \
-    libimxcamerahwl_impl \
-    libimxcamerahalhwl_impl \
-    libimageprocess
+#PRODUCT_PACKAGES += \
+#    android.hardware.camera.provider@2.7-service-google \
+#    android.hardware.camera.provider@2.7-impl-google \
+#    libgooglecamerahal \
+#    libgooglecamerahalutils \
+#    lib_profiler \
+#    libimxcamerahwl_impl \
+#    libimxcamerahalhwl_impl \
+#    libimageprocess
 
 # external camera, AIDL
-PRODUCT_PACKAGES += \
-    android.hardware.camera.provider-V1-external-service \
-    android.hardware.camera.metadata-V1-ndk.so \
-    android.hardware.graphics.allocator-V1-ndk.so \
-    android.hardware.camera.device-V1-ndk.so \
-    android.hardware.camera.provider-V1-ndk.so \
-    android.hardware.camera.provider-V1-external-impl.so \
-    camera.device-external-imx-impl.so
+#PRODUCT_PACKAGES += \
+#    android.hardware.camera.provider-V1-external-service \
+#    android.hardware.camera.metadata-V1-ndk.so \
+#    android.hardware.graphics.allocator-V1-ndk.so \
+#    android.hardware.camera.device-V1-ndk.so \
+#    android.hardware.camera.provider-V1-ndk.so \
+#    android.hardware.camera.provider-V1-external-impl.so \
+#    camera.device-external-imx-impl.so
 
 # external camera feature demo
-PRODUCT_PACKAGES += \
-    Camera2
+#PRODUCT_PACKAGES += \
+#    Camera2
 endif
 
 ifeq ($(PRODUCT_IMX_CAR),true)
@@ -238,6 +238,14 @@ PRODUCT_PACKAGES += \
     CubeLiveWallpapers \
     LiveWallpapersPicker \
     WallpaperPicker
+endif
+
+ifneq ($(PRODUCT_IMX_CAR),true)
+PRODUCT_PACKAGES += \
+    MultiDisplay
+else
+PRODUCT_PACKAGES += \
+    MultiDisplaySecondaryHomeTestLauncher
 endif
 
 PRODUCT_SOONG_NAMESPACES += external/mesa3d
