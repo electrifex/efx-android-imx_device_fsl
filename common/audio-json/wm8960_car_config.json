@@ -3,9 +3,9 @@
   "bus_name": "bus0_media_out",
   "supported_out_devices": ["speaker", "wired_headphone", "wired_headset", "bus", "line"],
   "supported_in_devices": ["builtin_mic", "wired_headset"],
-  "out_period_size": 768,
+  "out_period_size": 576,
   "support_compress": 1,
-  "in_period_size": 768,
+  "in_period_size": 576,
   "in_period_count": 8,
 
   "init_ctl": [

@@ -4,9 +4,9 @@
   "supported_out_devices": ["speaker", "bus"],
   "supported_in_devices": ["builtin_mic"],
   "support_multi_chn": 1,
-  "in_period_size": 768,
+  "in_period_size": 576,
   "in_period_count": 8,
-  "out_period_size": 768,
+  "out_period_size": 576,
   "out_volume_ctl": [
     "DAC1 Playback Volume"
   ]

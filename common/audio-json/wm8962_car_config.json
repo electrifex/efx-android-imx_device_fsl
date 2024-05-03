@@ -4,7 +4,10 @@
   "supported_out_devices": ["speaker", "wired_headphone", "wired_headset", "line"],
   "supported_in_devices": ["builtin_mic", "wired_headset"],
   "support_lpa": 1,
+  "out_period_size": 576,
   "support_compress": 1,
+  "in_period_size": 576,
+  "in_period_count": 8,
 
   "init_ctl": [
     {"name": "Speaker Volume", "type": "int", "val": 114},
