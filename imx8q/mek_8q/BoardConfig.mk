@@ -133,15 +133,6 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 # NXP 8997 BLUETOOTH
 BOARD_HAVE_BLUETOOTH_NXP := true
 
-# -------@block_sensor-------
-BOARD_USE_SENSOR_FUSION := true
-BOARD_USE_SENSOR_PEDOMETER := false
-ifeq ($(PRODUCT_IMX_CAR),true)
-    BOARD_USE_LEGACY_SENSOR := false
-else
-    BOARD_USE_LEGACY_SENSOR :=true
-endif
-
 # -------@block_kernel_bootimg-------
 
 # NXP default config
@@ -252,6 +243,21 @@ else
       TARGET_BOARD_DTS_CONFIG += imx8qm-sof:imx8qm-mek-sof-wm8960.dtb
       # imx8qxp support SOF
       TARGET_BOARD_DTS_CONFIG += imx8qxp-sof:imx8qxp-mek-sof-wm8960.dtb
+      # imx8qm standard android; MIPI-HDMI display on revd
+      TARGET_BOARD_DTS_CONFIG += imx8qm-revd:imx8qm-mek-revd-ov5640.dtb
+      # imx8qm standard android; MIPI panel display on revd
+      TARGET_BOARD_DTS_CONFIG += imx8qm-mipi-panel-revd:imx8qm-mek-revd-dsi-rm67199.dtb
+      TARGET_BOARD_DTS_CONFIG += imx8qm-mipi-panel-rm67191-revd:imx8qm-mek-revd-dsi-rm67191.dtb
+      # imx8qm standard android; HDMI display on revd
+      TARGET_BOARD_DTS_CONFIG += imx8qm-hdmi-revd:imx8qm-mek-revd-hdmi.dtb
+      # imx8qm standard android; HDMI and HDMI RX on revd
+      TARGET_BOARD_DTS_CONFIG += imx8qm-hdmi-rx-revd:imx8qm-mek-revd-hdmi-rx-ov5640.dtb
+      # imx8qm standard android; Multiple display on revd
+      TARGET_BOARD_DTS_CONFIG += imx8qm-md-revd:imx8qm-mek-revd-md.dtb
+      # imx8qm standard android; LVDS1 panel display on revd
+      TARGET_BOARD_DTS_CONFIG += imx8qm-lvds1-panel-revd:imx8qm-mek-revd-jdi-wuxga-lvds1-panel.dtb
+      # imx8qm support SOF on revd
+      TARGET_BOARD_DTS_CONFIG += imx8qm-sof-revd:imx8qm-mek-revd-sof-wm8962.dtb
     endif #IMX_NO_PRODUCT_PARTITION
   else
     ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
@@ -284,6 +290,3 @@ endif
 ifeq ($(PRODUCT_IMX_CAR),true)
 BOARD_HAVE_IMX_EVS := true
 endif
-
-BOARD_BOOTCONFIG += \
-      androidboot.vendor.apex.com.google.android.widevine=com.google.android.widevine

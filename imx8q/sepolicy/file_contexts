@@ -52,7 +52,7 @@
 /vendor/lib(64)?/libLLVM_viv\.so            u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libOpenCL\.so              u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libopencl-2d\.so           u:object_r:same_process_hal_file:s0
-/(vendor|system/vendor)/lib(64)?/hw/android\.hardware\.graphics\.mapper@4\.0-impl\.imx\.so u:object_r:same_process_hal_file:s0
+/(vendor|system/vendor)/lib(64)?/hw/mapper\.imx\.so u:object_r:same_process_hal_file:s0
 
 #early_init_sh service
 /vendor/bin/init\.insmod\.sh                u:object_r:init-insmod-sh_exec:s0
@@ -79,6 +79,7 @@
 /(vendor|system/vendor)/bin/hw/android\.hardware\.keymaster@4\.0-service-imx u:object_r:hal_keymaster_default_exec:s0
 /(vendor|system/vendor)/bin/hw/android\.hardware\.security\.keymint-service\.trusty u:object_r:hal_keymint_default_exec:s0
 /(vendor|system/vendor)/bin/hw/android\.hardware\.security\.keymint-service-imx u:object_r:hal_keymint_default_exec:s0
+/(vendor|system/vendor)/bin/hw/android\.hardware\.security\.keymint-service\.rust\.trusty u:object_r:hal_keymint_default_exec:s0
 /vendor/bin/hw/android\.hardware\.gatekeeper-service-imx    u:object_r:hal_gatekeeper_default_exec:s0
 /vendor/bin/hw/android\.hardware\.gatekeeper-service\.trusty    u:object_r:hal_gatekeeper_default_exec:s0
 
@@ -104,6 +105,7 @@
 /vendor/bin/hw/android\.hardware\.dumpstate-service\.imx      u:object_r:hal_dumpstate_impl_exec:s0
 /dev/cpu_dma_latency u:object_r:latency_device:s0
 /vendor/bin/hw/android\.hardware\.oemlock-service\.imx      u:object_r:hal_oemlock_impl_exec:s0
+/vendor/bin/hw/android\.hardware\.oemlock-service-software\.imx      u:object_r:hal_oemlock_impl_exec:s0
 
 /vendor/vendor_overlay_soc/(imx8qm|imx8qxp)/vendor/etc(/.*)?              u:object_r:vendor_configs_file:s0
 
@@ -125,6 +127,7 @@
 /dev/block/by-name/userdata                  u:object_r:userdata_block_device:s0
 /dev/block/by-name/vbmeta_[ab]               u:object_r:vbmeta_block_device:s0
 /dev/block/by-name/super                     u:object_r:super_block_device:s0
+/dev/block/by-name/fbmisc                    u:object_r:fbmisc_block_device:s0
 
 /vendor/bin/hw/android\.hardware\.camera\.provider@2\.7-service-google       u:object_r:hal_camera_default_exec:s0
 

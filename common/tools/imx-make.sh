@@ -147,12 +147,15 @@ soc_path=${product_path%/*}
 nxp_git_path=${soc_path%/*}
 
 if [ -n "${build_kernel_modules}" ]; then
-    if [ ${TARGET_PRODUCT} = "mek_8q" ] || [ ${TARGET_PRODUCT} = "mek_8q_car" ] || \
-           [ ${TARGET_PRODUCT} = "mek_8q_car2" ]; then
+    if [ ${TARGET_PRODUCT} = "mek_8q" ] || \
+           [ ${TARGET_PRODUCT} = "mek_8q_car" ] || [ ${TARGET_PRODUCT} = "mek_8q_car2" ]; then
         make -f ${nxp_git_path}/common/build/encrypt_and_sign_firmware.mk manifest build encrypt sign clean< /dev/null || exit
     fi
 fi
 
+if [ -n "${build_kernel}" ] && [ ${TARGET_PRODUCT} = "evk_95" ]; then
+    make -f ${nxp_git_path}/common/build/encrypt_and_sign_firmware.mk manifest build encrypt sign clean< /dev/null || exit
+fi
 
 # if uboot is to be compiled, remove the UBOOT_COLLECTION directory
 if [ -n "${build_bootloader}" ]; then
@@ -200,8 +203,9 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
     if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
         if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] || [ ${TARGET_PRODUCT} = "mek_8q" ] \
+        || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
         || [ ${TARGET_PRODUCT} = "mek_8q_car" ] || [ ${TARGET_PRODUCT} = "mek_8q_car2" ] \
-        || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ]; then
+        || [ ${TARGET_PRODUCT} = "evk_95" ]; then
             if [ ${enable_gki} -eq 1 ]; then
                 mv ${OUT}/boot.img ${OUT}/boot-imx.img
                 make bootimage

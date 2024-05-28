@@ -6,7 +6,7 @@ IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
 #Enable this to choose 32 bit user space build
-IMX8_BUILD_32BIT_ROOTFS ?= false
+IMX_BUILD_32BIT_ROOTFS ?= false
 
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
@@ -172,7 +172,7 @@ endif
 # hardware backed keymaster service
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
-    android.hardware.security.keymint-service.trusty
+    android.hardware.security.keymint-service.rust.trusty
 endif
 
 # Keymaster HAL
@@ -205,7 +205,8 @@ PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 #Oemlock HAL support
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock-service.imx
+    android.hardware.oemlock-service.imx \
+    android.hardware.oemlock-service-software.imx
 endif
 
 # Specify rollback index for boot and vbmeta partitions
@@ -265,10 +266,18 @@ PRODUCT_COPY_FILES += \
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 
+# Add WebCam option in settings
+PRODUCT_VENDOR_PROPERTIES += ro.usb.uvc.enabled=true
+
 # -------@block_display-------
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
-# HWC2 HAL
+# -----some limiataion of overlay/g2d in hwcomposer3 --------
+SOONG_CONFIG_NAMESPACES += nxp_hwc
+SOONG_CONFIG_nxp_hwc += overlay_ip
+SOONG_CONFIG_nxp_hwc_overlay_ip := DCSS
+
+# HWC3 HAL
 PRODUCT_PACKAGES += \
     android.hardware.graphics.composer3-service.imx
 
@@ -282,8 +291,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # Gralloc HAL
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.mapper@4.0-impl.imx \
-    android.hardware.graphics.allocator-service.imx
+    android.hardware.graphics.allocator-service.imx \
+    mapper.imx
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
@@ -297,9 +306,8 @@ endif
 PRODUCT_PACKAGES += \
         libg2d-opencl
 
-# Multi-Display launcher
-PRODUCT_PACKAGES += \
-    MultiDisplay
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
 
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
@@ -425,7 +433,7 @@ PRODUCT_PACKAGES += \
     c2_component_register_rv
 
 ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
-ifneq ($(IMX8_BUILD_32BIT_ROOTFS),true)
+ifneq ($(IMX_BUILD_32BIT_ROOTFS),true)
 INSTALL_64BIT_LIBRARY := true
 endif
 endif
@@ -433,7 +441,6 @@ endif
 # -------@block_neural_network-------
 # Neural Network HAL and lib
 PRODUCT_PACKAGES += \
-    libovxlib \
     libtim-vx \
     libVsiSupportLibrary \
     android.hardware.neuralnetworks-shell-service-imx

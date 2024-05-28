@@ -60,7 +60,7 @@ PRODUCT_COPY_FILES += \
 # -------@block_app-------
 
 #Enable this to choose 32 bit user space build
-IMX9_BUILD_32BIT_ROOTFS := false
+IMX_BUILD_32BIT_ROOTFS := false
 
 # Set permission for GMS packages
 PRODUCT_COPY_FILES += \
@@ -104,14 +104,6 @@ PRODUCT_PACKAGES += \
     resizefs.vendor_ramdisk \
     tune2fs.vendor_ramdisk
 endif
-
-# IIO sensor HAL
-PRODUCT_PACKAGES += \
-    android.hardware.sensors-service.multihal \
-    android.hardware.sensors@2.1-nxp-IIO-Subhal
-
-PRODUCT_COPY_FILES += \
-    vendor/nxp-opensource/imx/iio_sensor/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
 
 #Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
 TARGET_USE_DYNAMIC_PARTITIONS ?= true
@@ -176,7 +168,7 @@ endif
 # Keymaster HAL
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
-    android.hardware.security.keymint-service.trusty
+    android.hardware.security.keymint-service.rust.trusty
 endif
 
 PRODUCT_PACKAGES += \
@@ -205,7 +197,8 @@ PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 #Oemlock HAL support
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock-service.imx
+    android.hardware.oemlock-service.imx \
+    android.hardware.oemlock-service-software.imx
 endif
 
 # Specify rollback index for boot and vbmeta partition
@@ -267,6 +260,12 @@ PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 
 # -------@block_display-------
+PRODUCT_PACKAGES += \
+    libedid
+
+PRODUCT_PACKAGES += \
+    libdisplayutils \
+    libfsldisplay
 
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
@@ -284,54 +283,20 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # Gralloc HAL
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.mapper@4.0-impl.imx \
-    android.hardware.graphics.allocator-service.imx
+    android.hardware.graphics.allocator-service.imx \
+    mapper.imx
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
 # -------@block_gpu-------
-#
-#PRODUCT_PACKAGES += \
-#    libEGL_VIVANTE \
-#    libGLESv1_CM_VIVANTE \
-#    libGLESv2_VIVANTE \
-#    gralloc_viv.$(TARGET_BOARD_PLATFORM) \
-#    libGAL \
-#    libGLSLC \
-#    libVSC \
-#    libgpuhelper \
-#    libSPIRV_viv \
-#    libvulkan_VIVANTE \
-#    vulkan.$(TARGET_BOARD_PLATFORM) \
-#    libCLC \
-#    libLLVM_viv \
-#    libOpenCL \
-#    libg2d-viv \
-#    libOpenVX \
-#    libOpenVXU \
-#    libNNVXCBinary-evis \
-#    libNNVXCBinary-evis2 \
-#    libNNVXCBinary-lite \
-#    libOvx12VXCBinary-evis \
-#    libOvx12VXCBinary-evis2 \
-#    libOvx12VXCBinary-lite \
-#    libNNGPUBinary-evis \
-#    libNNGPUBinary-evis2 \
-#    libNNGPUBinary-lite \
-#    libNNGPUBinary-ulite \
-#    libNNGPUBinary-nano \
-#    libNNArchPerf \
-#    libarchmodelSw
-#
-
 # ANGLE OpenGL implementation based on SwiftShader Vulkan
-PRODUCT_PACKAGES += \
-    libEGL_angle \
-    libGLESv1_CM_angle \
-    libGLESv2_angle \
-    vulkan.pastel
+$(call inherit-product, build/make/target/product/angle_default.mk)
+
+# TODO(b/65201432): Swiftshader needs to create executable memory.
+PRODUCT_REQUIRES_INSECURE_EXECMEM_FOR_SWIFTSHADER := true
+PRODUCT_PACKAGES += vulkan.pastel
 
 # pxp g2d
 PRODUCT_PACKAGES += \
@@ -366,13 +331,9 @@ PRODUCT_COPY_FILES += \
     external/wireless-regdb/regulatory.db:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/regulatory.db \
     external/wireless-regdb/regulatory.db.p7s:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/regulatory.db.p7s
 
-# EPDC firmware
-PRODUCT_COPY_FILES += \
-    $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/epdc/epdc_ED060XH2C1.fw.nonrestricted:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/epdc/epdc_ED060XH2C1.fw
-
 # NXP ap1302 camera Firmware
-PRODUCT_COPY_FILES += \
-    vendor/nxp/fsl-proprietary/isp/ap1302/ap1302.fw:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/imx/camera/ap1302.fw
+PRODUCT_PACKAGES += \
+    ap1302.fw
 
 # -------@block_bluetooth-------
 
@@ -413,7 +374,7 @@ PRODUCT_PACKAGES += \
     c2_component_register_ra
 
 ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
-ifneq ($(IMX9_BUILD_32BIT_ROOTFS),true)
+ifneq ($(IMX_BUILD_32BIT_ROOTFS),true)
 INSTALL_64BIT_LIBRARY := true
 endif
 endif

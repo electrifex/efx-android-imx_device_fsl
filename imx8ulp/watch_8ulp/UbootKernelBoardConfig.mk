@@ -8,11 +8,11 @@ TARGET_BOOTLOADER_CONFIG += imx8ulp-trusty-dual:imx8ulp_watch_android_trusty_dua
 TARGET_BOOTLOADER_CONFIG += imx8ulp-evk-uuu:imx8ulp_watch_android_uuu_defconfig
 
 # imx8ulp kernel defconfig
-ifeq ($(LOADABLE_KERNEL_MODULE),true)
 TARGET_KERNEL_DEFCONFIG := gki_defconfig
+ifeq ($(LOADABLE_KERNEL_MODULE),true)
 TARGET_KERNEL_GKI_DEFCONF:= imx8ulp_gki.fragment
 else
-TARGET_KERNEL_DEFCONFIG := imx_v8_android_defconfig
+TARGET_KERNEL_GKI_DEFCONF := imx_v8_android_defconfig
 endif
 TARGET_KERNEL_ADDITION_DEFCONF := android_addition_defconfig
 

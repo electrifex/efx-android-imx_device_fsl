@@ -1,12 +1,16 @@
 include $(CONFIG_REPO_PATH)/common/build/build_info.mk
 # -------@block_infrastructure-------
-ifneq ($(IMX8_BUILD_32BIT_ROOTFS),true)
-ifneq ($(filter TRUE true 1,$(IMX8_BUILD_64BIT_ROOTFS)),)
+ifneq ($(IMX_BUILD_32BIT_ROOTFS),true)
+ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 endif
-endif # IMX8_BUILD_32BIT_ROOTFS
+else
+ifneq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
+$(error IMX_BUILD_32BIT_ROOTFS and IMX_BUILD_32BIT_64BIT_ROOTFS CANNOT be both set)
+endif
+endif # IMX_BUILD_32BIT_ROOTFS
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic.mk)
@@ -74,8 +78,6 @@ PRODUCT_PACKAGES += \
     media_codecs_c2_ra.xml \
     media_codecs_c2_rv.xml \
     media_codecs_c2_dsp.xml \
-    media_codecs_c2_dsp_aacp.xml \
-    media_codecs_c2_dsp_wma.xml \
     media_profiles_V1_0.xml \
     media_codecs_c2.xml \
     media_codecs_performance_c2.xml \
@@ -106,16 +108,13 @@ PRODUCT_PACKAGES += \
     lib_asf_parser_arm11_elinux.3.0 \
     lib_ddpd_wrap_arm12_elinux_android \
     lib_ddplus_dec_v2_arm12_elinux \
-    lib_dsp_aac_dec \
     lib_dsp_bsac_dec \
     lib_dsp_codec_wrap \
     lib_dsp_mp3_dec \
     lib_dsp_mp3_dec_ext \
     lib_dsp_codec_wrap_ext \
     lib_dsp_wrap_arm12_android \
-    lib_aacd_wrap_dsp \
     lib_mp3d_wrap_dsp \
-    lib_wma10d_wrap_dsp \
     lib_realad_wrap_arm11_elinux_android \
     lib_realaudio_dec_v2_arm11_elinux \
     lib_rm_parser_arm11_elinux.3.0 \
@@ -139,6 +138,7 @@ PRODUCT_PACKAGES += \
     lib_imx_c2_v4l2_enc \
     lib_imx_opencl_converter \
     ocl_converter.cl \
+    ocl_converter_ext.cl \
     lib_imx_c2_unia_post_filter \
     lib_imx_c2_unia_pre_filter \
     lib_imx_c2_filter_device_opencl \
@@ -161,9 +161,7 @@ PRODUCT_PACKAGES += \
     c2_component_register_wmv9 \
     c2_component_register_rv \
     c2_component_register_ra \
-    c2_component_register_dsp \
-    c2_component_register_dsp_wma \
-    c2_component_register_dsp_aacp
+    c2_component_register_dsp
 
 # Set c2 codec in default
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -189,7 +187,7 @@ PRODUCT_COPY_FILES += \
 
 # A/B OTA
 PRODUCT_PACKAGES += \
-    android.hardware.boot-service.default \
+    com.android.hardware.boot \
     android.hardware.boot-service.default_recovery \
     update_engine \
     update_engine_client \
@@ -214,6 +212,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # enable FUSE passthrough
 PRODUCT_PRODUCT_PROPERTIES += \
     persist.sys.fuse.passthrough.enable=true
+
+# RKPD
+PRODUCT_PRODUCT_PROPERTIES += \
+    remote_provisioning.enable_rkpd=true \
+    remote_provisioning.hostname=remoteprovisioning.googleapis.com
 
 # health
 PRODUCT_PACKAGES += \
@@ -251,6 +254,10 @@ PRODUCT_PACKAGES += \
     android.hardware.camera.provider-V1-external-impl.so \
     camera.device-external-imx-impl.so
 
+# Foreground service DeviceAsCamera
+PRODUCT_PACKAGES += \
+    DeviceAsWebcam
+
 PRODUCT_PACKAGES += \
     Camera2
 
@@ -265,15 +272,16 @@ endif
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
     CubeLiveWallpapers \
-    LiveWallpapersPicker
+    LiveWallpapersPicker \
+    WallpaperPicker
 endif
 
 PRODUCT_PACKAGES += \
     libedid
 
 ifneq ($(PRODUCT_IMX_CAR),true)
-PRODUCT_PACKAGES += \
-    MultiDisplay
+PRODUCT_COPY_FILES += \
+   $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
 else
 PRODUCT_PACKAGES += \
     MultiDisplaySecondaryHomeTestLauncher

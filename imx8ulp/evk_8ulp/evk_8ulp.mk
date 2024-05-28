@@ -6,7 +6,7 @@ IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
 #Enable this to choose 32 bit user space build
-IMX8_BUILD_32BIT_ROOTFS ?= false
+IMX_BUILD_32BIT_ROOTFS ?= false
 
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
@@ -182,7 +182,7 @@ endif
 # Keymaster HAL
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
-    android.hardware.security.keymint-service.trusty
+    android.hardware.security.keymint-service.rust.trusty
 endif
 
 PRODUCT_PACKAGES += \
@@ -213,7 +213,8 @@ PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 #Oemlock HAL support
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock-service.imx
+    android.hardware.oemlock-service.imx \
+    android.hardware.oemlock-service-software.imx
 endif
 
 # Specify rollback index for boot and vbmeta partition
@@ -280,7 +281,12 @@ PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
-# HWC2 HAL
+# -----some limiataion of overlay/g2d in hwcomposer3 --------
+SOONG_CONFIG_NAMESPACES += nxp_hwc
+SOONG_CONFIG_nxp_hwc += g2d_ip
+SOONG_CONFIG_nxp_hwc_g2d_ip := VIV
+
+# HWC3 HAL
 PRODUCT_PACKAGES += \
     android.hardware.graphics.composer3-service.imx
 
@@ -294,8 +300,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # Gralloc HAL
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.mapper@4.0-impl.imx \
-    android.hardware.graphics.allocator-service.imx
+    android.hardware.graphics.allocator-service.imx \
+    mapper.imx
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
@@ -349,6 +355,9 @@ PRODUCT_VENDOR_PROPERTIES += \
 # GPU openCL g2d
 PRODUCT_COPY_FILES += \
     $(IMX_PATH)/imx/opencl-2d/cl_g2d.cl:$(TARGET_COPY_OUT_VENDOR)/etc/cl_g2d.cl
+
+# GPU openCL SDK header file
+-include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/include/CL/cl_sdk.mk
 
 # -------@block_wifi-------
 
@@ -422,7 +431,7 @@ PRODUCT_PACKAGES += \
     c2_component_register_ra
 
 ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
-ifneq ($(IMX8_BUILD_32BIT_ROOTFS),true)
+ifneq ($(IMX_BUILD_32BIT_ROOTFS),true)
 INSTALL_64BIT_LIBRARY := true
 endif
 endif
@@ -438,7 +447,6 @@ endif
 
 # Neural Network HAL and lib
 PRODUCT_PACKAGES += \
-    libovxlib \
     libtim-vx \
     libVsiSupportLibrary \
     android.hardware.neuralnetworks-shell-service-imx

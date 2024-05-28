@@ -1,10 +1,14 @@
 include $(CONFIG_REPO_PATH)/common/build/build_info.mk
 # -------@block_infrastructure-------
-ifneq ($(IMX9_BUILD_32BIT_ROOTFS),true)
-ifneq ($(filter TRUE true 1,$(IMX9_BUILD_64BIT_ROOTFS)),)
+ifneq ($(IMX_BUILD_32BIT_ROOTFS),true)
+ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+endif
+else
+ifneq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
+$(error IMX_BUILD_32BIT_ROOTFS and IMX_BUILD_32BIT_64BIT_ROOTFS CANNOT be both set)
 endif
 endif
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
@@ -31,6 +35,8 @@ TARGET_BOARD_PLATFORM := imx
 PRODUCT_SHIPPING_API_LEVEL := 34
 
 # -------@block_app-------
+PRODUCT_PACKAGES += \
+    imx-chip-tool \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     pm.dexopt.boot=quicken
@@ -39,6 +45,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.control_privapp_permissions=enforce
 
+# add dmabufheap debug info
+PRODUCT_PROPERTY_OVERRIDES += \
+    debug.c2.use_dmabufheaps=1
 
 # -------@block_multimedia_codec-------
 
@@ -47,12 +56,7 @@ PRODUCT_PACKAGES += \
     Gallery2
 endif
 
-# add dmabufheap debug info
-PRODUCT_PROPERTY_OVERRIDES += \
-    debug.c2.use_dmabufheaps=1
-
 PRODUCT_PACKAGES += \
-    vsidaemon \
     CactusPlayer
 
 # Omx related libs
@@ -98,10 +102,6 @@ PRODUCT_PACKAGES += \
     lib_asf_parser_arm11_elinux.3.0 \
     lib_ddpd_wrap_arm12_elinux_android \
     lib_ddplus_dec_v2_arm12_elinux \
-    lib_omx_ac3_dec_v2_arm11_elinux \
-    lib_omx_ra_dec_v2_arm11_elinux \
-    lib_omx_wma_dec_v2_arm11_elinux \
-    lib_omx_wmv_dec_v2_arm11_elinux \
     lib_realad_wrap_arm11_elinux_android \
     lib_realaudio_dec_v2_arm11_elinux \
     lib_rm_parser_arm11_elinux.3.0 \
@@ -115,6 +115,7 @@ PRODUCT_PACKAGES += \
     codec2.vendor.ext.policy \
     libsfplugin_ccodec \
     lib_imx_c2_componentbase \
+    lib_imx_utils \
     lib_imx_ts_manager \
     lib_c2_imx_store \
     lib_c2_imx_audio_dec_common \
@@ -130,6 +131,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.stagefright.ccodec=4  \
     debug.stagefright.omx_default_rank=0x200 \
     debug.stagefright.c2-poolmask=0x70000 \
+    debug.stagefright.ccodec_delayed_params=true \
     debug.stagefright.c2inputsurface=-1
 
 -include $(FSL_RESTRICTED_CODEC_PATH)/fsl-restricted-codec/fsl_real_dec/fsl_real_dec.mk
@@ -153,7 +155,7 @@ PRODUCT_COPY_FILES += \
 
 # A/B OTA
 PRODUCT_PACKAGES += \
-    android.hardware.boot-service.default \
+    com.android.hardware.boot \
     android.hardware.boot-service.default_recovery \
     update_engine \
     update_engine_client \
@@ -174,6 +176,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # enable FUSE passthrough
 PRODUCT_PRODUCT_PROPERTIES += \
     persist.sys.fuse.passthrough.enable=true
+
+# RKPD
+PRODUCT_PRODUCT_PROPERTIES += \
+    remote_provisioning.enable_rkpd=true \
+    remote_provisioning.hostname=remoteprovisioning.googleapis.com
 
 # health
 PRODUCT_PACKAGES += \
@@ -211,45 +218,28 @@ PRODUCT_PACKAGES += \
     android.hardware.camera.provider-V1-ndk.so \
     android.hardware.camera.provider-V1-external-impl.so \
     camera.device-external-imx-impl.so
-endif
-endif
 
 # external camera feature demo
 PRODUCT_PACKAGES += \
      Camera2Basic
+endif
+endif
 
 # -------@block_display-------
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
     CubeLiveWallpapers \
-    LiveWallpapersPicker
+    LiveWallpapersPicker \
+    WallpaperPicker
 endif
-
-PRODUCT_PACKAGES += \
-    libedid
-
-PRODUCT_PACKAGES += \
-    libdrm_android \
-    libdisplayutils \
-    libfsldisplay
 
 PRODUCT_SOONG_NAMESPACES += external/mesa3d
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.sf.color_saturation=1.0 \
-    ro.hw_timeout_multiplier=2
+    persist.sys.sf.color_saturation=1.0
 
 # -------@block_gpu-------
-# vivante libdrm support
-#PRODUCT_PACKAGES += \
-#    libdrm_vivante
-#
-# gpu debug tool
-#PRODUCT_PACKAGES += \
-#    gmem_info \
-#    gpu-top
-#
-#
+
 # -------@block_memtrack-------
 #PRODUCT_PACKAGES += \
 #    android.hardware.memtrack-service.imx
@@ -284,7 +274,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     android.hardware.audio@7.1-impl \
     android.hardware.audio.service \
-    android.hardware.audio.effect@7.0-impl:32
+    android.hardware.audio.effect@7.0-impl:32 \
+    android.hardware.bluetooth.audio@2.1-impl
 
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
@@ -309,7 +300,14 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_in_audio_policy_configuration_7_0.xml \
     frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
-    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
+    frameworks/av/services/audiopolicy/config/bluetooth_with_le_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_with_le_audio_policy_configuration_7_0.xml \
+    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml \
+    device/nxp/imx8m/evk_8mm/le_audio_codec_capabilities.xml:$(TARGET_COPY_OUT_VENDOR)/etc/le_audio_codec_capabilities.xml
+
+# compress offload audio playback support
+PRODUCT_PACKAGES += \
+    libtinycompress \
+    cplay
 
 PRODUCT_VENDOR_PROPERTIES += ro.config.ringtone=Ring_Synth_04.ogg
 
@@ -322,10 +320,10 @@ PRODUCT_PACKAGES += \
     wpa_supplicant.conf
 
 PRODUCT_PACKAGES += \
-    mlanutl
+    netutils-wrapper-1.0
 
 PRODUCT_PACKAGES += \
-    netutils-wrapper-1.0
+    mlanutl
 
 # wifionly device
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -341,6 +339,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libldacBT_enc \
     libldacBT_abr
+
+# -------@block_sensor-------
+PRODUCT_PACKAGES += \
+    fsl_sensor_fusion
 
 # -------@block_input-------
 

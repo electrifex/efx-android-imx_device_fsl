@@ -50,20 +50,18 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
     $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
     $(KERNEL_OUT)/drivers/firmware/imx/seco_mu.ko \
-    $(KERNEL_OUT)/drivers/firmware/imx/scu-pd.ko \
+    $(KERNEL_OUT)/drivers/pmdomain/imx/scu-pd.ko \
     $(KERNEL_OUT)/drivers/clk/imx/mxc-clk.ko \
     $(KERNEL_OUT)/drivers/clk/imx/clk-imx-scu.ko \
     $(KERNEL_OUT)/drivers/clk/imx/clk-imx-lpcg-scu.ko \
-    $(KERNEL_OUT)/drivers/clk/imx/clk-imx-acm-utils.ko \
-    $(KERNEL_OUT)/drivers/clk/imx/clk-imx8qxp-acm.ko \
-    $(KERNEL_OUT)/drivers/clk/imx/clk-imx8qm-acm.ko \
+    $(KERNEL_OUT)/drivers/clk/imx/clk-imx-acm.ko \
     $(KERNEL_OUT)/drivers/irqchip/irq-imx-irqsteer.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-scu.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx8qxp.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx8qm.ko \
+    $(KERNEL_OUT)/drivers/power/reset/imx-sm-reset.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-core.ko \
-    $(KERNEL_OUT)/drivers/trusty/trusty-irq.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-log.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-virtio.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-ipc.ko \
@@ -129,8 +127,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/adv7511/adv7511.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-simple.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm67191.ko \
-    $(KERNEL_OUT)/drivers/media/v4l2-core/v4l2-async.ko \
-    $(KERNEL_OUT)/drivers/media/v4l2-core/v4l2-fwnode.ko \
     $(KERNEL_OUT)/drivers/media/i2c/ov5640.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/gmsl-max9286.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-mipi-csi2.ko \
@@ -148,7 +144,9 @@ endif
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/mm/zsmalloc.ko \
     $(KERNEL_OUT)/drivers/block/zram/zram.ko \
+    $(KERNEL_OUT)/net/rfkill/rfkill.ko \
     $(KERNEL_OUT)/net/wireless/cfg80211.ko \
+    $(KERNEL_OUT)/lib/crypto/libarc4.ko \
     $(KERNEL_OUT)/net/mac80211/mac80211.ko \
     $(KERNEL_OUT)/drivers/mxc/gpu-viv/galcore.ko \
     $(KERNEL_OUT)/drivers/thermal/imx_sc_thermal.ko \
@@ -165,6 +163,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-sai.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-esai.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8960.ko \
+    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8962.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-cs42xx8.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-cs42xx8-i2c.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-bt-sco.ko \
@@ -176,6 +175,8 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8q-pcie.ko \
     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
     $(KERNEL_OUT)/drivers/net/phy/at803x.ko \
+    $(KERNEL_OUT)/drivers/pps/pps_core.ko \
+    $(KERNEL_OUT)/drivers/ptp/ptp.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
     $(KERNEL_OUT)/drivers/watchdog/imx_sc_wdt.ko \
     $(KERNEL_OUT)/drivers/rtc/rtc-imx-sc.ko \

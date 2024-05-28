@@ -4,7 +4,7 @@ CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
 IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 
 #Enable this to choose 32 bit user space build
-IMX8_BUILD_32BIT_ROOTFS ?= false
+IMX_BUILD_32BIT_ROOTFS ?= false
 
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
@@ -248,7 +248,7 @@ endif
 # hardware backed keymaster service
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
-    android.hardware.security.keymint-service.trusty
+    android.hardware.security.keymint-service.rust.trusty
 endif
 # Keymaster HAL
 PRODUCT_PACKAGES += \
@@ -270,7 +270,8 @@ endif
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 #Oemlock HAL support
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock-service.imx
+    android.hardware.oemlock-service.imx \
+    android.hardware.oemlock-service-software.imx
 endif
 
 # Copy firmware encrypt key and public verify key
@@ -317,7 +318,8 @@ PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey \
     libwvdrmcryptoplugin \
     libwvaidl \
-    liboemcrypto
+    liboemcrypto \
+    firmware_loader
 
 TARGET_BUILD_WIDEVINE :=
 TARGET_BUILD_WIDEVINE_USE_PREBUILT := true
@@ -348,6 +350,7 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/audio-json/cs42888_car_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42888_config.json
 else
 PRODUCT_COPY_FILES += \
+    $(CONFIG_REPO_PATH)/common/audio-json/wm8962_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8962_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/wm8960_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8960_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/cs42888_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42888_config.json
 endif
@@ -394,6 +397,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 ifneq ($(PRODUCT_IMX_CAR),true)
+# Add WebCam option in settings
 PRODUCT_VENDOR_PROPERTIES += ro.usb.uvc.enabled=true
 
 # external camera feature demo
@@ -423,8 +427,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # Gralloc HAL
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.mapper@4.0-impl.imx \
-    android.hardware.graphics.allocator-service.imx
+    android.hardware.graphics.allocator-service.imx \
+    mapper.imx
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
@@ -513,9 +517,9 @@ PRODUCT_COPY_FILES += \
 # -------@block_vpu-------
 # VPU files
 PRODUCT_COPY_FILES += \
-	$(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/vpu/vpu_fw_imx8_dec.bin.signed:vendor/firmware/vpu/vpu_fw_imx8_dec.bin.signed \
-	$(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/vpu/vpu_fw_imx8_dec.bin:vendor/firmware/vpu/vpu_fw_imx8_dec.bin \
-	$(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/vpu/vpu_fw_imx8_enc.bin:vendor/firmware/vpu/vpu_fw_imx8_enc.bin
+	$(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/vpu/vpu_fw_imx8_dec.bin.signed:$(TARGET_COPY_OUT_VENDOR)/firmware/amphion/vpu/vpu_fw_imx8_dec.bin.signed \
+	$(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/vpu/vpu_fw_imx8_dec.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/amphion/vpu/vpu_fw_imx8_dec.bin \
+	$(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/vpu/vpu_fw_imx8_enc.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/amphion/vpu/vpu_fw_imx8_enc.bin
 
 # -------@block_wifi-------
 PRODUCT_COPY_FILES += \
@@ -569,7 +573,7 @@ PRODUCT_COPY_FILES += \
 
 
 ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
-ifneq ($(IMX8_BUILD_32BIT_ROOTFS),true)
+ifneq ($(IMX_BUILD_32BIT_ROOTFS),true)
 INSTALL_64BIT_LIBRARY := true
 endif
 -include $(FSL_RESTRICTED_CODEC_PATH)/fsl-restricted-codec/imx_dsp/imx_dsp_8q.mk
@@ -578,7 +582,6 @@ endif
 # -------@block_neural_network-------
 # Neural Network HAL and Lib
 PRODUCT_PACKAGES += \
-    libovxlib \
     libtim-vx \
     libVsiSupportLibrary \
     android.hardware.neuralnetworks-shell-service-imx
@@ -588,8 +591,6 @@ ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
                     tflitecamerademo
 endif
-
-SOONG_CONFIG_IMXPLUGIN_BOARD_USE_LEGACY_SENSOR = true
 
 # imx8 sensor HAL libs.
 PRODUCT_PACKAGES += \
@@ -692,11 +693,19 @@ PRODUCT_COPY_FILES += \
 
 ifneq ($(PRODUCT_IMX_CAR),true)
 # Included GMS package
+ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_ROOTFS) $(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
+$(call inherit-product-if-exists, vendor/partner_gms/products/gms_64bit_only.mk)
+else
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
+endif
 PRODUCT_SOONG_NAMESPACES += vendor/partner_gms
 else
 # Included GAS package
+#ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_ROOTFS) $(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
+#$(call inherit-product-if-exists, vendor/partner_gas/products/gms_64bit_only.mk)
+#else
 $(call inherit-product-if-exists, vendor/partner_gas/products/gms.mk)
+#endif
 PRODUCT_SOONG_NAMESPACES += vendor/partner_gas
 endif
 

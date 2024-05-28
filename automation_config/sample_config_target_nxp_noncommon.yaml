@@ -1,13 +1,13 @@
 reference_product:
-  name: evk_8ulp
-  device: evk_8ulp
-  soc_type: IMX8ULP
-  AndroidProducts_root: device/nxp/imx8ulp
+  name: evk_8mp
+  device: evk_8mp
+  soc_type: IMX8MP
+  AndroidProducts_root: device/nxp/imx8m
 
 target_product:
-  name: evk_93
-  device: evk_93
-  soc_type: IMX93
+  name: evk_95
+  device: evk_95
+  soc_type: IMX95
   repo_path: device/nxp
   AndroidProducts_root: device/nxp/imx9
   manufacturer: nxp
@@ -20,10 +20,10 @@ modules:
   common_config: y
   display: y
   ethernet: y
-  gpu: n
+  gpu: y
   infrastructure: y
   input: y
-  isp: n
+  isp: y
   kernel_bootimg: y
   memory: y
   miscellaneous: y
