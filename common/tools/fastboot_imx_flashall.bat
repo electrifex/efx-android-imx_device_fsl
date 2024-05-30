@@ -74,7 +74,7 @@ set imx8mq_uboot_feature=dual trusty-dual evk-uuu trusty-secure-unlock-dual wevk
 set imx8qxp_uboot_feature=dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock c0 c0-dual trusty-c0-dual mek-c0-uuu
 set imx8qm_uboot_feature=dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock md hdmi xen
 set imx93_uboot_feature=dual trusty-dual evk-uuu
-set imx95_uboot_feature=dual trusty-dual trusty-secure-unlock-dual evk-uuu verdin trusty-verdin-dual verdin-uuu 15x15 15x15-dual trusty-15x15-dual 15x15-evk-uuu rpmsg
+set imx95_uboot_feature=evk-uuu verdin verdin-uuu
 set imx7ulp_uboot_feature=evk-uuu
 
 set imx8mm_dtb_feature=ddr4 m4 mipi-panel mipi-panel-rm67191 8mic
@@ -85,7 +85,7 @@ set imx8qxp_dtb_feature=sof mipi-panel mipi-panel-rm67191 lvds0-panel
 set imx8qm_dtb_feature=hdmi hdmi-rx mipi-panel mipi-panel-rm67191 md xen sof lvds1-panel revd mipi-panel-revd mipi-panel-rm67191-revd hdmi-revd hdmi-rx-revd md-revd lvds1-panel-revd sof-revd
 set imx8ulp_dtb_feature=hdmi epdc 9x9 9x9-hdmi sof lpa lpd
 set imx93_dtb_feature=
-set imx95_dtb_feature=mipi-lvds1 mipi-panel lvds0 lvds-dualdisp lvds-panel cs42888 verdin verdin-adv7535 verdin-lvds-panel 15x15 rpmsg
+set imx95_dtb_feature=mipi-lvds1 lvds0 verdin verdin-adv7535
 set imx7ulp_dtb_feature=evk-mipi evk mipi
 
 :: an array to collect the supported soc_names
@@ -281,8 +281,7 @@ echo                           ^|   imx8qm    ^|  dual trusty-dual mek-uuu trust
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx93     ^|  dual trusty-dual evk-uuu                                                                          ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx95     ^|  dual trusty-dual trusty-secure-unlock-dual evk-uuu verdin trusty-verdin-dual verdin-uuu           ^|
-echo                           ^|             ^|  15x15 15x15-dual trusty-15x15-dual 15x15-evk-uuu rpmsg                                            ^|
+echo                           ^|   imx95     ^|  evk-uuu verdin verdin-uuu                                                                         ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx7ulp   ^|  evk-uuu                                                                                           ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
@@ -313,8 +312,7 @@ echo                           ^|   imx8ulp   ^|  hdmi epdc 9x9 9x9-hdmi sof lpa
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx93     ^|                                                                                                    ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx95     ^|  mipi-lvds1 mipi-panel lvds0 lvds-dualdisp lvds-panel cs42888 verdin verdin-adv7535                ^|
-echo                           ^|             ^|  verdin-lvds-panel 15x15 rpmsg                                                                     ^|
+echo                           ^|   imx95     ^|  mipi-lvds1 lvds0 verdin verdin-adv7535                                                            ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx7ulp   ^|  evk-mipi evk mipi                                                                                 ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+

@@ -176,9 +176,9 @@ BOARD_USES_SYSTEM_DLKMIMAGE := true
 BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
 TARGET_COPY_OUT_SYSTEM_DLKM := system_dlkm
 ifeq ($(PRODUCT_IMX_CAR),true)
-BOARD_SYSTEM_KERNEL_MODULES += $(wildcard vendor/nxp/fsl-proprietary/gki/system_dlkm_staging_8q_car/flatten/lib/modules/*.ko)
+BOARD_SYSTEM_KERNEL_MODULES += $(wildcard vendor/nxp-opensource/imx-gki/system_dlkm_staging_8q_car/flatten/lib/modules/*.ko)
 else
-BOARD_SYSTEM_KERNEL_MODULES += $(wildcard vendor/nxp/fsl-proprietary/gki/system_dlkm_staging_8q/flatten/lib/modules/*.ko)
+BOARD_SYSTEM_KERNEL_MODULES += $(wildcard vendor/nxp-opensource/imx-gki/system_dlkm_staging_8q/flatten/lib/modules/*.ko)
 endif
 
 BOARD_FLASH_BLOCK_SIZE := 4096

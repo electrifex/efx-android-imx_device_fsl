@@ -1,7 +1,22 @@
+# -------@block_common_config-------
+# after selecting the target by "lunch" command, TARGET_PRODUCT will be set
+ifeq ($(TARGET_PRODUCT),evk_95_car)
+  PRODUCT_IMX_CAR := true
+  PRODUCT_IMX_CAR_M7 := true
+  # Enable dual bootloader feature
+  PRODUCT_IMX_DUAL_BOOTLOADER := true
+endif
+ifeq ($(TARGET_PRODUCT),evk_95_car2)
+  PRODUCT_IMX_CAR := true
+  # the env setting in mek_8q_car to make the build without M4 image
+  PRODUCT_IMX_CAR_M7 := false
+  # Enable dual bootloader feature
+  PRODUCT_IMX_DUAL_BOOTLOADER := true
+endif
 # -------@block_kernel_bootimg-------
 KERNEL_NAME := Image.lz4
 TARGET_KERNEL_ARCH := arm64
-LOADABLE_KERNEL_MODULE ?= true
+LOADABLE_KERNEL_MODULE ?= false
 
 ifeq ($(LOADABLE_KERNEL_MODULE),true)
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
@@ -195,5 +210,7 @@ LOW_MEMORY := false
 PRODUCT_IMX_TRUSTY := true
 
 # -------@block_storage-------
-# the bootloader image used in dual-bootloader OTA
-BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
+ifneq ($(TARGET_PRODUCT),evk_95_car2)
+  # the bootloader image used in dual-bootloader OTA
+  BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
+endif

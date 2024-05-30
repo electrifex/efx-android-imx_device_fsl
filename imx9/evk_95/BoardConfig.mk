@@ -47,22 +47,33 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 
 # Support gpt
-ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
-  BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab_super.bpt
-  ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab_super.bpt \
-                           partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt \
-                           partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt
-else
-  ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
-    BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-no-product.bpt
-    ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-no-product.bpt \
-                             partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader-no-product.bpt \
-                             partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader-no-product.bpt
+ifeq ($(PRODUCT_IMX_DUAL_BOOTLOADER),true)
+  ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
+    BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt
+    ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt
   else
-    BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab.bpt
-    ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab.bpt \
-                             partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader.bpt \
-                             partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader.bpt
+    ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
+      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader-no-product.bpt
+      ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader-no-product.bpt
+    else
+      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader.bpt
+      ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader.bpt
+    endif
+  endif
+else
+  ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
+      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab_super.bpt
+      ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab_super.bpt \
+                               partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt \
+                               partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt
+  else
+    ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
+      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-no-product.bpt
+      ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-no-product.bpt
+    else
+      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab.bpt
+      ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab.bpt
+    endif
   endif
 endif
 
@@ -102,12 +113,15 @@ BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 
 # -------@block_treble-------
 # Vendor Interface manifest and compatibility
-ifeq ($(POWERSAVE),true)
-    DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest_powersave.xml
+ifeq ($(PRODUCT_IMX_CAR),true)
+    DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest_car.xml
 else
-    DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest.xml
+    ifeq ($(POWERSAVE),true)
+        DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest_powersave.xml
+    else
+        DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest.xml
+    endif
 endif
-
 DEVICE_MATRIX_FILE := $(IMX_DEVICE_PATH)/compatibility_matrix.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(IMX_DEVICE_PATH)/device_framework_matrix.xml
 
@@ -132,7 +146,7 @@ BOARD_KERNEL_BASE := 0x90400000
 CMASIZE=1024M
 # NXP default config
 BOARD_KERNEL_CMDLINE := init=/init firmware_class.path=/vendor/firmware loop.max_part=7 bootconfig
-BOARD_BOOTCONFIG += androidboot.console=ttyLP0 androidboot.hardware=nxp
+BOARD_BOOTCONFIG += androidboot.hardware=nxp
 
 # memory config
 BOARD_KERNEL_CMDLINE += transparent_hugepage=never
@@ -140,35 +154,53 @@ BOARD_KERNEL_CMDLINE += swiotlb=65536
 BOARD_KERNEL_CMDLINE += cma=$(CMASIZE)@0xBF0M-0xFF0M
 
 # display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=240 androidboot.dpu_composition=1
+BOARD_BOOTCONFIG += androidboot.lcd_density=200 androidboot.dpu_composition=1
 
 # wifi config
-BOARD_BOOTCONFIG += androidboot.wificountrycode=CN
-BOARD_KERNEL_CMDLINE +=  moal.mod_para=wifi_mod_para.conf
+BOARD_BOOTCONFIG += androidboot.wificountrycode=US
+BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf
 
 BOARD_KERNEL_CMDLINE +=  cpuidle.off=1
 
-# powersave config
-ifeq ($(POWERSAVE),true)
-    BOARD_BOOTCONFIG += androidboot.powersave.usb=true androidboot.powersave.uclamp=true androidboot.powersave.lpa=true
+ifeq ($(PRODUCT_IMX_CAR),true)
+# automotive config
+#BOARD_KERNEL_CMDLINE += video=HDMI-A-2:d
+else
+    BOARD_BOOTCONFIG += androidboot.console=ttyLP0
+    # powersave config
+    ifeq ($(POWERSAVE),true)
+        BOARD_BOOTCONFIG += androidboot.powersave.usb=true androidboot.powersave.uclamp=true androidboot.powersave.lpa=true
+    endif
 endif
 
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
 
-TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-adv7535-ap1302.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-adv7535-it6263-lvds1-ap1302.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-mipi-panel:imx95-19x19-evk-rm692c9.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-lvds0:imx95-19x19-evk-it6263-lvds0.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-lvds-dualdisp:imx95-19x19-evk-it6263-lvds-two-disp.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-lvds-panel:imx95-19x19-evk-jdi-wuxga-lvds-panel.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-cs42888:imx95-19x19-evk-adv7535-ap1302-cs42888.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-lt8912-ap1302.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535:imx95-19x19-verdin-adv7535-ap1302.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-verdin-lvds-panel:imx95-19x19-verdin-lt8912-lvds-panel-ap1302.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-15x15:imx95-15x15-evk-adv7535-ap1302.dtb
-TARGET_BOARD_DTS_CONFIG += imx95-rpmsg:imx95-19x19-evk-adv7535-rpmsg.dtb
+ifeq ($(PRODUCT_IMX_CAR),true)
+  ifeq ($(PRODUCT_IMX_CAR_M7),true)
+    #TODO Car image type is not supported yet
+  else #PRODUCT_IMX_CAR_M7
+    TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car2-adv7535.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-car2-adv7535-it6263-lvds1.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-lvds0:imx95-19x19-evk-car2-it6263-lvds0.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-car2-lt8912.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535:imx95-19x19-verdin-car2-adv7535.dtb
+  endif #PRODUCT_IMX_CAR_M7
+else
+  TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-adv7535-it6263-lvds1-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-mipi-panel:imx95-19x19-evk-rm692c9.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-lvds0:imx95-19x19-evk-it6263-lvds0.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-lvds-dualdisp:imx95-19x19-evk-it6263-lvds-two-disp.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-lvds-panel:imx95-19x19-evk-jdi-wuxga-lvds-panel.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-cs42888:imx95-19x19-evk-adv7535-ap1302-cs42888.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-lt8912-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535:imx95-19x19-verdin-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin-lvds-panel:imx95-19x19-verdin-lt8912-lvds-panel-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15:imx95-15x15-evk-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-rpmsg:imx95-19x19-evk-adv7535-rpmsg.dtb
+endif
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
@@ -176,3 +208,17 @@ ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx9/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy
+
+ifeq ($(PRODUCT_IMX_CAR),true)
+BOARD_SEPOLICY_DIRS += \
+     $(CONFIG_REPO_PATH)/imx9/sepolicy_car \
+     $(IMX_DEVICE_PATH)/sepolicy_car \
+     device/generic/car/common/sepolicy \
+     vendor/nxp-opensource/imx/evs/sepolicy \
+     vendor/nxp-opensource/imx/vehicle/sepolicy
+endif
+
+# -------@block_camera-------
+ifeq ($(PRODUCT_IMX_CAR),true)
+  BOARD_HAVE_IMX_EVS := true
+endif

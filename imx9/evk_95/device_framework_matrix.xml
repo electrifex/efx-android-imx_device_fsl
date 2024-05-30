@@ -1,5 +1,13 @@
 <compatibility-matrix version="1.0" type="framework">
     <hal format="aidl" optional="true">
+        <name>android.hardware.automotive.evs</name>
+        <version>1</version>
+        <interface>
+            <name>IEvsEnumerator</name>
+            <instance>EvsEnumeratorHw</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
         <name>nxp.hardware.secureime</name>
         <version>1</version>
         <interface>
