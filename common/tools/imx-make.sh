@@ -206,6 +206,7 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] || [ ${TARGET_PRODUCT} = "mek_8q" ] \
         || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
         || [ ${TARGET_PRODUCT} = "mek_8q_car" ] || [ ${TARGET_PRODUCT} = "mek_8q_car2" ] \
+        || [ ${TARGET_PRODUCT} = "evk_95_car" ] || [ ${TARGET_PRODUCT} = "evk_95_car2" ] \
         || [ ${TARGET_PRODUCT} = "evk_95" ]; then
             if [ ${enable_gki} -eq 1 ]; then
                 mv ${OUT}/boot.img ${OUT}/boot-imx.img

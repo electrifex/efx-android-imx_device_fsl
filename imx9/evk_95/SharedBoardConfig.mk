@@ -16,7 +16,7 @@ endif
 # -------@block_kernel_bootimg-------
 KERNEL_NAME := Image.lz4
 TARGET_KERNEL_ARCH := arm64
-LOADABLE_KERNEL_MODULE ?= false
+LOADABLE_KERNEL_MODULE ?= true
 
 ifeq ($(LOADABLE_KERNEL_MODULE),true)
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
@@ -116,6 +116,10 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/media/platform/nxp/imx8-isi/imx8-isi.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/imx-csi-formatter.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/dwc-mipi-csi2.ko
+ifeq ($(PRODUCT_IMX_CAR),true)
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle-core.ko
+endif
 
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/media/i2c/ap130x.ko \
@@ -185,6 +189,17 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-enetc-vf.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-enetc4.ko \
     $(KERNEL_OUT)/drivers/net/phy/realtek.ko
+
+# Vehicle drv (dummy. rpmsg_m4)
+  ifeq ($(PRODUCT_IMX_CAR),true)
+    ifeq ($(PRODUCT_IMX_CAR_M7),true)
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle_rpmsg_m4.ko
+    else
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle_dummy_hw.ko
+    endif
+  endif
 endif
 
 #NXP 8997 wifi driver module

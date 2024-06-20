@@ -36,7 +36,11 @@ ifeq ($(PRODUCT_IMX_CAR),true)
     TARGET_KERNEL_ADDITION_DEFCONF := automotive_addition_car2_defconfig
   endif # PRODUCT_IMX_CAR_M7
   TARGET_KERNEL_DEFCONFIG := gki_defconfig
-  TARGET_KERNEL_GKI_DEFCONF:= imx_v8_android_defconfig
+  ifeq ($(LOADABLE_KERNEL_MODULE),true)
+    TARGET_KERNEL_GKI_DEFCONF:= imx95_car_gki.fragment
+  else
+    TARGET_KERNEL_GKI_DEFCONF:= imx_v8_android_defconfig
+  endif
 else
   TARGET_KERNEL_DEFCONFIG := gki_defconfig
   ifeq ($(LOADABLE_KERNEL_MODULE),true)
