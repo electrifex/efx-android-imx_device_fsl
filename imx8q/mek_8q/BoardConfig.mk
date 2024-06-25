@@ -121,8 +121,8 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 
 # Enables to use two concurrent interfaces
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
-# Enables following multi-interface concurrency:  STA+AP+AP, STA+AP, AP+AP, STA, AP
-WIFI_HAL_INTERFACE_COMBINATIONS := {{{STA}, 1}, {{AP_BRIDGED, AP}, 1}}, {{{AP_BRIDGED}, 1}}, {{{AP}, 1}}, {{{STA}, 1}}
+# Enables following multi-interface concurrency:  STA+AP+AP, STA+AP, STA+P2P, AP+AP, STA, AP, P2P
+WIFI_HAL_INTERFACE_COMBINATIONS := {{{STA}, 1}, {{AP_BRIDGED, AP, P2P}, 1}}, {{{AP_BRIDGED}, 1}}, {{{AP}, 1}}, {{{STA}, 1},}, {{{P2P}, 1}}
 
 #Enable hostapd 802.11ax support
 WIFI_FEATURE_HOSTAPD_11AX := true
