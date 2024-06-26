@@ -206,6 +206,7 @@ else
   TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535:imx95-19x19-verdin-adv7535-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-verdin-lvds-panel:imx95-19x19-verdin-lt8912-lvds-panel-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-15x15:imx95-15x15-evk-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15-mipi-panel:imx95-15x15-evk-rm692c9.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-rpmsg:imx95-19x19-evk-adv7535-rpmsg.dtb
 endif
 
