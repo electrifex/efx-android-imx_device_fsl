@@ -76,6 +76,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/mfd/adp5585.ko \
     $(KERNEL_OUT)/drivers/mfd/max96789-core.ko \
     $(KERNEL_OUT)/drivers/mfd/max96789-i2c.ko \
+    $(KERNEL_OUT)/drivers/power/supply/dummy_battery.ko \
     $(KERNEL_OUT)/drivers/pwm/pwm-adp5585.ko \
     $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8mq-usb.ko \
     $(KERNEL_OUT)/drivers/usb/chipidea/usbmisc_imx.ko \
@@ -129,7 +130,6 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/net/wireless/cfg80211.ko \
     $(KERNEL_OUT)/lib/crypto/libarc4.ko \
     $(KERNEL_OUT)/net/mac80211/mac80211.ko \
-    $(KERNEL_OUT)/drivers/power/supply/dummy_battery.ko \
     $(KERNEL_OUT)/drivers/perf/fsl_imx9_ddr_perf.ko \
     $(KERNEL_OUT)/drivers/iio/adc/imx93_adc.ko \
     $(KERNEL_OUT)/drivers/reset/gpio-reset.ko \
