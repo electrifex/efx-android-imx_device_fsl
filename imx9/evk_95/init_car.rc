@@ -77,7 +77,7 @@ on late-fs
     mount_all /vendor/etc/fstab.nxp --late
 
 on early-boot
-    # For evk_8mp, when swap used about 400M, upgrade the level.
+    # For evk_95, when swap used about 400M, upgrade the level.
     setprop ro.lmk.upgrade_pressure 93
     setprop ro.lmk.downgrade_pressure 99
     setprop ro.lmk.critical_upgrade true
@@ -85,7 +85,7 @@ on early-boot
     setprop vendor.hwc.stretch.filter  1
 
     # Default g2d [dpu|pxp|viv] lib to be used
-    setprop vendor.imx.default-g2d viv
+    setprop vendor.imx.default-g2d dpu
 
     # fsl omx graphic manager media framework property
     setprop vendor.rw.VIDEO_RENDER_NAME video_render.surface

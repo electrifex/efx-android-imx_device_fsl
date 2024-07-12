@@ -1,0 +1,8 @@
+<display-settings>
+	<!-- Type of identifier to use: 1 = physical port number, 0 = uniqueId. -->
+	<config identifier="1" />
+	<!-- Primary screen has system decorations and IME enabled by default. -->
+	<!-- Cluster screen -->
+	<display name="port:1"
+		forcedDensity="320" />
+</display-settings>

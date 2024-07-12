@@ -240,6 +240,11 @@ PRODUCT_PACKAGES += \
     WallpaperPicker
 endif
 
+ifeq ($(PRODUCT_IMX_CAR),true)
+PRODUCT_PACKAGES += \
+    MultiDisplaySecondaryHomeTestLauncher
+endif
+
 PRODUCT_SOONG_NAMESPACES += external/mesa3d
 
 PRODUCT_PROPERTY_OVERRIDES += \
