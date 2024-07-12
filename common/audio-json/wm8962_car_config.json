@@ -17,7 +17,8 @@
   "builtin_mic_ctl": [
     {"name": "Capture Switch", "type": "int", "val": 1},
     {"name": "Capture Volume", "type": "int", "val": 40},
-    {"name": "Digital Capture Volume", "type": "int", "val": 108}
+    {"name": "Digital Capture Volume", "type": "int", "val": 108},
+    {"name": "ADC L/R Swap Switch", "type": "int", "val": 1}
   ],
 
   "out_volume_min": 0,
