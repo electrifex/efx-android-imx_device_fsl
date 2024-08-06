@@ -167,7 +167,7 @@ BOARD_BOOTCONFIG += androidboot.lcd_density=200 androidboot.dpu_composition=1
 BOARD_BOOTCONFIG += androidboot.wificountrycode=US
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf
 
-BOARD_KERNEL_CMDLINE +=  cpuidle.off=1
+BOARD_KERNEL_CMDLINE += cpuidle.off=1
 
 ifeq ($(PRODUCT_IMX_CAR),true)
 # automotive config
@@ -186,7 +186,8 @@ endif
 
 ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(PRODUCT_IMX_CAR_M7),true)
-    #TODO Car image type is not supported yet
+    TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car-adv7535.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-car-adv7535-it6263-lvds1.dtb
   else #PRODUCT_IMX_CAR_M7
     TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car2-adv7535.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-car2-adv7535-it6263-lvds1.dtb

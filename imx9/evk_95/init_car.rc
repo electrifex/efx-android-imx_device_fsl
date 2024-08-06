@@ -1,5 +1,6 @@
 import /vendor/etc/init/hw/init.${ro.hardware}.usb.rc
 import /vendor/etc/init/hw/init.${ro.hardware}.${ro.boot.soc_type}.rc
+import /vendor/etc/init/hw/init.car_additional.rc
 
 on early-init
     # mount the debugfs

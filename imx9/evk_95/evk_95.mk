@@ -509,7 +509,7 @@ PRODUCT_COPY_FILES += \
 
 ifeq ($(PRODUCT_IMX_CAR_M7),true)
   PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init_car_m4.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.car_additional.rc
+    $(IMX_DEVICE_PATH)/init_car_m7.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.car_additional.rc
 endif
 
 PRODUCT_COPY_FILES += \

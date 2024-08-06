@@ -55,8 +55,11 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.type.automotive.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.type.automotive.xml
 
 ifeq ($(PRODUCT_IMX_CAR_M7),false)
-# Simulate the vehical rpmsg register event for non m4 car image
+# Simulate the vehical rpmsg register event for non M7 car image
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.vehicle.register=1 \
     vendor.evs.video.ready=1
+else
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/display.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/display.init.cfg
 endif # PRODUCT_IMX_CAR_M7

@@ -94,35 +94,46 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6161.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/max96752-lvds.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/display-connector.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/adv7511/adv7511.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/fsl-imx-ldb.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/max96789-dsi.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6263.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/nwl-dsi.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/lontium-lt8912b.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-link.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-interleaver.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx-ldb-helper.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-ldb.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-mipi-dsi.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/mxsfb/imx-lcdif.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm67191.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-nxp-rm67162.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-simple.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm692c9.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-rocktech-hx8394f.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/imx/dpu95/imx95-dpu-drm.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/display-imx-rpmsg.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/imx8-isi/imx8-isi.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/imx-csi-formatter.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/dwc-mipi-csi2.ko
+
+BOARD_VENDOR_DISPLAY_KERNEL_MODULES = \
+    $(KERNEL_OUT)/drivers/gpu/drm/bridge/adv7511/adv7511.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-interleaver.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-mipi-dsi.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/imx/dpu95/imx95-dpu-drm.ko
 ifeq ($(PRODUCT_IMX_CAR),true)
+    ifeq ($(PRODUCT_IMX_CAR_M7),true)
+        # Display drivers are in /vendor_dlkm  for Car image type.
+    else
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+        $(BOARD_VENDOR_DISPLAY_KERNEL_MODULES)
+    endif
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle-core.ko
+else
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+        $(BOARD_VENDOR_DISPLAY_KERNEL_MODULES)
 endif
 
-BOARD_VENDOR_KERNEL_MODULES += \
+BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(KERNEL_OUT)/drivers/media/i2c/ap130x.ko \
     $(KERNEL_OUT)/mm/zsmalloc.ko \
     $(KERNEL_OUT)/drivers/block/zram/zram.ko \
@@ -191,30 +202,45 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/phy/realtek.ko
 
 # Vehicle drv (dummy. rpmsg_m4)
-  ifeq ($(PRODUCT_IMX_CAR),true)
-    ifeq ($(PRODUCT_IMX_CAR_M7),true)
+    ifeq ($(PRODUCT_IMX_CAR),true)
+        ifeq ($(PRODUCT_IMX_CAR_M7),true)
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle_rpmsg_m4.ko
-    else
+        else
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle_dummy_hw.ko
+        endif
     endif
-  endif
 endif
 
 #NXP 8997 wifi driver module
-BOARD_VENDOR_KERNEL_MODULES += \
+BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
 
 #ARM GPU driver module
-BOARD_VENDOR_KERNEL_MODULES += \
+BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(KERNEL_OUT)/drivers/gpu/arm/midgard/mali_kbase.ko
 
 #neutron driver module
-BOARD_VENDOR_KERNEL_MODULES += \
+BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(KERNEL_OUT)/drivers/remoteproc/imx_neutron_rproc.ko \
     $(KERNEL_OUT)/drivers/staging/neutron/neutron.ko
+
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(BOARD_VENDOR_KERNEL_MODULES_TEMP)
+
+ifeq ($(PRODUCT_IMX_CAR),true)
+    ifeq ($(PRODUCT_IMX_CAR_M7),true)
+# Load all kernel module drivers without display drivers,
+# display drivers will be loaded later
+BOARD_VENDOR_KERNEL_MODULES_LOAD  += \
+    $(BOARD_VENDOR_KERNEL_MODULES_TEMP)
+
+BOARD_VENDOR_KERNEL_MODULES += \
+        $(BOARD_VENDOR_DISPLAY_KERNEL_MODULES)
+    endif
+endif
 
 # -------@block_memory-------
 #Enable this to config 1GB ddr on evk_95
@@ -225,7 +251,9 @@ LOW_MEMORY := false
 PRODUCT_IMX_TRUSTY := true
 
 # -------@block_storage-------
-ifneq ($(TARGET_PRODUCT),evk_95_car2)
+ifeq ($(PRODUCT_IMX_CAR),true)
   # the bootloader image used in dual-bootloader OTA
+  BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95.img
+else
   BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
 endif
