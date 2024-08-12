@@ -69,7 +69,7 @@ on init && property:vendor.skip.charger_not_need=0 && property:ro.boot.powersave
 
 on late-fs && property:vendor.storageproxyd=trusty
     start storageproxyd
-    start vendor.oemlock-1-0
+    start vendor.oemlock-1-0-${ro.boot.keystore}
     start vendor.confirmationui_default
 
 on late-fs
