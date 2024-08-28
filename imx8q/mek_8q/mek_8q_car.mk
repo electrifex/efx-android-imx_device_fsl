@@ -24,11 +24,6 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-imx.xml \
     $(CONFIG_REPO_PATH)/imx8q/default-permissions/default-permissions-com.android.car.dialer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default-permissions/prebuilt_default-permissions-com.android.car.dialer.xml
 
-# Add Google prebuilt services
-PRODUCT_PACKAGES += \
-    HeadUnit \
-    privapp_permissions_google_auto
-
 # -------@block_camera-------
 # Android Auto with Camera2 enablement
 ENABLE_CAMERA_SERVICE ?= true
