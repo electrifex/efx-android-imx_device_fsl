@@ -69,13 +69,13 @@ on init && property:vendor.skip.charger_not_need=0 && property:ro.boot.powersave
 
 on late-fs && property:vendor.storageproxyd=trusty
     start storageproxyd
-    start vendor.oemlock-1-0-${ro.boot.keystore}
     start vendor.confirmationui_default
 
 on late-fs
-    # Start keymaster/gatekeeper service
+    # Start keymaster/gatekeeper/oemlock service
     start vendor.gatekeeper-${ro.boot.keystore}
     start vendor.keymint-${ro.boot.keystore}
+    start vendor.oemlock-1-0-${ro.boot.keystore}
     setprop vendor.powerhal.init 1
 
     # Wait for keymaster
