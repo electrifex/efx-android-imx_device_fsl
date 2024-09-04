@@ -5,8 +5,10 @@ UBOOT_POST_PROCESS := true
 ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(PRODUCT_IMX_CAR_M7),true)
     TARGET_BOOTLOADER_CONFIG := imx95:imx95_19x19_evk_androidauto_trusty_defconfig
+    TARGET_BOOTLOADER_CONFIG += imx95-secure-unlock:imx95_19x19_evk_androidauto_trusty_secure_unlock_defconfig
   else
     TARGET_BOOTLOADER_CONFIG := imx95:imx95_19x19_evk_androidauto2_trusty_defconfig
+    TARGET_BOOTLOADER_CONFIG += imx95-secure-unlock:imx95_19x19_evk_androidauto2_trusty_secure_unlock_defconfig
     TARGET_BOOTLOADER_CONFIG += imx95-verdin:imx95_19x19_verdin_androidauto2_trusty_defconfig
   endif #PRODUCT_IMX_CAR_M7
 else
