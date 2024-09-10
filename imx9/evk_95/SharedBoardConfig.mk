@@ -76,7 +76,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/mfd/adp5585.ko \
     $(KERNEL_OUT)/drivers/mfd/max96789-core.ko \
     $(KERNEL_OUT)/drivers/mfd/max96789-i2c.ko \
-    $(KERNEL_OUT)/drivers/power/supply/dummy_battery.ko \
     $(KERNEL_OUT)/drivers/pwm/pwm-adp5585.ko \
     $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8mq-usb.ko \
     $(KERNEL_OUT)/drivers/usb/chipidea/usbmisc_imx.ko \

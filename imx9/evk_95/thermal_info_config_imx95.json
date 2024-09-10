@@ -29,22 +29,6 @@
             "VrThreshold":"NAN",
             "Multiplier":0.001,
             "Monitor":true
-        },
-        {
-            "Name":"battery",
-            "Type":"BATTERY",
-            "HotThreshold":[
-                "NAN",
-                "NAN",
-                "NAN",
-                "NAN",
-                "NAN",
-                "NAN",
-                100.0
-            ],
-            "VrThreshold":"NAN",
-            "Multiplier":0.001,
-            "Monitor":true
         }
     ],
     "CoolingDevices":[
