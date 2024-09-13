@@ -53,4 +53,7 @@ ifeq ($(PRODUCT_IMX_CAR_M4),false)
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.vehicle.register=1 \
     vendor.evs.video.ready=1
+else
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/camera.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/camera.init.cfg
 endif # PRODUCT_IMX_CAR_M4

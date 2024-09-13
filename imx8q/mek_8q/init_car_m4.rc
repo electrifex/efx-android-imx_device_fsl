@@ -1,3 +1,15 @@
+# camera drivers load service
+service camera_init_sh /vendor/bin/init.insmod.sh /vendor/etc/camera.init.cfg
+    class main
+    user root
+    group root system
+    disabled
+    oneshot
+
+# start camera drivers load service
+on property:vendor.vehicle.register=1
+    start camera_init_sh
+
 # restart camera provider
 on property:sys.boot_completed=1 && property:vendor.vehicle.register=1
     stop vendor.camera-provider-2-7-google

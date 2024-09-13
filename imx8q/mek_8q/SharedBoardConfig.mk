@@ -27,12 +27,12 @@ endif
 TARGET_KERNEL_ARCH := arm64
 
 # NXP 9098 mxmdriver wifi driver module
-BOARD_VENDOR_KERNEL_MODULES += \
+BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
 
 # Support SOF modules
-BOARD_VENDOR_KERNEL_MODULES += \
+BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(KERNEL_OUT)/drivers/firmware/imx/imx-dsp.ko \
     $(KERNEL_OUT)/sound/soc/sof/snd-sof-utils.ko \
     $(KERNEL_OUT)/sound/soc/sof/snd-sof.ko \
@@ -126,7 +126,9 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/nwl-dsi.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/adv7511/adv7511.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-simple.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm67191.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm67191.ko
+
+BOARD_VENDOR_CAPTURE_KERNEL_MODULES = \
     $(KERNEL_OUT)/drivers/media/i2c/ov5640.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/gmsl-max9286.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-mipi-csi2.ko \
@@ -137,11 +139,17 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-mem2mem.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko
 ifeq ($(PRODUCT_IMX_CAR),true)
+    ifeq ($(PRODUCT_IMX_CAR_M4),true)
+        # Camera drivers are in /vendor_dlkm  for Car image type.
+    else
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+        $(BOARD_VENDOR_CAPTURE_KERNEL_MODULES)
+    endif
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle-core.ko
 endif
 
-BOARD_VENDOR_KERNEL_MODULES += \
+BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(KERNEL_OUT)/mm/zsmalloc.ko \
     $(KERNEL_OUT)/drivers/block/zram/zram.ko \
     $(KERNEL_OUT)/net/rfkill/rfkill.ko \
@@ -191,6 +199,21 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     else
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle_dummy_hw.ko
+    endif
+endif
+
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(BOARD_VENDOR_KERNEL_MODULES_TEMP)
+
+ifeq ($(PRODUCT_IMX_CAR),true)
+    ifeq ($(PRODUCT_IMX_CAR_M4),true)
+# Load all kernel module drivers without camera drivers,
+# camera drivers will be loaded later
+BOARD_VENDOR_KERNEL_MODULES_LOAD  += \
+    $(BOARD_VENDOR_KERNEL_MODULES_TEMP)
+
+BOARD_VENDOR_KERNEL_MODULES += \
+        $(BOARD_VENDOR_CAPTURE_KERNEL_MODULES)
     endif
 endif
 
