@@ -93,8 +93,13 @@ endif
 # boot ramdisk so far, we need this step to generate the vendor-ramdisk folder or build process would fail. This
 # can be deleted once we figure out what kernel modules should be put into the vendor boot ramdisk.
 ifeq ($(TARGET_USE_VENDOR_BOOT),true)
+  ifeq ($(PRODUCT_IMX_CAR),true)
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/fstab.nxp.car:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.nxp
+  else
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/fstab.nxp:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.nxp
+  endif
 endif
 
 PRODUCT_COPY_FILES += \
@@ -132,10 +137,17 @@ IMX_NO_PRODUCT_PARTITION := false
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-PRODUCT_COPY_FILES += \
+ifeq ($(PRODUCT_IMX_CAR),true)
+  PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/fstab.nxp.car:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.nxp
+
+  TARGET_RECOVERY_FSTAB = $(IMX_DEVICE_PATH)/fstab.nxp.car
+else
+  PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/fstab.nxp:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.nxp
 
-TARGET_RECOVERY_FSTAB = $(IMX_DEVICE_PATH)/fstab.nxp
+  TARGET_RECOVERY_FSTAB = $(IMX_DEVICE_PATH)/fstab.nxp
+endif
 
 ifneq ($(filter TRUE true 1,$(IMX_OTA_POSTINSTALL)),)
   PRODUCT_PACKAGES += imx_ota_postinstall
