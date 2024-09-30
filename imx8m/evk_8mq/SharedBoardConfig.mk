@@ -135,6 +135,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/cpufreq/imx-cpufreq-dt.ko \
     $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp.ko \
     $(KERNEL_OUT)/drivers/pwm/pwm-imx27.ko \
+    $(KERNEL_OUT)/drivers/mmc/core/pwrseq_simple.ko \
     $(KERNEL_OUT)/drivers/mmc/host/sdhci-esdhc-imx.ko \
     $(KERNEL_OUT)/drivers/mmc/host/cqhci.ko \
     $(KERNEL_OUT)/drivers/i2c/busses/i2c-imx.ko \
@@ -144,6 +145,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/spi/spi-imx.ko \
     $(KERNEL_OUT)/lib/stmp_device.ko \
     $(KERNEL_OUT)/drivers/dma/mxs-dma.ko \
+    $(KERNEL_OUT)/drivers/dma/imx-sdma.ko \
     $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
     $(KERNEL_OUT)/drivers/dma-buf/heaps/system_heap.ko \
     $(KERNEL_OUT)/drivers/dma-buf/heaps/cma_heap.ko \
@@ -177,8 +179,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-hw.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-mem2mem.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-mipi-csi2-sam.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
-    $(KERNEL_OUT)/drivers/dma/imx-sdma.ko
+    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko
 else
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/input/touchscreen/goodix_ts.ko \

@@ -60,6 +60,7 @@ on init && property:vendor.skip.charger_not_need=0
 on late-fs && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
     start storageproxyd
     start vendor.confirmationui_default
+    start securedpu_daemon
 
 on late-fs && property:vendor.skip.charger_not_need=0
     # Start keymaster/gatekeeper/oemlock service
@@ -99,12 +100,6 @@ on early-boot && property:vendor.skip.charger_not_need=0
 
     # Set tracefs permission to 755
     chmod 0755 /sys/kernel/debug/tracing
-
-    # Default backlight device
-    setprop vendor.hw.backlight.dev "backlight"
-    # Chmod/chown FSL specific sys entry
-    chown system system /sys/class/backlight/backlight/brightness
-    chmod 0660 /sys/class/backlight/backlight/brightness
 
     # Set light sensor sysfs path and light sensor threshold lux value
     setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-0/device/0-0044/"
@@ -189,6 +184,9 @@ on post-fs-data && property:vendor.storageproxyd=trusty && property:vendor.skip.
 service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk0rpmb -d /dev/trusty-ipc-dev0
    group system
 
+service securedpu_daemon /vendor/bin/secure_dpu
+   group system
+
 on property:ro.boot.vendor.sysrq=1 && property:vendor.skip.charger_not_need=0
     write /proc/sys/kernel/sysrq 1
 
@@ -225,3 +223,12 @@ on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
 on property:sys.boot_completed=1
     # Turn on swap
     swapon_all /vendor/etc/fstab.nxp
+
+    setprop vendor.sensor.trigger "hrtimer_trigger"
+    chown system system /config/iio/triggers/hrtimer
+    chmod 0770 /config/iio/triggers/hrtimer
+
+    chown system  system /sys/devices/iio_sysfs_trigger/add_trigger
+    chmod 0660 /sys/devices/iio_sysfs_trigger/add_trigger
+    chown system  system /sys/devices/iio_sysfs_trigger/remove_trigger
+    chmod 0660 /sys/devices/iio_sysfs_trigger/remove_trigger

@@ -50,11 +50,7 @@ else
   else
     TARGET_KERNEL_GKI_DEFCONF:= imx_v8_android_defconfig
   endif # LOADABLE_KERNEL_MODULE
-  ifeq ($(POWERSAVE),true)
-    TARGET_KERNEL_ADDITION_DEFCONF := android_addition_defconfig
-  endif
 endif # PRODUCT_IMX_CAR
-
 
 # absolute path is used, not the same as relative path used in AOSP make
 TARGET_DEVICE_DIR := $(patsubst %/, %, $(dir $(realpath $(lastword $(MAKEFILE_LIST)))))

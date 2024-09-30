@@ -16,6 +16,6 @@
 local_dir := $(dir $(lastword $(MAKEFILE_LIST)))
 
 # Attach the flag value definitions to the various release configurations.
-$(call declare-release-config, trunk_staging, $(local_dir)build_config/trunk_staging.scl, ap1a)
+$(call declare-release-config, trunk_staging, $(local_dir)build_config/trunk_staging.scl, ap2a)
 
 local_dir :=

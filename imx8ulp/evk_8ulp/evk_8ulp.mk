@@ -195,7 +195,8 @@ PRODUCT_PACKAGES += \
 # ConfirmationUi HAL
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
-    android.hardware.confirmationui-service.trusty
+    android.hardware.confirmationui-service.trusty \
+    secure_dpu
 endif
 
 # Add Trusty OS backed gatekeeper and secure storage proxy
@@ -489,6 +490,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
     frameworks/native/data/etc/android.hardware.screen.landscape.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.landscape.xml \
     frameworks/native/data/etc/android.hardware.screen.portrait.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.portrait.xml \
+    frameworks/native/data/etc/android.hardware.sensor.ambient_temperature.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.ambient_temperature.xml \
+    frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
     frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
     frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml \
@@ -526,3 +529,8 @@ PRODUCT_PACKAGES += \
     SecureIME \
     nxp.hardware.secureime \
     nxp.hardware.secureime-service
+
+# ele fw
+PRODUCT_COPY_FILES += \
+    vendor/nxp/ele/mx8ulpa2ext-ahab-container.img:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/imx/ele/mx8ulpa2ext-ahab-container.img \
+    vendor/nxp/ele/mx8ulpa2-ahab-container.img:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/imx/ele/mx8ulpa2-ahab-container.img

@@ -28,15 +28,25 @@ ENV AARCH64_GCC_CROSS_COMPILE=/opt/${GCC_CROSS_COMPILE_TOOL_CHAIN_AARCH64}/bin/a
 ENV AARCH32_GCC_CROSS_COMPILE=/opt/${GCC_CROSS_COMPILE_TOOL_CHAIN_AARCH32}/bin/arm-none-eabi-
 ENV ARMGCC_DIR=/opt/${GCC_CROSS_COMPILE_TOOL_CHAIN_AARCH32}
 
-RUN git clone https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 --single-branch --depth=1 -b android-14.0.0_r51 /opt/prebuilt-android-clang
+RUN git clone -b main-kernel-build-2024 --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 /opt/prebuilt-android-clang \
+  && cd /opt/prebuilt-android-clang \
+  && git fetch origin 7061673283909f372f4938e45149d23bd10cbd40 \
+  && git checkout 7061673283909f372f4938e45149d23bd10cbd40
 
-RUN git clone https://android.googlesource.com/kernel/prebuilts/build-tools --single-branch -b master /opt/prebuilt-android-kernel-build-tools \
+RUN git clone https://android.googlesource.com/kernel/prebuilts/build-tools --single-branch -b main-kernel-build-2024 /opt/prebuilt-android-kernel-build-tools \
   && cd /opt/prebuilt-android-kernel-build-tools \
-  && git checkout ae85d23af20f61220b114fc3f7bb6f77cc140365
+  && git fetch origin b46264b70e3cdf70d08c9ae2df6ea3002b242ebc \
+  && git checkout b46264b70e3cdf70d08c9ae2df6ea3002b242ebc
 
-RUN git clone -b main-kernel-build-2024 --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/rust /opt/prebuilt-android-rust
+RUN git clone -b main-kernel-build-2024 --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/rust /opt/prebuilt-android-rust \
+  && cd /opt/prebuilt-android-rust \
+  && git fetch origin 442511af884f074018466f85b4daadd4b0ac0050 \
+  && git checkout 442511af884f074018466f85b4daadd4b0ac0050
 
-RUN git clone -b main-kernel-build-2024 --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/clang-tools /opt/prebuilt-android-clang-tools
+RUN git clone -b main-kernel-build-2024 --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/clang-tools /opt/prebuilt-android-clang-tools \
+  && cd /opt/prebuilt-android-clang-tools \
+  && git fetch origin 1634c6a556d1f2c24897bf74156c6449486e8941 \
+  && git checkout 1634c6a556d1f2c24897bf74156c6449486e8941
 
 ENV CLANG_PATH=/opt/prebuilt-android-clang
 ENV PATH=/opt/prebuilt-android-kernel-build-tools/linux-x86/bin:$PATH

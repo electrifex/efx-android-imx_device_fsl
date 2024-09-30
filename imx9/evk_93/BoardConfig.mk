@@ -21,11 +21,12 @@ HAVE_FSL_IMX_PXP := false
 TARGET_USES_HWC2 := true
 TARGET_HAVE_VULKAN := true
 
+BOARD_GPU_DRIVERS := angle
+
 SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX93
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = false
 SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
 SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_CODEC = false
-SOONG_CONFIG_IMXPLUGIN_POWERSAVE = false
 
 # -------@block_memory-------
 USE_ION_ALLOCATOR := true
@@ -112,6 +113,11 @@ WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 # NXP camera driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko
+
+# Common net modules
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/net/rfkill/rfkill.ko \
+    $(KERNEL_OUT)/net/wireless/cfg80211.ko
 
 # NXP 8987 wifi driver module
 BOARD_VENDOR_KERNEL_MODULES += \

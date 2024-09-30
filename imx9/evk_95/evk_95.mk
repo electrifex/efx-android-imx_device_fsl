@@ -54,9 +54,9 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     android.hardware.power-service.imx
 
-# Do not include product_evk_95.prop for automotive builds
+# Do not include product.prop for automotive builds
 ifneq ($(PRODUCT_IMX_CAR),true)
-    TARGET_VENDOR_PROP := $(LOCAL_PATH)/product_evk_95.prop
+    TARGET_VENDOR_PROP := $(LOCAL_PATH)/product.prop
 endif
 
 # Thermal HAL
@@ -204,7 +204,8 @@ PRODUCT_PACKAGES += \
 # Confirmation UI
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
-    android.hardware.confirmationui-service.trusty
+    android.hardware.confirmationui-service.trusty \
+    secure_dpu
 endif
 
 # new gatekeeper HAL
@@ -249,6 +250,12 @@ else
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := 0
 endif
 
+# Secure enclave
+PRODUCT_PACKAGES += \
+    nvmd \
+    nxp.hardware.secure-enclave \
+    SecureEnclaveDemo
+
 $(call  inherit-product-if-exists, vendor/nxp-private/security/nxp_security.mk)
 
 # Resume on Reboot support
@@ -288,28 +295,25 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
 else
 PRODUCT_COPY_FILES += \
+    $(CONFIG_REPO_PATH)/common/audio-json/cs42448_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42448_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/cs42888_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42888_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/wm8962_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8962_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/micfil_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/micfil_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
+    $(CONFIG_REPO_PATH)/common/audio-json/mqs_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/mqs_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
 endif
 
 # LPA demo
 PRODUCT_COPY_FILES += \
-    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx95/imx95_mcu_demo_lpa.img:imx95_mcu_demo.img
-
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_lpa.img:imx95_mcu_demo.img
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_effects_car.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(IMX_DEVICE_PATH)/audio_policy_configuration_car.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
     $(IMX_DEVICE_PATH)/car_audio_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/car_audio_configuration.xml
 else
-    ifeq ($(POWERSAVE),true)
-PRODUCT_COPY_FILES += \
-    $(CONFIG_REPO_PATH)/common/audio-json/pcm512x_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/pcm512x_config.json
-    endif
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
@@ -325,8 +329,12 @@ endif
 # -------@block_camera-------
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/camera_config_imx95.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
+    $(IMX_DEVICE_PATH)/camera_config_imx95-os08a20.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
+    $(IMX_DEVICE_PATH)/camera_config_imx95-ap1302.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-ap1302.json \
     $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
+
+PRODUCT_PACKAGES += \
+    media_profiles_95-ap1302.xml
 
 PRODUCT_PACKAGES += \
     ap130x_ar0144_single_fw.bin
@@ -335,7 +343,13 @@ PREBUILT_LIBCAMERA := false
 PRODUCT_PACKAGES += \
     libcamera-base \
     libcamera \
-    libyaml
+    libyaml \
+    libnxp_ipa_cam_helper \
+    ipa_nxp_neo \
+    config.yaml \
+    os08a20.yaml \
+    nxpneo_ipa_proxy \
+    ipa_nxp_neo.so.sign
 
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
@@ -344,6 +358,9 @@ ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
     imx_evs_app \
     imx_evs_app_default_resources
+
+PRODUCT_COPY_FILES += \
+    $(IMX_PATH)/libcamera/prebuilt-android/src/ipa/nxp/neo/ipa_nxp_neo.so.sign:$(TARGET_COPY_OUT_VENDOR)/lib64/ipa/ipa_nxp_neo.so.sign
 endif
 
 # -------@block_display-------
@@ -541,24 +558,16 @@ else
     $(IMX_DEVICE_PATH)/init.recovery.nxp.rc:root/init.recovery.nxp.rc
 endif
 
-ifeq ($(POWERSAVE),true)
-  PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/required_hardware_powersave.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
-else
-  PRODUCT_COPY_FILES += \
+PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/required_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
-endif
-
 endif
 
 # ONLY devices that meet the CDD's requirements may declare these features
 
-ifneq ($(POWERSAVE),true)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.external.xml:vendor/etc/permissions/android.hardware.camera.external.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
     frameworks/native/data/etc/android.hardware.camera.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.xml
-endif
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.output.xml \

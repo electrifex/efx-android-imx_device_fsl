@@ -37,5 +37,7 @@ COMMON_LUNCH_CHOICES := \
   evk_93-trunk_staging-userdebug \
   evk_95-trunk_staging-user \
   evk_95-trunk_staging-userdebug \
+  evk_95_car-trunk_staging-user \
+  evk_95_car-trunk_staging-userdebug \
   evk_95_car2-trunk_staging-user \
   evk_95_car2-trunk_staging-userdebug

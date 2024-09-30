@@ -20,6 +20,9 @@
         <permission name="android.permission.WRITE_DEVICE_CONFIG" />
         <permission name="android.permission.THREAD_NETWORK_PRIVILEGED" />
         <permission name="android.permission.READ_DROPBOX_DATA" />
+        <permission name="android.permission.READ_SYSTEM_GRAMMATICAL_GENDER" />
+        <permission name="android.permission.EMERGENCY_INSTALL_PACKAGES" />
+        <permission name="android.permission.CONFIGURE_FACTORY_RESET_PROTECTION" />
     </privapp-permissions>
     <privapp-permissions package="com.google.android.googlequicksearchbox">
         <permission name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -27,5 +30,11 @@
     </privapp-permissions>
     <privapp-permissions package="com.google.android.apps.carrier.carrierwifi">
         <permission name="android.permission.MODIFY_PHONE_STATE" />
+    </privapp-permissions>
+    <privapp-permissions package="com.android.vending">
+        <permission name="android.permission.READ_SYSTEM_GRAMMATICAL_GENDER" />
+    </privapp-permissions>
+    <privapp-permissions package="com.google.android.apps.messaging">
+        <permission name="android.permission.READ_SYSTEM_GRAMMATICAL_GENDER" />
     </privapp-permissions>
 </permissions>

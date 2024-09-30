@@ -43,15 +43,16 @@ PRODUCT_SHIPPING_API_LEVEL := 34
 PRODUCT_PROPERTY_OVERRIDES += \
     pm.dexopt.boot=quicken
 
-# add dmabufheap debug info
-PRODUCT_PROPERTY_OVERRIDES += \
-    debug.c2.use_dmabufheaps=1
-
 # Enforce privapp-permissions whitelist
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.control_privapp_permissions=enforce
 
+# add dmabufheap debug info
+PRODUCT_PROPERTY_OVERRIDES += \
+    debug.c2.use_dmabufheaps=1
+
 # -------@block_multimedia_codec-------
+
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
     Gallery2
@@ -199,7 +200,6 @@ ifneq ($(PRODUCT_IMX_CAR),true)
 endif
 
 # -------@block_camera-------
-ifneq ($(POWERSAVE),true)
 #PRODUCT_PACKAGES += \
 #    android.hardware.camera.provider@2.7-service-google \
 #    android.hardware.camera.provider@2.7-impl-google \
@@ -223,7 +223,6 @@ ifneq ($(POWERSAVE),true)
 # external camera feature demo
 #PRODUCT_PACKAGES += \
 #     Camera2Basic
-endif
 
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \

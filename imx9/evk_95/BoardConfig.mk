@@ -20,20 +20,24 @@ TARGET_USES_HWC2 := true
 TARGET_HAVE_VULKAN := true
 CFG_SECURE_IOCTRL_REGS := true
 ENABLE_SEC_DMABUF_HEAP := true
+MEDIA_PIPELINE := NEOISP
 
 SOONG_CONFIG_IMXPLUGIN += \
                         BOARD_VPU_TYPE \
                         CFG_SECURE_IOCTRL_REGS \
-                        ENABLE_SEC_DMABUF_HEAP
+                        ENABLE_SEC_DMABUF_HEAP \
+                        MEDIA_PIPELINE
 
 SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX95
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = true
 SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_TYPE = wave6
 SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
 SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_CODEC = true
-SOONG_CONFIG_IMXPLUGIN_POWERSAVE = $(POWERSAVE)
 SOONG_CONFIG_IMXPLUGIN_CFG_SECURE_IOCTRL_REGS = true
 SOONG_CONFIG_IMXPLUGIN_ENABLE_SEC_DMABUF_HEAP = true
+SOONG_CONFIG_IMXPLUGIN_MEDIA_PIPELINE = NEOISP
+
+BOARD_GPU_DRIVERS := mali
 
 # -------@block_memory-------
 USE_ION_ALLOCATOR := true
@@ -116,11 +120,7 @@ BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 ifeq ($(PRODUCT_IMX_CAR),true)
     DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest_car.xml
 else
-    ifeq ($(POWERSAVE),true)
-        DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest_powersave.xml
-    else
-        DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest.xml
-    endif
+    DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest.xml
 endif
 DEVICE_MATRIX_FILE := $(IMX_DEVICE_PATH)/compatibility_matrix.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(IMX_DEVICE_PATH)/device_framework_matrix.xml
@@ -167,19 +167,10 @@ BOARD_BOOTCONFIG += androidboot.lcd_density=200 androidboot.dpu_composition=1
 BOARD_BOOTCONFIG += androidboot.wificountrycode=US
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf
 
-BOARD_KERNEL_CMDLINE += cpuidle.off=1
-
 ifeq ($(PRODUCT_IMX_CAR),true)
 # automotive config
 #BOARD_KERNEL_CMDLINE += video=HDMI-A-2:d
-else
-    BOARD_BOOTCONFIG += androidboot.console=ttyLP0
-    # powersave config
-    ifeq ($(POWERSAVE),true)
-        BOARD_BOOTCONFIG += androidboot.powersave.usb=true androidboot.powersave.uclamp=true androidboot.powersave.lpa=true
-    endif
 endif
-
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
@@ -196,19 +187,31 @@ ifeq ($(PRODUCT_IMX_CAR),true)
     TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535:imx95-19x19-verdin-car2-adv7535.dtb
   endif #PRODUCT_IMX_CAR_M7
 else
-  TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-os08a20-isp-adv7535.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-ap1302:imx95-19x19-evk-adv7535-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-adv7535-it6263-lvds1-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-mipi-panel:imx95-19x19-evk-rm692c9.dtb
-  TARGET_BOARD_DTS_CONFIG += imx95-lvds0:imx95-19x19-evk-it6263-lvds0.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-lvds0:imx95-19x19-evk-os08a20-isp-it6263-lvds0.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-lvds-dualdisp:imx95-19x19-evk-it6263-lvds-two-disp.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-lvds-panel:imx95-19x19-evk-jdi-wuxga-lvds-panel.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-cs42888:imx95-19x19-evk-adv7535-ap1302-cs42888.dtb
-  TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-lt8912-ap1302.dtb
-  TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535:imx95-19x19-verdin-adv7535-ap1302.dtb
-  TARGET_BOARD_DTS_CONFIG += imx95-verdin-lvds-panel:imx95-19x19-verdin-lt8912-lvds-panel-ap1302.dtb
-  TARGET_BOARD_DTS_CONFIG += imx95-15x15:imx95-15x15-evk-adv7535-ap1302.dtb
-  TARGET_BOARD_DTS_CONFIG += imx95-15x15-mipi-panel:imx95-15x15-evk-rm692c9.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-rpmsg:imx95-19x19-evk-adv7535-rpmsg.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-mipi4k:imx95-19x19-evk-lt9611uxc-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-dsi-serdes:imx95-19x19-evk-dsi-serdes.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-os08a20-isp-adv7535.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin-ap1302:imx95-19x19-verdin-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin-lt8912:imx95-19x19-verdin-lt8912-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin-10inch-panel-lvds:imx95-19x19-verdin-panel-cap-touch-10inch-lvds.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin-10inch-panel-dsi:imx95-19x19-verdin-panel-cap-touch-10inch-dsi.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin-mipi-panel:imx95-19x19-verdin-rm692c9.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin-mipi4k:imx95-19x19-verdin-lt9611uxc-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15:imx95-15x15-evk-os08a20-isp-adv7535.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15-ap1302:imx95-15x15-evk-adv7535-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15-mipi-panel:imx95-15x15-evk-rm692c9.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15-aud-hat:imx95-15x15-evk-adv7535-aud-hat.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15-mqs:imx95-15x15-evk-adv7535-mqs.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15-mipi4k:imx95-15x15-evk-lt9611uxc-ap1302.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15-boe-panel-lvds1:imx95-15x15-evk-boe-wxga-lvds1-panel.dtb
 endif
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
