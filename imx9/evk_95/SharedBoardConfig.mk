@@ -133,7 +133,10 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
 endif
 
 BOARD_VENDOR_KERNEL_MODULES_TEMP += \
-    $(KERNEL_OUT)/drivers/media/i2c/ap130x.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/max96724.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/max96717.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/ox03c10.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/mx95mbcam.ko \
     $(KERNEL_OUT)/mm/zsmalloc.ko \
     $(KERNEL_OUT)/drivers/block/zram/zram.ko \
     $(KERNEL_OUT)/net/rfkill/rfkill.ko \

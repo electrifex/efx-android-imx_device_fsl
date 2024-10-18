@@ -305,15 +305,15 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
 endif
 
-# LPA demo
-PRODUCT_COPY_FILES += \
-    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_lpa.img:imx95_mcu_demo.img
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_effects_car.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(IMX_DEVICE_PATH)/audio_policy_configuration_car.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
     $(IMX_DEVICE_PATH)/car_audio_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/car_audio_configuration.xml
 else
+# LPA demo
+PRODUCT_COPY_FILES += \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_lpa.img:imx95_mcu_demo.img
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
@@ -328,6 +328,12 @@ endif
 
 # -------@block_camera-------
 
+ifeq ($(PRODUCT_IMX_CAR),true)
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/camera_config_imx95-ox03c10.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
+    $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xm
+
+else
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/camera_config_imx95-os08a20.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
     $(IMX_DEVICE_PATH)/camera_config_imx95-ap1302.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-ap1302.json \
@@ -338,6 +344,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     ap130x_ar0144_single_fw.bin
+endif
 
 PREBUILT_LIBCAMERA := false
 PRODUCT_PACKAGES += \
@@ -347,9 +354,16 @@ PRODUCT_PACKAGES += \
     libnxp_ipa_cam_helper \
     ipa_nxp_neo \
     config.yaml \
-    os08a20.yaml \
     nxpneo_ipa_proxy \
     ipa_nxp_neo.so.sign
+
+ifeq ($(PRODUCT_IMX_CAR),true)
+PRODUCT_PACKAGES += \
+    mx95mbcam.yaml
+else
+PRODUCT_PACKAGES += \
+    os08a20.yaml
+endif
 
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
@@ -523,6 +537,10 @@ PRODUCT_PACKAGES += \
     NeutronFirmware.elf \
     NeutronKernels.bin \
     android.hardware.neuralnetworks-shell-service-imx
+
+# Tensorflow lite camera demo
+PRODUCT_PACKAGES += \
+                    tflitecamerademo
 
 # -------@block_miscellaneous-------
 

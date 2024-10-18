@@ -140,6 +140,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PREBUILT_FSL_IMX_CODEC := true
 
+# -------@enable isp copy-------
+PREBUILT_FSL_IMX_ISP := true
+
 # -------@block_storage-------
 
 TARGET_USERIMAGES_USE_F2FS := true
@@ -200,25 +203,24 @@ ifneq ($(PRODUCT_IMX_CAR),true)
 endif
 
 # -------@block_camera-------
-#PRODUCT_PACKAGES += \
-#    android.hardware.camera.provider@2.7-service-google \
-#    android.hardware.camera.provider@2.7-impl-google \
-#    libgooglecamerahal \
-#    libgooglecamerahalutils \
-#    lib_profiler \
-#    libimxcamerahwl_impl \
-#    libimxcamerahalhwl_impl \
-#    libimageprocess
+PRODUCT_PACKAGES += \
+    android.hardware.camera.provider@2.7-service-google \
+    android.hardware.camera.provider@2.7-impl-google \
+    libgooglecamerahal \
+    libgooglecamerahalutils \
+    lib_profiler \
+    libimxcamerahwl_impl \
+    libimageprocess
 
 # external camera, AIDL
-#PRODUCT_PACKAGES += \
-#    android.hardware.camera.provider-V1-external-service \
-#    android.hardware.camera.metadata-V1-ndk.so \
-#    android.hardware.graphics.allocator-V1-ndk.so \
-#    android.hardware.camera.device-V1-ndk.so \
-#    android.hardware.camera.provider-V1-ndk.so \
-#    android.hardware.camera.provider-V1-external-impl.so \
-#    camera.device-external-imx-impl.so
+PRODUCT_PACKAGES += \
+    android.hardware.camera.provider-V1-external-service \
+    android.hardware.camera.metadata-V1-ndk.so \
+    android.hardware.graphics.allocator-V1-ndk.so \
+    android.hardware.camera.device-V1-ndk.so \
+    android.hardware.camera.provider-V1-ndk.so \
+    android.hardware.camera.provider-V1-external-impl.so \
+    camera.device-external-imx-impl.so
 
 # external camera feature demo
 #PRODUCT_PACKAGES += \
