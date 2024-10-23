@@ -139,7 +139,7 @@ function uuu_load_uboot
         done
     fi
 
-    echo uuu_version 1.4.182 > /tmp/uuu.lst${randome_part}
+    echo uuu_version 1.5.179 > /tmp/uuu.lst${randome_part}
     tmp_files_in_uuu+=(uuu.lst${randome_part})
 
     ln -sf "${sym_link_directory}"${bootloader_used_by_uuu} /tmp/${bootloader_used_by_uuu}${randome_part}
