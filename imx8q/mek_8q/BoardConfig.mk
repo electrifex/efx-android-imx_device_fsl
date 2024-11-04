@@ -55,7 +55,7 @@ else
   endif
 endif
 
-BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx8qm.img
+BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx8qm-revd.img
 ifeq ($(OTA_TARGET),8qxp)
 BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx8qxp.img
 endif
@@ -179,6 +179,12 @@ ifeq ($(PRODUCT_IMX_CAR),true)
         TARGET_BOARD_DTS_CONFIG += imx8qm-md:imx8qm-mek-car-md-a72.dtb
         # imx8qm auto with SOF
         TARGET_BOARD_DTS_CONFIG += imx8qm-sof:imx8qm-mek-car-a72-sof.dtb
+        # imx8qm auto android, A72 boot on revd
+        TARGET_BOARD_DTS_CONFIG += imx8qm-revd:imx8qm-mek-revd-car-a72.dtb
+        # imx8qm auto android with multi-display, A72 boot on revd
+        TARGET_BOARD_DTS_CONFIG += imx8qm-md-revd:imx8qm-mek-revd-car-md-a72.dtb
+        # imx8qm auto with SOF on revd
+        TARGET_BOARD_DTS_CONFIG += imx8qm-sof-revd:imx8qm-mek-revd-car-a72-sof.dtb
       else
         # imx8qm auto android
         TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car.dtb
@@ -201,6 +207,12 @@ ifeq ($(PRODUCT_IMX_CAR),true)
         TARGET_BOARD_DTS_CONFIG += imx8qm-md:imx8qm-mek-car2-md-a72.dtb
         # imx8qm auto with SOF
         TARGET_BOARD_DTS_CONFIG += imx8qm-sof:imx8qm-mek-car2-a72-sof.dtb
+        # imx8qm auto android without m4 image, A72 boot on revd
+        TARGET_BOARD_DTS_CONFIG += imx8qm-revd:imx8qm-mek-revd-car2-a72.dtb
+        # imx8qm auto android without m4 image for multi-display, A72 boot on revd
+        TARGET_BOARD_DTS_CONFIG += imx8qm-md-revd:imx8qm-mek-revd-car2-md-a72.dtb
+        # imx8qm auto with SOF on revd
+        TARGET_BOARD_DTS_CONFIG += imx8qm-sof-revd:imx8qm-mek-revd-car2-a72-sof.dtb
       else
         # imx8qm auto android without m4 image
         TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car2.dtb

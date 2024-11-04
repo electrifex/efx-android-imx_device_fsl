@@ -347,6 +347,7 @@ PRODUCT_COPY_FILES += \
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/audio-json/wm8960_car_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8960_config.json \
+    $(CONFIG_REPO_PATH)/common/audio-json/wm8962_car_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8962_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/cs42888_car_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42888_config.json
 else
 PRODUCT_COPY_FILES += \

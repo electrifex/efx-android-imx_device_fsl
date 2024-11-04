@@ -34,27 +34,11 @@ options:
                            ┌────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────┐
                            │   soc_name     │  legal parameter after "-u"                                                                          │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8mm       │  dual trusty-dual 4g-evk-uuu 4g ddr4-evk-uuu ddr4 evk-uuu trusty-secure-unlock-dual                  │
+                           │   imx8qxp      │  mek-uuu secure-unlock c0 mek-c0-uuu                                                                 │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8mn       │  dual trusty-dual evk-uuu trusty-secure-unlock-dual ddr4-evk-uuu ddr4                                │
+                           │   imx8qm       │  mek-uuu secure-unlock md                                                                            │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8mq       │  dual trusty-dual evk-uuu trusty-secure-unlock-dual wevk wevk-dual trusty-wevk-dual                  │
-			   │                │  wevk-uuu trusty-secure-unlock-wevk-dual                                                             │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8mp       │  dual trusty-dual evk-uuu trusty-secure-unlock-dual powersave trusty-powersave-dual                  │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8ulp      │  dual trusty-dual trusty-dualboot-dual evk-uuu trusty-secure-unlock-dual 9x9-evk-uuu 9x9 9x9-dual trusty-9x9-dual trusty-lpa-dual  │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8qxp      │  dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock c0 c0-dual                         │
-                           │                │  trusty-c0-dual mek-c0-uuu                                                                           │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8qm       │  dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock md hdmi xen                        │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx93        │  dual trusty-dual evk-uuu                                                                            │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx95        │  verdin verdin-uuu evk-uuu                                                                           │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx7ulp      │  evk-uuu                                                                                             │
+                           │   imx95        │  evk-uuu secure-unlock verdin verdin-uuu                                                             │
                            └────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
   -d dtb_feature    flash dtbo, vbmeta and recovery image file with "dtb_feature" in their names
@@ -63,30 +47,11 @@ options:
                            ┌────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────┐
                            │   soc_name     │  legal parameter after "-d"                                                                          │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8mm       │  ddr4 m4 mipi-panel mipi-panel-rm67191 8mic                                                          │
+                           │   imx8qxp      │  sof                                                                                                 │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8mn       │  mipi-panel mipi-panel-rm67191 rpmsg ddr4 ddr4-mipi-panel mipi-panel-rm67191 ddr4-rpmsg 8mic         │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8mq       │  wevk dual mipi-panel mipi-panel-rm67191                                                             │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8mp       │  rpmsg lvds-panel lvds mipi-panel mipi-panel-rm67191 basler powersave powersave-non-rpmsg            │
-                           │                │  basler-ov5640 ov5640.img sof dual-basler os08a20-ov5640 os08a20                                     │
-                           │                │  revb4 rpmsg-revb4 lvds-panel-revb4 lvds-revb4 mipi-panel-revb4 mipi-panel-rm67191-revb4 basler-revb4│
-                           │                │  powersave-revb4 powersave-non-rpmsg-revb4 basler-ov5640-revb4 ov5640.img-revb4 sof-revb4            │
-                           │                │  dual-basler-revb4 os08a20-ov5640-revb4 os08a20-revb4                                                │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8qxp      │  sof mipi-panel mipi-panel-rm67191 lvds0-panel                                                       │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8qm       │  hdmi mipi-panel mipi-panel-rm67191 md xen sof lvds1-panel                                           │
-                           │                │  revd mipi-panel-revd mipi-panel-rm67191-revd hdmi-revd hdmi-rx-revd md-revd lvds1-panel-revd sof-revd │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8ulp      │  hdmi epdc 9x9 9x9-hdmi sof lpa lpd                                                                  │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx93        │                                                                                                      │
+                           │   imx8qm       │  md sof revd md-revd sof-revd                                                                        │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
                            │   imx95        │  mipi-lvds1 lvds0 verdin verdin-adv7535                                                              │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx7ulp      │  evk-mipi evk mipi                                                                                   │
                            └────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
   -e                erase user data after all image files being flashed
@@ -458,27 +423,13 @@ randome_part=
 # We want to detect illegal feature input to some extent. Here it's based on SoC names. Since an SoC may be on a
 # board running different set of images(android and automotive for a example), so misuse the features of one set of
 # images when flash another set of images can not be detect early with this scenario.
-imx8mm_uboot_feature=(dual trusty-dual 4g-evk-uuu 4g ddr4-evk-uuu ddr4 evk-uuu trusty-secure-unlock-dual)
-imx8mn_uboot_feature=(dual trusty-dual evk-uuu trusty-secure-unlock-dual ddr4-evk-uuu ddr4)
-imx8mq_uboot_feature=(dual trusty-dual evk-uuu trusty-secure-unlock-dual wevk wevk-dual trusty-wevk-dual wevk-uuu trusty-secure-unlock-wevk-dual)
-imx8mp_uboot_feature=(dual trusty-dual evk-uuu trusty-secure-unlock-dual powersave trusty-powersave-dual)
-imx8ulp_uboot_feature=(dual trusty-dual trusty-dualboot-dual evk-uuu trusty-secure-unlock-dual 9x9-evk-uuu 9x9 9x9-dual trusty-9x9-dual trusty-lpa-dual)
-imx8qxp_uboot_feature=(dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock c0 c0-dual trusty-c0-dual mek-c0-uuu)
-imx8qm_uboot_feature=(dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock md hdmi xen)
-imx7ulp_uboot_feature=(evk-uuu)
-imx93_uboot_feature=(dual trusty-dual evk-uuu)
-imx95_uboot_feature=(evk-uuu verdin verdin-uuu)
+imx8qxp_uboot_feature=(mek-uuu secure-unlock c0 mek-c0-uuu)
+imx8qm_uboot_feature=(mek-uuu secure-unlock md)
+imx95_uboot_feature=(evk-uuu secure-unlock verdin verdin-uuu)
 
-imx8mm_dtb_feature=(ddr4 m4 mipi-panel mipi-panel-rm67191 8mic)
-imx8mn_dtb_feature=(mipi-panel mipi-panel-rm67191 rpmsg ddr4 ddr4-mipi-panel ddr4-mipi-panel-rm67191 ddr4-rpmsg 8mic)
-imx8mq_dtb_feature=(wevk dual mipi-panel mipi-panel-rm67191 mipi)
-imx8mp_dtb_feature=(rpmsg lvds-panel lvds mipi-panel mipi-panel-rm67191 basler powersave powersave-non-rpmsg basler-ov5640 ov5640 sof dual-basler os08a20-ov5640 os08a20 revb4 rpmsg-revb4 lvds-panel-revb4 lvds-revb4 mipi-panel-revb4 mipi-panel-rm67191-revb4 basler-revb4 powersave-revb4 powersave-non-rpmsg-revb4 basler-ov5640-revb4 ov5640-revb4 sof-revb4 dual-basler-revb4 os08a20-ov5640-revb4 os08a20-revb4)
-imx8qxp_dtb_feature=(sof mipi-panel mipi-panel-rm67191 lvds0-panel)
-imx8qm_dtb_feature=(hdmi hdmi-rx mipi-panel mipi-panel-rm67191 md xen sof lvds1-panel revd mipi-panel-revd mipi-panel-rm67191-revd hdmi-revd hdmi-rx-revd md-revd lvds1-panel-revd sof-revd)
-imx8ulp_dtb_feature=(hdmi epdc 9x9 9x9-hdmi sof lpa lpd)
-imx93_dtb_feature=()
+imx8qxp_dtb_feature=(sof)
+imx8qm_dtb_feature=(md sof revd md-revd sof-revd)
 imx95_dtb_feature=(mipi-lvds1 lvds0 verdin verdin-adv7535)
-imx7ulp_dtb_feature=(evk-mipi evk mipi)
 
 tmp_files_before_uuu=()
 tmp_files_in_uuu=()

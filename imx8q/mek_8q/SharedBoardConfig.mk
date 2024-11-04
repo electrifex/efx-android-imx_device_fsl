@@ -40,9 +40,6 @@ BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(KERNEL_OUT)/sound/soc/sof/xtensa/snd-sof-xtensa-dsp.ko \
     $(KERNEL_OUT)/sound/soc/sof/imx/imx-common.ko \
     $(KERNEL_OUT)/sound/soc/sof/imx/snd-sof-imx8.ko \
-    $(KERNEL_OUT)/drivers/iio/imu/fxos8700_core.ko \
-    $(KERNEL_OUT)/drivers/iio/imu/fxos8700_i2c.ko \
-    $(KERNEL_OUT)/drivers/iio/light/isl29018.ko
 
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
@@ -81,6 +78,26 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/i2c/muxes/i2c-mux-gpio.ko \
     $(KERNEL_OUT)/drivers/spi/spi-fsl-lpspi.ko \
     $(KERNEL_OUT)/drivers/spi/spi-nxp-fspi.ko \
+    $(KERNEL_OUT)/drivers/iio/imu/fxos8700_core.ko \
+    $(KERNEL_OUT)/drivers/iio/imu/fxos8700_i2c.ko \
+    $(KERNEL_OUT)/drivers/iio/light/isl29018.ko \
+    $(KERNEL_OUT)/drivers/iio/buffer/kfifo_buf.ko \
+    $(KERNEL_OUT)/drivers/iio/buffer/industrialio-triggered-buffer.ko \
+    $(KERNEL_OUT)/drivers/iio/pressure/mpl3115.ko \
+    $(KERNEL_OUT)/drivers/iio/gyro/fxas21002c_core.ko \
+    $(KERNEL_OUT)/drivers/iio/gyro/fxas21002c_i2c.ko \
+    $(KERNEL_OUT)/drivers/iio/industrialio-configfs.ko \
+    $(KERNEL_OUT)/drivers/iio/industrialio-sw-trigger.ko \
+    $(KERNEL_OUT)/drivers/iio/trigger/iio-trig-hrtimer.ko \
+    $(KERNEL_OUT)/drivers/iio/trigger/iio-trig-sysfs.ko \
+    $(KERNEL_OUT)/drivers/iio/common/st_sensors/st_sensors.ko \
+    $(KERNEL_OUT)/drivers/iio/common/st_sensors/st_sensors_i2c.ko \
+    $(KERNEL_OUT)/drivers/iio/accel/st_accel.ko \
+    $(KERNEL_OUT)/drivers/iio/accel/st_accel_i2c.ko \
+    $(KERNEL_OUT)/drivers/iio/magnetometer/st_magn.ko \
+    $(KERNEL_OUT)/drivers/iio/magnetometer/st_magn_i2c.ko \
+    $(KERNEL_OUT)/drivers/iio/gyro/st_gyro.ko \
+    $(KERNEL_OUT)/drivers/iio/gyro/st_gyro_i2c.ko \
     $(KERNEL_OUT)/drivers/soc/imx/busfreq-imx8mq.ko \
     $(KERNEL_OUT)/drivers/mmc/host/cqhci.ko \
     $(KERNEL_OUT)/drivers/mmc/host/sdhci-esdhc-imx.ko \

@@ -66,30 +66,16 @@ set /A flag=1
 :: We want to detect illegal feature input to some extent. Here it's based on SoC names. Since an SoC may be on a
 :: board running different set of images(android and automotive for a example), so misuse the features of one set of
 :: images when flash another set of images can not be detect early with this scenario.
-set imx8mm_uboot_feature=dual trusty-dual 4g-evk-uuu 4g ddr4-evk-uuu ddr4 evk-uuu trusty-secure-unlock-dual
-set imx8mn_uboot_feature=dual trusty-dual evk-uuu trusty-secure-unlock-dual ddr4-evk-uuu ddr4
-set imx8mp_uboot_feature=dual trusty-dual evk-uuu trusty-secure-unlock-dual powersave trusty-powersave-dual
-set imx8ulp_uboot_feature=dual trusty-dual trusty-dualboot-dual evk-uuu trusty-secure-unlock-dual 9x9-evk-uuu 9x9 9x9-dual trusty-9x9-dual trusty-lpa-dual
-set imx8mq_uboot_feature=dual trusty-dual evk-uuu trusty-secure-unlock-dual wevk wevk-dual trusty-wevk-dual wevk-uuu trusty-secure-unlock-wevk-dual
-set imx8qxp_uboot_feature=dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock c0 c0-dual trusty-c0-dual mek-c0-uuu
-set imx8qm_uboot_feature=dual trusty-dual mek-uuu trusty-secure-unlock-dual secure-unlock md hdmi xen
-set imx93_uboot_feature=dual trusty-dual evk-uuu
-set imx95_uboot_feature=evk-uuu verdin verdin-uuu
-set imx7ulp_uboot_feature=evk-uuu
+set imx8qxp_uboot_feature=mek-uuu secure-unlock c0 mek-c0-uuu
+set imx8qm_uboot_feature=mek-uuu secure-unlock md
+set imx95_uboot_feature=evk-uuu secure-unlock verdin verdin-uuu
 
-set imx8mm_dtb_feature=ddr4 m4 mipi-panel mipi-panel-rm67191 8mic
-set imx8mn_dtb_feature=mipi-panel mipi-panel-rm67191 rpmsg ddr4 ddr4-mipi-panel ddr4-mipi-panel-rm67191 ddr4-rpmsg 8mic
-set imx8mp_dtb_feature=rpmsg lvds-panel lvds mipi-panel mipi-panel-rm67191 basler powersave powersave-non-rpmsg basler-ov5640 ov5640 dual-basler os08a20-ov5640 os08a20 sof revb4 rpmsg-revb4 lvds-panel-revb4 lvds-revb4 mipi-panel-revb4 mipi-panel-rm67191-revb4 basler-revb4 powersave-revb4 powersave-non-rpmsg-revb4 basler-ov5640-revb4 ov5640-revb4 sof-revb4 dual-basler-revb4 os08a20-ov5640-revb4 os08a20-revb4
-set imx8mq_dtb_feature=wevk dual mipi-panel mipi-panel-rm67191 mipi
-set imx8qxp_dtb_feature=sof mipi-panel mipi-panel-rm67191 lvds0-panel
-set imx8qm_dtb_feature=hdmi hdmi-rx mipi-panel mipi-panel-rm67191 md xen sof lvds1-panel revd mipi-panel-revd mipi-panel-rm67191-revd hdmi-revd hdmi-rx-revd md-revd lvds1-panel-revd sof-revd
-set imx8ulp_dtb_feature=hdmi epdc 9x9 9x9-hdmi sof lpa lpd
-set imx93_dtb_feature=
+set imx8qxp_dtb_feature=sof
+set imx8qm_dtb_feature=md sof revd md-revd sof-revd
 set imx95_dtb_feature=mipi-lvds1 lvds0 verdin verdin-adv7535
-set imx7ulp_dtb_feature=evk-mipi evk mipi
 
 :: an array to collect the supported soc_names
-set supported_soc_names=imx8qm imx8qxp imx8mq imx8mm imx8mn imx7ulp imx8mp imx8ulp imx93 imx95
+set supported_soc_names=imx8qm imx8qxp imx95
 
 
 
@@ -262,28 +248,11 @@ echo                        Below table lists the legal value supported now base
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   soc_name  ^|  legal parameter after "-u"                                                                        ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8mm    ^|  dual trusty-dual 4g-evk-uuu 4g ddr4-evk-uuu ddr4 evk-uuu trusty-secure-unlock-dual                ^|
+echo                           ^|   imx8qxp   ^|  mek-uuu secure-unlock c0 -c0 mek-c0-uuu                                                           ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8mn    ^|  dual trusty-dual evk-uuu trusty-secure-unlock-dual ddr4-evk-uuu ddr4                              ^|
+echo                           ^|   imx8qm    ^|  mek-uuu md                                                                                        ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8mp    ^|  dual trusty-dual evk-uuu trusty-secure-unlock-dual powersave trusty-powersave-dual                ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8ulp   ^|  dual trusty-dual trusty-dualboot-dual evk-uuu trusty-secure-unlock-dual 9x9-evk-uuu 9x9 9x9-dual  ^|
-echo                           ^|             ^|  trusty-9x9-dual trusty-lpa-dual                                                                   ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8mq    ^|  dual trusty-dual evk-uuu trusty-secure-unlock-dual wevk wevk-dual                                 ^|
-echo                           ^|             ^|  trusty-wevk-dual wevk-uuu trusty-secure-unlock-wevk-dual                                          ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8qxp   ^|  dual trusty-dual mek-uuu trusty-secure-unlock trusty secure-unlock c0 c0-dual trusty-c0           ^|
-echo                           ^|             ^|  trusty-c0-dual mek-c0-uuu                                                                         ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8qm    ^|  dual trusty-dual mek-uuu trusty-secure-unlock trusty secure-unlock md hdmi xen                    ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx93     ^|  dual trusty-dual evk-uuu                                                                          ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx95     ^|  evk-uuu verdin verdin-uuu                                                                         ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx7ulp   ^|  evk-uuu                                                                                           ^|
+echo                           ^|   imx95     ^|  evk-uuu secure-unlock verdin verdin-uuu                                                           ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo
 echo  -d dtb_feature    flash dtbo, vbmeta and recovery image file with "dtb_feature" in their names
@@ -292,29 +261,11 @@ echo                        Below table lists the legal value supported now base
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   soc_name  ^|  legal parameter after "-d"                                                                        ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8mm    ^|  ddr4 m4 mipi-panel mipi-panel-rm67191 8mic                                                        ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8mn    ^|  mipi-panel mipi-panel-rm67191 rpmsg ddr4 ddr4-mipi-panel ddr4-mipi-panel-rm67191 ddr4-rpmsg 8mic  ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8mp    ^|  rpmsg lvds-panel lvds mipi-panel mipi-panel-rm67191 basler powersave powersave-non-rpmsg          ^|
-echo                           ^|             ^|  basler-ov5640 ov5640 dual-basler os08a20-ov5640 os08a20 sof revb4 rpmsg-revb4 lvds-panel-revb4    ^|
-echo                           ^|             ^|  lvds-revb4 mipi-panel-revb4 mipi-panel-rm67191-revb4 basler-revb4 powersave-revb4                 ^|
-echo                           ^|             ^|  powersave-non-rpmsg-revb4 basler-ov5640-revb4 ov5640.img-revb4 sof-revb4 dual-basler-revb4        ^|
-echo                           ^|             ^|  os08a20-ov5640-revb4 os08a20-revb4                                                                ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8mq    ^|  wevk dual mipi-panel mipi-panel-rm67191 mipi                                                      ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx8qxp   ^|  sof                                                                                               ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8qm    ^|  hdmi mipi-panel mipi-panel-rm67191 md xen esai sof                                                ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx8ulp   ^|  hdmi epdc 9x9 9x9-hdmi sof lpa lpd                                                                ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx93     ^|                                                                                                    ^|
+echo                           ^|   imx8qm    ^|  md sof revd md-revd sof-revd                                                                      ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx95     ^|  mipi-lvds1 lvds0 verdin verdin-adv7535                                                            ^|
-echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx7ulp   ^|  evk-mipi evk mipi                                                                                 ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo
 echo  -e                erase user data after all image files being flashed
