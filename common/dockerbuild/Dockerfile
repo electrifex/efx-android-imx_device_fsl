@@ -24,9 +24,15 @@ RUN curl -o ${GCC_CROSS_COMPILE_TOOL_CHAIN_AARCH32}.tar.xz https://armkeil.blob.
  && tar -xvJf ${GCC_CROSS_COMPILE_TOOL_CHAIN_AARCH32}.tar.xz -C /opt \
  && rm -rf ${GCC_CROSS_COMPILE_TOOL_CHAIN_AARCH32}.tar.xz
 
+# imx8QM/QXP CM4 and imx95 CM7 toolchain
+ENV GCC_CROSS_COMPILE_TOOL_CHAIN_CM4 gcc-arm-none-eabi-7-2018-q2-update-linux
+RUN curl -o ${GCC_CROSS_COMPILE_TOOL_CHAIN_CM4}.tar.xz https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/${GCC_CROSS_COMPILE_TOOL_CHAIN_CM4}.tar.bz2 \
+ && tar -jxvf ${GCC_CROSS_COMPILE_TOOL_CHAIN_CM4}.tar.xz -C /opt \
+ && rm -rf ${GCC_CROSS_COMPILE_TOOL_CHAIN_CM4}.tar.xz
+
 ENV AARCH64_GCC_CROSS_COMPILE=/opt/${GCC_CROSS_COMPILE_TOOL_CHAIN_AARCH64}/bin/aarch64-none-linux-gnu-
 ENV AARCH32_GCC_CROSS_COMPILE=/opt/${GCC_CROSS_COMPILE_TOOL_CHAIN_AARCH32}/bin/arm-none-eabi-
-ENV ARMGCC_DIR=/opt/${GCC_CROSS_COMPILE_TOOL_CHAIN_AARCH32}
+ENV ARMGCC_DIR=/opt/gcc-arm-none-eabi-7-2018-q2-update
 
 RUN git clone -b main-kernel-build-2024 --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 /opt/prebuilt-android-clang \
   && cd /opt/prebuilt-android-clang \
@@ -38,20 +44,8 @@ RUN git clone https://android.googlesource.com/kernel/prebuilts/build-tools --si
   && git fetch origin b46264b70e3cdf70d08c9ae2df6ea3002b242ebc \
   && git checkout b46264b70e3cdf70d08c9ae2df6ea3002b242ebc
 
-RUN git clone -b main-kernel-build-2024 --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/rust /opt/prebuilt-android-rust \
-  && cd /opt/prebuilt-android-rust \
-  && git fetch origin 442511af884f074018466f85b4daadd4b0ac0050 \
-  && git checkout 442511af884f074018466f85b4daadd4b0ac0050
-
-RUN git clone -b main-kernel-build-2024 --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/clang-tools /opt/prebuilt-android-clang-tools \
-  && cd /opt/prebuilt-android-clang-tools \
-  && git fetch origin 1634c6a556d1f2c24897bf74156c6449486e8941 \
-  && git checkout 1634c6a556d1f2c24897bf74156c6449486e8941
-
 ENV CLANG_PATH=/opt/prebuilt-android-clang
 ENV PATH=/opt/prebuilt-android-kernel-build-tools/linux-x86/bin:$PATH
-ENV PATH=/opt/prebuilt-android-rust/linux-x86/1.73.0b/bin:$PATH
-ENV PATH=/opt/prebuilt-android-clang-tools/linux-x86/bin:$PATH
 ENV LIBCLANG_PATH=/opt/prebuilt-android-clang/clang-r510928/lib
 
 RUN groupadd -g $groupid $username \
