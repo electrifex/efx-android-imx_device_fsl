@@ -1,6 +1,7 @@
 {
   "driver_name": "micfil-audio",
   "supported_in_devices": ["builtin_mic"],
+  "support_s16": 0,
 
   "init_ctl": [
     {"name": "CH0 Volume", "type": "int", "val": 7},

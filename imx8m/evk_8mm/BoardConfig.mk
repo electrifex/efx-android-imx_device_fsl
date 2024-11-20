@@ -20,7 +20,7 @@ HAVE_FSL_IMX_GPU2D := true
 HAVE_FSL_IMX_GPU3D := true
 HAVE_FSL_IMX_PXP := false
 TARGET_USES_HWC2 := true
-TARGET_HAVE_VULKAN := true
+TARGET_HAVE_VULKAN := false
 
 SOONG_CONFIG_IMXPLUGIN += \
                           BOARD_VPU_TYPE
@@ -31,10 +31,6 @@ SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_TYPE = hantro
 SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
 SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_CODEC = true
 SOONG_CONFIG_IMXPLUGIN_POWERSAVE = false
-
-# -------@block_memory-------
-USE_ION_ALLOCATOR := true
-USE_GPU_ALLOCATOR := false
 
 # -------@block_storage-------
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -137,6 +133,7 @@ BOARD_BOOTCONFIG += androidboot.console=ttymxc1 androidboot.hardware=nxp
 
 # memory config
 BOARD_KERNEL_CMDLINE += transparent_hugepage=never
+BOARD_KERNEL_CMDLINE += swiotlb=512
 
 # display config
 BOARD_BOOTCONFIG += androidboot.lcd_density=240
@@ -155,6 +152,9 @@ endif
 
 # Disable fw_devlink.strict
 BOARD_KERNEL_CMDLINE += fw_devlink.strict=0
+
+# Add KVM support
+BOARD_BOOTCONFIG += androidboot.hypervisor.vm.supported=true
 
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1

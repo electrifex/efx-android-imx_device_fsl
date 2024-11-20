@@ -43,9 +43,15 @@ RUN git clone https://android.googlesource.com/kernel/prebuilts/build-tools --si
   && cd /opt/prebuilt-android-kernel-build-tools \
   && git fetch origin b46264b70e3cdf70d08c9ae2df6ea3002b242ebc \
   && git checkout b46264b70e3cdf70d08c9ae2df6ea3002b242ebc
+RUN git clone -b main-kernel-build-2024 --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/clang-tools /opt/prebuilt-android-clang-tools \
+  && cd /opt/prebuilt-android-clang-tools \
+  && git fetch origin 1634c6a556d1f2c24897bf74156c6449486e8941 \
+  && git checkout 1634c6a556d1f2c24897bf74156c6449486e8941
 
 ENV CLANG_PATH=/opt/prebuilt-android-clang
 ENV PATH=/opt/prebuilt-android-kernel-build-tools/linux-x86/bin:$PATH
+ENV LIBCLANG_PATH=/opt/prebuilt-android-clang/clang-r510928/lib
+ENV PATH=/opt/prebuilt-android-clang-tools/linux-x86/bin:$PATH
 ENV LIBCLANG_PATH=/opt/prebuilt-android-clang/clang-r510928/lib
 
 RUN groupadd -g $groupid $username \

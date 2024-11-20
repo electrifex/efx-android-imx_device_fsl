@@ -29,7 +29,7 @@
                     <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
                              samplingRates="48000" channelMasks="AUDIO_CHANNEL_OUT_STEREO"/>
                 </mixPort>
-                <mixPort name="esai output" role="source" flags="AUDIO_OUTPUT_FLAG_DIRECT">
+                <mixPort name="direct output" role="source" flags="AUDIO_OUTPUT_FLAG_DIRECT">
                     <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
                              samplingRates="48000 96000 192000" channelMasks="AUDIO_CHANNEL_OUT_QUAD AUDIO_CHANNEL_OUT_5POINT1 AUDIO_CHANNEL_OUT_7POINT1"/>
                 </mixPort>
@@ -48,8 +48,7 @@
 
                 <mixPort name="primary input" role="sink">
                     <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
-                             samplingRates="8000 11025 16000 22050 24000 32000 44100 48000"
-                             channelMasks="AUDIO_CHANNEL_IN_MONO AUDIO_CHANNEL_IN_STEREO"/>
+                             samplingRates="48000" channelMasks="AUDIO_CHANNEL_IN_STEREO"/>
                 </mixPort>
             </mixPorts>
             <devicePorts>
@@ -74,14 +73,12 @@
                 </devicePort>
                 <devicePort tagName="Wired Headset Mic" type="AUDIO_DEVICE_IN_WIRED_HEADSET" role="source">
                 </devicePort>
-                <devicePort tagName="Spdif-In" type="AUDIO_DEVICE_IN_AUX_DIGITAL" role="source">
-                </devicePort>
                 <devicePort tagName="BT SCO Headset Mic" type="AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET" role="source">
                 </devicePort>
             </devicePorts>
             <routes>
                 <route type="mix" sink="Speaker"
-                       sources="esai output,primary output"/>
+                       sources="primary output"/>
                 <route type="mix" sink="Wired Headphones"
                        sources="primary output"/>
                 <route type="mix" sink="Wired Headset"
@@ -95,10 +92,10 @@
                 <route type="mix" sink="BT SCO"
                        sources="bt sco output"/>
                 <route type="mix" sink="Line-Out"
-                       sources="compressed_offload,primary output"/>
+                       sources="direct output,compressed_offload,primary output"/>
 
                 <route type="mix" sink="primary input"
-                       sources="Built-In Mic,Wired Headset Mic,Spdif-In,BT SCO Headset Mic"/>
+                       sources="Built-In Mic,Wired Headset Mic,BT SCO Headset Mic"/>
             </routes>
         </module>
 

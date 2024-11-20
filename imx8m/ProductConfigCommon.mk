@@ -12,7 +12,7 @@ $(error IMX_BUILD_32BIT_ROOTFS and IMX_BUILD_32BIT_64BIT_ROOTFS CANNOT be both s
 endif
 endif
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/generic.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_no_telephony.mk)
 ifeq ($(PRODUCT_IMX_CAR),true)
 $(call inherit-product, packages/services/Car/car_product/build/car.mk)
 endif
@@ -111,7 +111,7 @@ PRODUCT_PACKAGES += \
 
 # imx c2 codec binary
 PRODUCT_PACKAGES += \
-    android.hardware.media.c2@1.0-service \
+    android.hardware.media.c2.service.imx \
     codec2.vendor.base.policy \
     codec2.vendor.ext.policy \
     libsfplugin_ccodec \
@@ -240,12 +240,7 @@ PRODUCT_PACKAGES += \
 endif
 
 PRODUCT_PACKAGES += \
-    libedid
-
-PRODUCT_PACKAGES += \
     libdrm_android \
-    libdisplayutils \
-    libfsldisplay
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.sf.color_saturation=1.0
@@ -293,10 +288,7 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # -------@block_audio-------
 PRODUCT_PACKAGES += \
-    android.hardware.audio@7.1-impl \
-    android.hardware.audio.service \
-    android.hardware.audio.effect@7.0-impl:32 \
-    android.hardware.bluetooth.audio@2.1-impl
+    com.android.hardware.audio
 
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
@@ -304,7 +296,6 @@ PRODUCT_PACKAGES += \
 endif
 
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth.audio-impl \
     audio.bluetooth.default \
     audio.primary.imx \
     audio.r_submix.default \
@@ -322,6 +313,7 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_in_audio_policy_configuration_7_0.xml \
     frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
     frameworks/av/services/audiopolicy/config/bluetooth_with_le_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_with_le_audio_policy_configuration_7_0.xml \
+    hardware/interfaces/audio/aidl/default/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects_config.xml \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml \
     device/nxp/imx8m/evk_8mm/le_audio_codec_capabilities.xml:$(TARGET_COPY_OUT_VENDOR)/etc/le_audio_codec_capabilities.xml
 
@@ -407,3 +399,7 @@ endif
 # vndservicemanager
 PRODUCT_PACKAGES += \
     vndservicemanager
+
+PRODUCT_HIDL_ENABLED := true
+PRODUCT_PACKAGES += \
+    hwservicemanager

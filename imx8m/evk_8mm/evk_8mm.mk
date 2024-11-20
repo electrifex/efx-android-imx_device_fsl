@@ -207,6 +207,15 @@ PRODUCT_PACKAGES += \
     android.hardware.oemlock-service-software.imx
 endif
 
+# Secretkeeper HAL
+PRODUCT_PACKAGES += \
+    com.android.hardware.security.secretkeeper
+
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+PRODUCT_PACKAGES += \
+    android.hardware.security.secretkeeper.trusty
+endif
+
 # Specify rollback index for boot and vbmeta partition
 ifneq ($(AVB_RBINDEX),)
 BOARD_AVB_ROLLBACK_INDEX := $(AVB_RBINDEX)
@@ -238,8 +247,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 #DRM Widevine 1.4 L3 support
 PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey \
-    libwvdrmcryptoplugin \
-    libwvaidl
+    libwvdrmcryptoplugin
 
 TARGET_BUILD_WIDEVINE :=
 TARGET_BUILD_WIDEVINE_USE_PREBUILT := true
@@ -293,26 +301,19 @@ PRODUCT_PACKAGES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.max_frame_buffer_acquired_buffers=3
 
-# disable frame rate override
+# set game default frame rate override
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.surface_flinger.enable_frame_rate_override=false
+    ro.surface_flinger.game_default_frame_rate_override=60
 
 # Gralloc HAL
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator-service.imx \
     mapper.imx
 
-# RenderScript HAL
-PRODUCT_PACKAGES += \
-    android.hardware.renderscript@1.0-impl
-
 # 2d test
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PACKAGES += 2d-test
 endif
-
-PRODUCT_PACKAGES += \
-    libg2d-opencl
 
 # -------@block_gpu-------
 
@@ -326,17 +327,11 @@ PRODUCT_PACKAGES += \
     libVSC \
     libCLC \
     libLLVM_viv \
-    libOpenCL \
     libg2d-viv \
-    libgpuhelper \
-    libSPIRV_viv \
+    libgpuhelper
 
 PRODUCT_VENDOR_PROPERTIES += \
     ro.hardware.egl = VIVANTE
-
-# GPU openCL g2d
-PRODUCT_COPY_FILES += \
-    $(IMX_PATH)/imx/opencl-2d/cl_g2d.cl:$(TARGET_COPY_OUT_VENDOR)/etc/cl_g2d.cl
 
 # -------@block_wifi-------
 
@@ -372,8 +367,8 @@ PRODUCT_COPY_FILES += \
 
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.1-impl \
-    android.hardware.bluetooth@1.1-service
+    android.hardware.bluetooth \
+    android.hardware.bluetooth-service.default.nxp
 
 # NXP 8987 Bluetooth vendor config
 PRODUCT_PACKAGES += \
@@ -466,7 +461,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.output.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
-    frameworks/native/data/etc/android.hardware.camera.external.xml:vendor/etc/permissions/android.hardware.camera.external.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
     frameworks/native/data/etc/android.hardware.camera.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
@@ -477,8 +471,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.touchscreen.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
-    frameworks/native/data/etc/android.software.vulkan.deqp.level-2023-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
-    frameworks/native/data/etc/android.software.opengles.deqp.level-2023-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
+    frameworks/native/data/etc/android.software.vulkan.deqp.level-2024-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
+    frameworks/native/data/etc/android.software.opengles.deqp.level-2024-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
@@ -492,7 +486,14 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml \
     frameworks/native/data/etc/android.software.voice_recognizers.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.voice_recognizers.xml \
     frameworks/native/data/etc/android.software.activities_on_secondary_displays.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.activities_on_secondary_displays.xml \
-    frameworks/native/data/etc/android.software.picture_in_picture.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.picture_in_picture.xml
+    frameworks/native/data/etc/android.software.picture_in_picture.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.picture_in_picture.xml \
+    frameworks/native/data/etc/android.software.credentials.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.credentials.xml
+
+PERMISSION_EXTCAM ?= true
+ifeq ($(PERMISSION_EXTCAM),true)
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.camera.external.xml:vendor/etc/permissions/android.hardware.camera.external.xml
+endif
 
 # trusty loadable apps
 PRODUCT_COPY_FILES += \
@@ -502,6 +503,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.device_id_attestation.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.device_id_attestation.xml
 
+# Add Virtualization support
+$(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
+
 # Included GMS package
 ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_ROOTFS) $(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms_64bit_only.mk)
@@ -509,4 +513,7 @@ else
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
 endif
 PRODUCT_SOONG_NAMESPACES += vendor/partner_gms
+
+PRODUCT_PACKAGES += \
+    privapp_whitelist_com.android.emergency
 

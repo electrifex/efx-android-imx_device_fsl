@@ -35,10 +35,6 @@ SOONG_CONFIG_IMXPLUGIN_POWERSAVE = false
 SOONG_CONFIG_IMXPLUGIN_ENABLE_SEC_DMABUF_HEAP = true
 SOONG_CONFIG_IMXPLUGIN_CFG_SECURE_IOCTRL_REGS = true
 
-# -------@block_memory-------
-USE_ION_ALLOCATOR := true
-USE_GPU_ALLOCATOR := false
-
 # -------@block_storage-------
 TARGET_USERIMAGES_USE_EXT4 := true
 
@@ -135,6 +131,7 @@ BOARD_BOOTCONFIG += androidboot.fbTileSupport=enable
 
 # memory config
 BOARD_KERNEL_CMDLINE += transparent_hugepage=never cma=$(CMASIZE)
+BOARD_KERNEL_CMDLINE += swiotlb=512
 
 # display config
 BOARD_BOOTCONFIG += androidboot.lcd_density=240 androidboot.gui_resolution=1080p
@@ -142,6 +139,12 @@ BOARD_BOOTCONFIG += androidboot.lcd_density=240 androidboot.gui_resolution=1080p
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=CN
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf pci=nomsi
+
+# Add KVM support
+BOARD_BOOTCONFIG += androidboot.hypervisor.vm.supported=true
+
+# Simulate audio input
+BOARD_BOOTCONFIG += androidboot.audio.tinyalsa.simulate_input=true
 
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1

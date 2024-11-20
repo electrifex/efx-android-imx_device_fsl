@@ -68,6 +68,8 @@ on early-boot
     # fsl omx graphic manager media framework property
     setprop vendor.rw.VIDEO_RENDER_NAME video_render.surface
     setprop vendor.media.fsl_codec.flag 7
+    setprop vendor.media.amphion_vpu.enable-tile 0
+    setprop media.c2.hal.selection aidl
 
     setprop camera.disable_zsl_mode 1
 
@@ -245,3 +247,6 @@ on property:ro.boot.vendor.sysrq=1
 # setenv append_bootargs androidboot.usb.debugging=1
 on property:ro.boot.usb.debugging=1
     setprop persist.sys.usb.config adb
+
+on property:sys.boot_completed=1
+    start vendor.secretkeeper.${ro.boot.keystore}

@@ -13,7 +13,7 @@ endif
 endif # IMX_BUILD_32BIT_ROOTFS
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/generic.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_no_telephony.mk)
 ifeq ($(PRODUCT_IMX_CAR),true)
 $(call inherit-product, packages/services/Car/car_product/build/car.mk)
 $(call inherit-product, packages/services/Car/cpp/telemetry/cartelemetryd/products/telemetry.mk)
@@ -123,7 +123,7 @@ PRODUCT_PACKAGES += \
 
 # imx c2 codec binary
 PRODUCT_PACKAGES += \
-    android.hardware.media.c2@1.0-service \
+    android.hardware.media.c2.service.imx \
     codec2.vendor.base.policy \
     codec2.vendor.ext.policy \
     libsfplugin_ccodec \
@@ -259,6 +259,9 @@ PRODUCT_PACKAGES += \
     DeviceAsWebcam
 
 PRODUCT_PACKAGES += \
+    DeviceAsWebcam
+
+PRODUCT_PACKAGES += \
     Camera2
 
 ifeq ($(PRODUCT_IMX_CAR),true)
@@ -276,9 +279,6 @@ PRODUCT_PACKAGES += \
     WallpaperPicker
 endif
 
-PRODUCT_PACKAGES += \
-    libedid
-
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_COPY_FILES += \
    $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
@@ -289,9 +289,6 @@ endif
 
 PRODUCT_PACKAGES += \
     libdrm_android \
-    libdisplayutils \
-    libfsldisplay
-
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.sf.color_saturation=1.0
 
@@ -337,9 +334,7 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # -------@block_audio-------
 PRODUCT_PACKAGES += \
-    android.hardware.audio@7.1-impl \
-    android.hardware.audio.service \
-    android.hardware.audio.effect@7.0-impl:32
+    com.android.hardware.audio
 
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
@@ -348,7 +343,6 @@ endif
 
 # audio
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth.audio-impl \
     audio.bluetooth.default \
     audio.primary.imx \
     audio.r_submix.default \
@@ -359,6 +353,7 @@ PRODUCT_PACKAGES += \
     tinypcminfo
 
 PRODUCT_COPY_FILES += \
+    hardware/interfaces/audio/aidl/default/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects_config.xml \
     frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
@@ -449,3 +444,7 @@ endif
 # vndservicemanager
 PRODUCT_PACKAGES += \
     vndservicemanager
+
+PRODUCT_HIDL_ENABLED := true
+PRODUCT_PACKAGES += \
+    hwservicemanager

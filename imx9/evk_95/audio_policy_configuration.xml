@@ -34,12 +34,11 @@
                     <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
                              samplingRates="48000 96000 192000" channelMasks="AUDIO_CHANNEL_OUT_QUAD AUDIO_CHANNEL_OUT_5POINT1 AUDIO_CHANNEL_OUT_7POINT1"/>
                 </mixPort>
+                    <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
+                             samplingRates="48000 96000 192000" channelMasks="AUDIO_CHANNEL_OUT_QUAD AUDIO_CHANNEL_OUT_5POINT1 AUDIO_CHANNEL_OUT_7POINT1"/>
+                </mixPort>
                 <mixPort name="lpa output" role="source" flags="AUDIO_OUTPUT_FLAG_DIRECT AUDIO_OUTPUT_FLAG_HW_AV_SYNC">
                     <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
-                             samplingRates="48000" channelMasks="AUDIO_CHANNEL_OUT_STEREO"/>
-                </mixPort>
-                <mixPort name="hi-res output" role="source" flags="AUDIO_OUTPUT_FLAG_DIRECT AUDIO_OUTPUT_FLAG_HW_AV_SYNC">
-                    <profile name="" format="AUDIO_FORMAT_PCM_FLOAT"
                              samplingRates="48000" channelMasks="AUDIO_CHANNEL_OUT_STEREO"/>
                 </mixPort>
                 <mixPort name="hdmi output" role="source">
@@ -63,7 +62,7 @@
 
                 <mixPort name="primary input" role="sink">
                     <profile name="" format="AUDIO_FORMAT_PCM_16_BIT"
-                             samplingRates="8000 11025 16000 22050 24000 32000 44100 48000"
+                             samplingRates="8000 11025 16000 22050 32000 44100 48000"
                              channelMasks="AUDIO_CHANNEL_IN_MONO AUDIO_CHANNEL_IN_STEREO"/>
                 </mixPort>
             </mixPorts>
@@ -88,8 +87,6 @@
                 </devicePort>
                 <devicePort tagName="Wired Headset Mic" type="AUDIO_DEVICE_IN_WIRED_HEADSET" role="source">
                 </devicePort>
-                <devicePort tagName="Spdif-In" type="AUDIO_DEVICE_IN_AUX_DIGITAL" role="source">
-                </devicePort>
                 <devicePort tagName="BT SCO Headset Mic" type="AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET" role="source">
                 </devicePort>
             </devicePorts>
@@ -101,7 +98,7 @@
                 <route type="mix" sink="Wired Headset"
                        sources="primary output"/>
                 <route type="mix" sink="Line-Out"
-                       sources="compressed_offload,hi-res output,lpa output,primary output"/>
+                       sources="direct output,compressed_offload,lpa output,primary output"/>
                 <route type="mix" sink="HDMI Out"
                        sources="passthrough output,hdmi output"/>
                 <route type="mix" sink="BT SCO Headset"
@@ -112,7 +109,7 @@
                        sources="bt sco output"/>
 
                 <route type="mix" sink="primary input"
-                       sources="Wired Headset Mic,Built-In Mic,Spdif-In,BT SCO Headset Mic"/>
+                       sources="Wired Headset Mic,Built-In Mic,BT SCO Headset Mic"/>
             </routes>
         </module>
 

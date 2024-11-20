@@ -24,10 +24,6 @@ SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX8ULP
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = false
 SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
 
-# -------@block_memory-------
-USE_ION_ALLOCATOR := true
-USE_GPU_ALLOCATOR := false
-
 # -------@block_storage-------
 TARGET_USERIMAGES_USE_EXT4 := true
 
@@ -129,6 +125,7 @@ BOARD_BOOTCONFIG += androidboot.hardware=nxp
 
 # memory config
 BOARD_KERNEL_CMDLINE += cma=640M transparent_hugepage=never
+BOARD_KERNEL_CMDLINE += swiotlb=256
 
 # display config
 BOARD_BOOTCONFIG += androidboot.lcd_density=240
@@ -142,6 +139,9 @@ ifeq ($(LOW_MEMORY),true)
 BOARD_BOOTCONFIG += androidboot.displaymode=720p
 BOARD_KERNEL_CMDLINE += galcore.contiguousSize=33554432
 endif
+
+# Add KVM support
+BOARD_BOOTCONFIG += androidboot.hypervisor.vm.supported=true
 
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1

@@ -274,6 +274,15 @@ PRODUCT_PACKAGES += \
     android.hardware.oemlock-service-software.imx
 endif
 
+# Secretkeeper HAL
+PRODUCT_PACKAGES += \
+    com.android.hardware.security.secretkeeper
+
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+PRODUCT_PACKAGES += \
+    android.hardware.security.secretkeeper.trusty
+endif
+
 # Copy firmware encrypt key and public verify key
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_COPY_FILES += \
@@ -317,7 +326,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey \
     libwvdrmcryptoplugin \
-    libwvaidl \
     liboemcrypto \
     firmware_loader
 
@@ -422,18 +430,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.max_frame_buffer_acquired_buffers=4
 
-# disable frame rate override
+# set game default frame rate override
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.surface_flinger.enable_frame_rate_override=false
+    ro.surface_flinger.game_default_frame_rate_override=60
 
 # Gralloc HAL
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator-service.imx \
     mapper.imx
-
-# RenderScript HAL
-PRODUCT_PACKAGES += \
-    android.hardware.renderscript@1.0-impl
 
 # 2d test
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
@@ -550,8 +554,8 @@ PRODUCT_COPY_FILES += \
 # -------@block_bluetooth-------
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0-impl \
-    android.hardware.bluetooth@1.0-service
+    android.hardware.bluetooth \
+    android.hardware.bluetooth-service.default.nxp
 
 # Bluetooth vendor config
 PRODUCT_PACKAGES += \
@@ -657,8 +661,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
     frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level-0.xml \
     frameworks/native/data/etc/android.hardware.vulkan.version-1_3.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version-1_3.xml \
-    frameworks/native/data/etc/android.software.vulkan.deqp.level-2023-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
-    frameworks/native/data/etc/android.software.opengles.deqp.level-2023-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
+    frameworks/native/data/etc/android.software.vulkan.deqp.level-2024-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
+    frameworks/native/data/etc/android.software.opengles.deqp.level-2024-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
@@ -686,6 +690,12 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.managed_users.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.managed_users.xml \
     frameworks/native/data/etc/android.software.print.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.print.xml \
     frameworks/native/data/etc/android.hardware.screen.portrait.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.portrait.xml
+
+PERMISSION_EXTCAM ?= true
+ifeq ($(PERMISSION_EXTCAM),true)
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.camera.external.xml:vendor/etc/permissions/android.hardware.camera.external.xml
+endif
 endif
 
 # Keymint configuration
@@ -700,6 +710,9 @@ else
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
 endif
 PRODUCT_SOONG_NAMESPACES += vendor/partner_gms
+
+PRODUCT_PACKAGES += \
+    privapp_whitelist_com.android.emergency
 else
 # Included GAS package
 #ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_ROOTFS) $(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
@@ -717,4 +730,3 @@ PRODUCT_PACKAGES += \
     CarMapsPlaceholder
 endif
 endif
-

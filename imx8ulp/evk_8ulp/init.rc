@@ -91,6 +91,7 @@ on early-boot && property:vendor.skip.charger_not_need=0
     # fsl omx graphic manager media framework property
     setprop vendor.rw.VIDEO_RENDER_NAME video_render.surface
     setprop vendor.media.fsl_codec.flag 7
+    setprop media.c2.hal.selection aidl
 
     setprop camera.disable_zsl_mode 1
 
@@ -232,3 +233,6 @@ on property:sys.boot_completed=1
     chmod 0660 /sys/devices/iio_sysfs_trigger/add_trigger
     chown system  system /sys/devices/iio_sysfs_trigger/remove_trigger
     chmod 0660 /sys/devices/iio_sysfs_trigger/remove_trigger
+
+on property:sys.boot_completed=1
+    start vendor.secretkeeper.${ro.boot.keystore}

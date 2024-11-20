@@ -15,22 +15,21 @@ include $(CONFIG_REPO_PATH)/imx9/BoardConfigCommon.mk
 
 BOARD_SOC_TYPE := IMX93
 BOARD_HAVE_VPU := false
-HAVE_FSL_IMX_GPU2D := true
-HAVE_FSL_IMX_GPU3D := true
-HAVE_FSL_IMX_PXP := false
+HAVE_FSL_IMX_GPU2D := false
+HAVE_FSL_IMX_GPU3D := false
+HAVE_FSL_IMX_PXP := true
 TARGET_USES_HWC2 := true
-TARGET_HAVE_VULKAN := true
+TARGET_HAVE_VULKAN := false
+
+BOARD_GPU_DRIVERS := angle
 
 BOARD_GPU_DRIVERS := angle
 
 SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX93
+SOONG_CONFIG_IMXPLUGIN_HAVE_FSL_IMX_GPU3D = false
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = false
 SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
 SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_CODEC = false
-
-# -------@block_memory-------
-USE_ION_ALLOCATOR := true
-USE_GPU_ALLOCATOR := false
 
 # -------@block_storage-------
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -119,6 +118,11 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/net/rfkill/rfkill.ko \
     $(KERNEL_OUT)/net/wireless/cfg80211.ko
 
+# Common net modules
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/net/rfkill/rfkill.ko \
+    $(KERNEL_OUT)/net/wireless/cfg80211.ko
+
 # NXP 8987 wifi driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
@@ -138,6 +142,7 @@ BOARD_BOOTCONFIG += androidboot.hardware=nxp
 
 # memory config
 BOARD_KERNEL_CMDLINE += cma=640M transparent_hugepage=never
+BOARD_KERNEL_CMDLINE += swiotlb=256
 
 # display config
 BOARD_BOOTCONFIG += androidboot.lcd_density=240
@@ -146,16 +151,15 @@ BOARD_BOOTCONFIG += androidboot.lcd_density=240
 BOARD_BOOTCONFIG += androidboot.wificountrycode=CN
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para_sd612.conf
 
-# low memory device build config
-ifeq ($(LOW_MEMORY),true)
 BOARD_BOOTCONFIG += androidboot.displaymode=720p
-endif
 
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
 
 TARGET_BOARD_DTS_CONFIG += imx93:imx93-11x11-evk.dtb
+TARGET_BOARD_DTS_CONFIG += imx93-iw612:imx93-11x11-evk-iw612-otbr.dtb
+TARGET_BOARD_DTS_CONFIG += imx93-frdm-iw612:imx93-11x11-frdm-iw612-otbr.dtb
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
@@ -163,4 +167,3 @@ ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx9/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy
-

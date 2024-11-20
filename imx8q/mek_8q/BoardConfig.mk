@@ -69,10 +69,6 @@ BOARD_ROOT_EXTRA_FOLDERS += metadata
 # -------@block_infrastructure-------
 include $(CONFIG_REPO_PATH)/imx8q/BoardConfigCommon.mk
 
-# -------@block_memory-------
-USE_ION_ALLOCATOR := true
-USE_GPU_ALLOCATOR := false
-
 # -------@block_security-------
 BOARD_AVB_ENABLE := true
 
@@ -144,6 +140,7 @@ BOARD_BOOTCONFIG += androidboot.fbTileSupport=enable
 
 # memory config
 BOARD_KERNEL_CMDLINE += cma=928M@0x960M-0xfc0M transparent_hugepage=never
+BOARD_KERNEL_CMDLINE += swiotlb=768
 
 # display config
 BOARD_BOOTCONFIG += androidboot.lcd_density=200

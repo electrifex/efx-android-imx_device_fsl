@@ -17,11 +17,10 @@ options:
   -f soc_name       flash android image file with soc_name
   -a                only flash image to slot_a
   -b                only flash image to slot_b
-  -c card_size      optional setting: 14 / 28
-                        If not set, use partition-table.img/partition-table-dual.img (default)
-                        If set to 14, use partition-table-14GB.img for 16GB SD card
+  -c card_size      optional setting: 13 / 28
+                        If not set, use partition-table.img/partition-table-dual.img
+                        If set to 13, use partition-table-13GB.img/partition-table-13GB-dual.img for 16GB SD card
                         If set to 28, use partition-table-28GB.img/partition-table-28GB-dual.img for 32GB SD card
-                    Make sure the corresponding file exist for your platform
   -m                flash mcu image
   -u uboot_feature  flash uboot or spl&bootloader image with "uboot_feature" in their names
                         For Standard Android:
@@ -38,6 +37,7 @@ options:
                            │   imx8qm       │  mek-uuu secure-unlock md                                                                            │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
                            │   imx95        │  evk-uuu secure-unlock verdin verdin-uuu                                                             │
+                           │                │  15x15 15x15-dual trusty-15x15-dual 15x15-evk-uuu rpmsg                                              │
                            └────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
   -d dtb_feature    flash dtbo, vbmeta and recovery image file with "dtb_feature" in their names
@@ -51,6 +51,8 @@ options:
                            │   imx8qm       │  md sof revd md-revd sof-revd                                                                        │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
                            │   imx95        │  mipi-lvds1 lvds0 verdin verdin-adv7535                                                              │
+                           │                │  verdin-ap1302 verdin-lt8912 verdin-10inch-panel-lvds verdin-10inch-panel-dsi verdin-mipi-panel      │
+                           │                │  verdin-mipi4k 15x15 15x15-ap1302 15x15-mipi-panel 15x15-aud-hat 15x15-mqs 15x15-mipi4k 15x15-boe-panel-lvds1  │
                            └────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
   -e                erase user data after all image files being flashed
@@ -377,7 +379,7 @@ if [[ "${uboot_feature}" = *"dual"* ]]; then
 fi
 
 # if card_size is not correctly set, exit.
-if [ ${card_size} -ne 0 ] && [ ${card_size} -ne 7 ] && [ ${card_size} -ne 14 ] && [ ${card_size} -ne 28 ]; then
+if [ ${card_size} -ne 0 ] && [ ${card_size} -ne 7 ] && [ ${card_size} -ne 13 ] && [ ${card_size} -ne 28 ]; then
     help; exit 1;
 fi
 
