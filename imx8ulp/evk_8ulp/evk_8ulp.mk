@@ -110,7 +110,8 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors@2.1-nxp-IIO-Subhal
 
 PRODUCT_COPY_FILES += \
-    vendor/nxp-opensource/imx/iio_sensor/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
+    $(IMX_PATH)/imx/sensor/config/sensor_hal_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/sensor_hal_configuration.xml \
+    $(IMX_PATH)/imx/sensor/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
 
 #Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
 TARGET_USE_DYNAMIC_PARTITIONS ?= true
@@ -486,7 +487,7 @@ endif
 
 # Display Device Config
 PRODUCT_COPY_FILES += \
-    device/nxp/imx8ulp/displayconfig/display_id_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_id_0.xml
+    device/nxp/imx8ulp/displayconfig/display_port_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_port_1.xml
 
 # ONLY devices that meet the CDD's requirements may declare these features
 PRODUCT_COPY_FILES += \
@@ -551,3 +552,6 @@ PRODUCT_COPY_FILES += \
 
 # Add Virtualization support
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
+
+# Add imx private apps
+$(call inherit-product-if-exists, vendor/nxp-private/imx-apps/imx-private-app.mk)

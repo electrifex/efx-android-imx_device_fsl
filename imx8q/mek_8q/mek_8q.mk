@@ -603,7 +603,8 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors@2.1-nxp-IIO-Subhal
 
 PRODUCT_COPY_FILES += \
-    $(IMX_PATH)/imx/iio_sensor/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
+    $(IMX_PATH)/imx/sensor/config/sensor_hal_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/sensor_hal_configuration.xml \
+    $(IMX_PATH)/imx/sensor/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
 
 # Copy device related config and binary to board
 PRODUCT_COPY_FILES += \
@@ -645,7 +646,7 @@ endif
 
 # Display Device Config
 PRODUCT_COPY_FILES += \
-    device/nxp/imx8q/displayconfig/display_id_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_id_0.xml
+    device/nxp/imx8q/displayconfig/display_port_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_port_1.xml
 
 # ONLY devices that meet the CDD's requirements may declare these features
 PRODUCT_COPY_FILES += \
@@ -730,3 +731,6 @@ PRODUCT_PACKAGES += \
     CarMapsPlaceholder
 endif
 endif
+
+# Add imx private apps
+$(call inherit-product-if-exists, vendor/nxp-private/imx-apps/imx-private-app.mk)

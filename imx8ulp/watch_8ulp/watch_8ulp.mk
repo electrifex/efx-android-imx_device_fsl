@@ -40,7 +40,7 @@ PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/power
 PRODUCT_SOONG_NAMESPACES += hardware/google/pixel
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/powerhint_imx8ulp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_${ro.boot.soc_type}.json
+    $(IMX_DEVICE_PATH)/powerhint_imx8ulp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_imx8ulp.json
 
 # Do not skip charger_not_need trigger by default
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -113,7 +113,8 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors@2.1-nxp-IIO-Subhal
 
 PRODUCT_COPY_FILES += \
-    vendor/nxp-opensource/imx/iio_sensor/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
+    $(IMX_PATH)/imx/sensor/config/sensor_hal_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/sensor_hal_configuration.xml \
+    $(IMX_PATH)/imx/sensor/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
 
 #Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
 TARGET_USE_DYNAMIC_PARTITIONS ?= true
@@ -447,7 +448,7 @@ endif
 
 # Display Device Config
 PRODUCT_COPY_FILES += \
-    device/nxp/imx8ulp/displayconfig/display_id_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_id_0.xml
+    device/nxp/imx8ulp/displayconfig/display_port_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_port_1.xml
 
 # ONLY devices that meet the CDD's requirements may declare these features
 PRODUCT_COPY_FILES += \

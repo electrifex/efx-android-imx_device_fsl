@@ -17,11 +17,12 @@ ifeq ($(PRODUCT_IMX_CAR),true)
 $(call inherit-product, packages/services/Car/car_product/build/car.mk)
 $(call inherit-product, packages/services/Car/cpp/telemetry/cartelemetryd/products/telemetry.mk)
 endif
+$(call inherit-product, $(TOPDIR)frameworks/base/data/sounds/AllAudio.mk)
 
 # Use updatable apex.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
-$(call inherit-product, $(TOPDIR)frameworks/base/data/sounds/AllAudio.mk)
+include $(CONFIG_REPO_PATH)/common/soong/imx_namespaces.mk
 
 # Installs gsi keys into ramdisk.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
@@ -29,7 +30,6 @@ PRODUCT_PACKAGES += \
     adb_debug.prop
 
 # -------@block_common_config-------
-
 # overrides
 PRODUCT_BRAND := Android
 PRODUCT_MANUFACTURER := nxp
@@ -240,13 +240,11 @@ PRODUCT_PACKAGES += \
     LiveWallpapersPicker \
     WallpaperPicker
 endif
-
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
     MultiDisplaySecondaryHomeTestLauncher
 endif
 
-PRODUCT_SOONG_NAMESPACES += external/mesa3d
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.sf.color_saturation=1.0

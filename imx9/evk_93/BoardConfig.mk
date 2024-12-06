@@ -23,8 +23,6 @@ TARGET_HAVE_VULKAN := false
 
 BOARD_GPU_DRIVERS := angle
 
-BOARD_GPU_DRIVERS := angle
-
 SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX93
 SOONG_CONFIG_IMXPLUGIN_HAVE_FSL_IMX_GPU3D = false
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = false
@@ -118,11 +116,6 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/net/rfkill/rfkill.ko \
     $(KERNEL_OUT)/net/wireless/cfg80211.ko
 
-# Common net modules
-BOARD_VENDOR_KERNEL_MODULES += \
-    $(KERNEL_OUT)/net/rfkill/rfkill.ko \
-    $(KERNEL_OUT)/net/wireless/cfg80211.ko
-
 # NXP 8987 wifi driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
@@ -160,6 +153,7 @@ endif
 TARGET_BOARD_DTS_CONFIG += imx93:imx93-11x11-evk.dtb
 TARGET_BOARD_DTS_CONFIG += imx93-iw612:imx93-11x11-evk-iw612-otbr.dtb
 TARGET_BOARD_DTS_CONFIG += imx93-frdm-iw612:imx93-11x11-frdm-iw612-otbr.dtb
+TARGET_BOARD_DTS_CONFIG += imx93-frdm-iw612-tianma-wvga:imx93-11x11-frdm-tianma-wvga-panel.dtb
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 

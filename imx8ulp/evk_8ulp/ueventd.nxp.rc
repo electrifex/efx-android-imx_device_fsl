@@ -44,4 +44,3 @@
 /sys/devices/iio_sysfs_trigger/trigger*                                  0660    system     system
 /sys/devices/iio_sysfs_trigger/trigger* name                             0660    system     system
 /sys/devices/iio_sysfs_trigger/trigger* trigger_now                      0660    system     system
-/sys/class/backlight/* brightness 0660 system system
