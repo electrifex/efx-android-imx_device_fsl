@@ -134,6 +134,9 @@ on early-boot
 
     start vendor.wifi_hal_legacy
 
+    # Filesystem for libcamera is ready
+    start evs_driver
+
 on property:vendor.vehicle.event=1 && property:vendor.evs.video.ready=1
     start evs_app
 
@@ -142,12 +145,13 @@ on property:vendor.vehicle.event=0
 
 on late-init
     start cardisplayproxyd
-    start evs_driver
 
 service evs_driver /vendor/bin/hw/android.hardware.automotive.evs@EvsEnumeratorHw
     user graphics
     group automotive_evs camera
     onrestart restart evs_manager
+    setenv LIBCAMERA_IPA_SIGNATURE_DIR /vendor/etc/ipa
+    class hal
 
 service evs_app /system/bin/imx_evs_app --hw
     user automotive_evs

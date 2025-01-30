@@ -342,7 +342,9 @@ endif
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/camera_config_imx95-ox03c10.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
-    $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xm
+    $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml \
+    $(IMX_DEVICE_PATH)/imx_evs_configuration_imx95-ox03c10.xml:$(TARGET_COPY_OUT_VENDOR)/etc/automotive/evs/imx_evs_aidl_configuration.xml \
+    $(IMX_DEVICE_PATH)/evs_app_ImxConfig.json:$(TARGET_COPY_OUT_SYSTEM)/etc/automotive/evs/ImxConfig.json
 
 else
 PRODUCT_COPY_FILES += \

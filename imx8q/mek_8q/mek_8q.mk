@@ -414,6 +414,10 @@ PRODUCT_PACKAGES += \
     Camera2Basic \
     MultiCamera
 else
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/imx_evs_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/automotive/evs/imx_evs_aidl_configuration.xml \
+    $(IMX_DEVICE_PATH)/evs_app_ImxConfig.json:$(TARGET_COPY_OUT_SYSTEM)/etc/automotive/evs/ImxConfig.json
+
 PRODUCT_PACKAGES += \
     imx_evs_app \
     imx_evs_app_default_resources
