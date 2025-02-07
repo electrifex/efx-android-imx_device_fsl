@@ -188,10 +188,9 @@ ifeq ($(PRODUCT_IMX_TRUSTY),true)
 -include $(IMX_SECURITY_PATH)/attestation/imx_attestation.mk
 endif
 
-# Copy rpmb test key and AVB test public key
+# Copy AVB test public key
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_COPY_FILES += \
-    $(CONFIG_REPO_PATH)/common/security/rpmb_key_test.bin:rpmb_key_test.bin \
     $(CONFIG_REPO_PATH)/common/security/testkey_public_rsa4096.bin:testkey_public_rsa4096.bin
 endif
 
