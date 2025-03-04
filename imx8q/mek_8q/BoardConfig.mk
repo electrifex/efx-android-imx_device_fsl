@@ -172,14 +172,10 @@ ifeq ($(PRODUCT_IMX_CAR),true)
       ifeq ($(IMX8QM_A72_BOOT),true)
         # imx8qm auto android, A72 boot
         TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car-a72.dtb
-        # imx8qm auto android with multi-display, A72 boot
-        TARGET_BOARD_DTS_CONFIG += imx8qm-md:imx8qm-mek-car-md-a72.dtb
         # imx8qm auto with SOF
         TARGET_BOARD_DTS_CONFIG += imx8qm-sof:imx8qm-mek-car-a72-sof.dtb
         # imx8qm auto android, A72 boot on revd
         TARGET_BOARD_DTS_CONFIG += imx8qm-revd:imx8qm-mek-revd-car-a72.dtb
-        # imx8qm auto android with multi-display, A72 boot on revd
-        TARGET_BOARD_DTS_CONFIG += imx8qm-md-revd:imx8qm-mek-revd-car-md-a72.dtb
         # imx8qm auto with SOF on revd
         TARGET_BOARD_DTS_CONFIG += imx8qm-sof-revd:imx8qm-mek-revd-car-a72-sof.dtb
       else
