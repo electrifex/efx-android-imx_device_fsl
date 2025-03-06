@@ -17,10 +17,10 @@ options:
   -f soc_name       flash android image file with soc_name
   -a                only flash image to slot_a
   -b                only flash image to slot_b
-  -c card_size      optional setting: 13 / 28
-                        If not set, use partition-table.img/partition-table-dual.img
-                        If set to 13, use partition-table-13GB.img/partition-table-13GB-dual.img for 16GB SD card
-                        If set to 28, use partition-table-28GB.img/partition-table-28GB-dual.img for 32GB SD card
+  -c card_size      optional setting: 7 / 13 / 14 / 28
+                        If this option is not used, partition-table.img or partition-table-dual.img is flashed
+                        If this option is used, partition-table-<card_size>GB.img or partition-table-<card_size>GB-dual.img is flashed
+                    Make sure the corresponding partition table image file exists
   -m                flash mcu image
   -u uboot_feature  flash uboot or spl&bootloader image with "uboot_feature" in their names
                         For Standard Android:
@@ -337,6 +337,8 @@ imx95_dtb_feature=(mipi-lvds1 lvds0 verdin verdin-adv7535)
 # an array to collect the supported soc_names
 supported_soc_names=(imx8qm imx8qxp imx95)
 
+supported_card_sizes=(0 7 13 14 28)
+
 if [ $# -eq 0 ]; then
     echo -e ${RED}no parameter specified, will directly exit after displaying help message${STD}
     help; exit 1;
@@ -379,7 +381,9 @@ if [[ "${uboot_feature}" = *"dual"* ]]; then
 fi
 
 # if card_size is not correctly set, exit.
-if [ ${card_size} -ne 0 ] && [ ${card_size} -ne 7 ] && [ ${card_size} -ne 13 ] && [ ${card_size} -ne 28 ]; then
+whether_in_array card_size supported_card_sizes
+if [ ${result_value} != 0 ]; then
+    echo -e >&2 ${RED}card size ${card_size} is not legal${STD};
     help; exit 1;
 fi
 

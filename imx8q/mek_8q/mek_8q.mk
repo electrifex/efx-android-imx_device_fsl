@@ -332,7 +332,7 @@ PRODUCT_PACKAGES += \
 TARGET_BUILD_WIDEVINE :=
 TARGET_BUILD_WIDEVINE_USE_PREBUILT := true
 
-$(call inherit-product-if-exists, vendor/nxp-private/widevine/nxp_widevine_tee_8qm.mk)
+$(call inherit-product-if-exists, vendor/nxp-private/widevine/nxp_widevine_tee_8q.mk)
 $(call inherit-product-if-exists, vendor/nxp-private/widevine/apex/device.mk)
 
 # -------@block_audio-------
@@ -372,7 +372,6 @@ PRODUCT_COPY_FILES += \
 else
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
-    $(IMX_DEVICE_PATH)/audio_policy_configuration_sof.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration_sof.xml \
     $(IMX_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml
 endif
 
@@ -422,6 +421,11 @@ endif
 
 # -------@block_display-------
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
+
+# -----some limiataion of overlay/g2d in hwcomposer3 --------
+SOONG_CONFIG_NAMESPACES += nxp_hwc
+SOONG_CONFIG_nxp_hwc += g2d_ip
+SOONG_CONFIG_nxp_hwc_g2d_ip := DPU
 
 # HWC2 HAL
 PRODUCT_PACKAGES += \
@@ -486,16 +490,13 @@ PRODUCT_PACKAGES += \
         libvulkan_VIVANTE \
         vulkan.$(TARGET_BOARD_PLATFORM) \
         libCLC \
-        libLLVM_viv \
         libOpenCL \
         libOpenVX \
         libOpenVXU \
         libNNVXCBinary-evis \
         libNNVXCBinary-evis2 \
-        libNNVXCBinary-lite \
         libOvx12VXCBinary-evis \
         libOvx12VXCBinary-evis2 \
-        libOvx12VXCBinary-lite \
         libNNGPUBinary-evis \
         libNNGPUBinary-evis2 \
         libNNGPUBinary-lite \
@@ -513,12 +514,6 @@ PRODUCT_COPY_FILES += \
 
 # GPU openCL SDK header file
 -include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/include/CL/cl_sdk.mk
-
-# GPU openCL icdloader config file
--include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/gpu-viv/icdloader/icdloader.mk
-
-# GPU openVX SDK header file
--include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/include/nnxc_kernels/nnxc_kernels.mk
 
 # -------@block_vpu-------
 # VPU files
@@ -650,11 +645,13 @@ PRODUCT_COPY_FILES += \
     device/nxp/imx8q/displayconfig/display_port_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_port_1.xml
 
 # ONLY devices that meet the CDD's requirements may declare these features
+PRODUCT_PACKAGES += \
+    android.hardware.opengles.aep.xml
+
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.output.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
-    frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/vendor_overlay_soc/imx8qm/vendor/etc/permissions/android.hardware.opengles.aep.xml \
     frameworks/native/data/etc/android.hardware.screen.landscape.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.landscape.xml \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.xml \

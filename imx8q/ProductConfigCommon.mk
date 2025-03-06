@@ -40,7 +40,7 @@ PRODUCT_MANUFACTURER := nxp
 # related to the definition and load of library modules
 TARGET_BOARD_PLATFORM := imx
 
-PRODUCT_SHIPPING_API_LEVEL := 34
+PRODUCT_SHIPPING_API_LEVEL := 35
 
 # -------@block_app-------
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -170,6 +170,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.stagefright.ccodec=4  \
     debug.stagefright.omx_default_rank=0x200 \
     debug.stagefright.c2-poolmask=0x70000 \
+    debug.stagefright.ccodec_delayed_params=true \
     debug.stagefright.c2inputsurface=-1
 
 -include $(FSL_RESTRICTED_CODEC_PATH)/fsl-restricted-codec/fsl_real_dec/fsl_real_dec.mk
@@ -284,9 +285,6 @@ endif
 ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_COPY_FILES += \
    $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
-else
-PRODUCT_PACKAGES += \
-    MultiDisplaySecondaryHomeTestLauncher
 endif
 
 PRODUCT_PACKAGES += \
@@ -355,7 +353,7 @@ PRODUCT_PACKAGES += \
     tinypcminfo
 
 PRODUCT_COPY_FILES += \
-    hardware/interfaces/audio/aidl/default/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects_config.xml \
+    vendor/nxp-opensource/imx/audio/default/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects_config.xml \
     frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
@@ -399,10 +397,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libldacBT_enc \
     libldacBT_abr
-
-# -------@block_sensor-------
-PRODUCT_PACKAGES += \
-    fsl_sensor_fusion
 
 # -------@block_input-------
 # Copy soc related config and binary to board

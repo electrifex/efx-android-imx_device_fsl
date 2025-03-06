@@ -29,12 +29,10 @@ options:
                            └────────────────────────────┴───────────────┘
   -a                only flash image to slot_a
   -b                only flash image to slot_b
-  -c card_size      optional setting: 7 / 14 / 28
-                        If not set, use partition-table.img (default)
-                        If set to  7, use partition-table-7GB.img  for  8GB SD card
-                        If set to 14, use partition-table-14GB.img for 16GB SD card
-                        If set to 28, use partition-table-28GB.img for 32GB SD card
-                    Make sure the corresponding file exist for your platform.
+  -c card_size      optional setting: 7 / 13 / 14 / 28
+                        If this option is not used, partition-table.img or partition-table-dual.img is flashed
+                        If this option is used, partition-table-<card_size>GB.img or partition-table-<card_size>GB-dual.img is flashed
+                    Make sure the corresponding partition table image file exists
   -u uboot_feature  flash uboot or spl&bootloader image files with "uboot_feature" in their names.
   -d dtb_feature    flash dtbo, recovery and vbmeta image files with "dtb_feature" in their names.
   -D directory      specify the directory which contains the images to be flashed.
@@ -42,6 +40,28 @@ options:
   -o force_offset   force set uboot offset
 EOF
 
+}
+
+# this function checks whether the value of first parameter is in the array value of second parameter
+# pass the name of the (array)variable to this function. the first is potential element, the second one is array.
+# make sure the first parameter is not empty
+function whether_in_array
+{
+    local potential_element=`eval echo \$\{${1}\}`
+    local array=(`eval echo \$\{${2}\[\*\]\}`)
+    local array_length=${#array[*]}
+    local last_element=${array[${array_length}-1]}
+    for arg in ${array[*]}
+    do
+        if [ "${arg}" = "${potential_element}" ]; then
+            result_value=0
+            return 0
+        fi
+        if [ "${arg}" = "${last_element}" ]; then
+            result_value=1
+            return 0
+        fi
+    done
 }
 
 # parse command line
@@ -86,6 +106,10 @@ current_device_minor=0
 minor_difference=0
 current_device_base_name=""
 
+result_value=0
+
+supported_card_sizes=(0 7 13 14 28)
+
 
 while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
     case $1 in
@@ -114,7 +138,9 @@ command -v simg2img >/dev/null 2>&1 || { echo -e >&2 "${RED}Missing simg2img app
 command -v hdparm >/dev/null 2>&1 || { echo -e >&2 "${RED}Missing hdparm app. Please make sure it is installed. Exiting.${STD}" ; exit 1 ; }
 command -v gdisk >/dev/null 2>&1 || { echo -e >&2 "${RED}Missing gdisk app. Please make sure it is installed. Exiting.${STD}" ; exit 1 ; }
 
-if [ ${card_size} -ne 0 ] && [ ${card_size} -ne 7 ] && [ ${card_size} -ne 14 ] && [ ${card_size} -ne 28 ]; then
+whether_in_array card_size supported_card_sizes
+if [ ${result_value} != 0 ]; then
+    echo -e >&2 ${RED}card size ${card_size} is not legal${STD};
     help; exit 1;
 fi
 
@@ -308,12 +334,12 @@ function flash_partition
 function format_android
 {
     echo "formating android images"
-    format_partition metadata f2fs
+    erase_partition metadata
     format_partition cache
     erase_partition presistdata
     erase_partition fbmisc
     erase_partition misc
-    format_partition userdata f2fs
+    erase_partition userdata
 }
 
 function make_partition

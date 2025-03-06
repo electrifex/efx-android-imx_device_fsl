@@ -6,6 +6,7 @@ on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
+on early-init
     start early_init_sh
     # Set the host name which used in console
     export HOSTNAME evk_95
@@ -161,13 +162,6 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     disabled
     oneshot
 
-service sensor_fusion /vendor/bin/fsl_sensor_fusion
-    class late_start
-    seclabel u:r:sensors:s0
-    user system
-    group system uhid
-    oneshot
-
 # Set watchdog timer to 30 seconds and pet it every 10 seconds to get a 20 second margin
 service watchdogd /system/bin/watchdogd 10 20
     class core
@@ -216,6 +210,8 @@ on post-fs-data
     # tmp dir for opencl Compiler
     setprop vendor.TMPDIR /data/vendor/.opencl-cache
     mkdir /data/vendor/.opencl-cache 0771 system camera
+    # HWC data
+    mkdir /data/vendor/hwc 0771 system graphics
 
 on zygote-start
     # Create the directories used by the Wireless subsystem

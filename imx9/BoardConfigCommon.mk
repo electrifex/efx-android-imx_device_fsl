@@ -104,6 +104,7 @@ endif
 
 # -------@block_storage-------
 AB_OTA_UPDATER := true
+PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := lz4
 ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
 AB_OTA_PARTITIONS += dtbo boot system system_dlkm system_ext vendor vendor_dlkm vbmeta
 else
@@ -146,10 +147,13 @@ TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 BOARD_USES_SYSTEM_DLKMIMAGE := false
 BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
 TARGET_COPY_OUT_SYSTEM_DLKM := system_dlkm
-ifeq ($(PRODUCT_IMX_CAR),true)
+TARGET_GKI_SYSTEM_DLKM ?= true
+ifeq ($(TARGET_GKI_SYSTEM_DLKM),true)
+  ifeq ($(PRODUCT_IMX_CAR),true)
 BOARD_SYSTEM_KERNEL_MODULES += $(wildcard vendor/nxp-opensource/imx-gki/system_dlkm_staging_95_car/flatten/lib/modules/*.ko)
-else
+  else
 BOARD_SYSTEM_KERNEL_MODULES += $(wildcard vendor/nxp-opensource/imx-gki/system_dlkm_staging_95/flatten/lib/modules/*.ko)
+  endif
 endif
 
 BOARD_FLASH_BLOCK_SIZE := 4096
@@ -164,6 +168,12 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
     BOARD_NXP_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_dlkm system_ext vendor vendor_dlkm product
 
   endif
+  BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 0
+  BOARD_SYSTEM_EXTIMAGE_PARTITION_RESERVED_SIZE := 0
+  BOARD_SYSTEM_DLKMIMAGE_PARTITION_RESERVED_SIZE := 0
+  BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 0
+  BOARD_VENDOR_DLKMIMAGE_PARTITION_RESERVED_SIZE := 0
+  BOARD_PRODUCTIMAGE_PARTITION_RESERVED_SIZE := 0
 else
   BOARD_VENDORIMAGE_PARTITION_SIZE := 671088640
   BOARD_SYSTEM_EXTIMAGE_PARTITION_SIZE := 134217728
@@ -184,7 +194,7 @@ BOARD_HAVE_IMX_CAMERA := true
 
 # -------@block_display-------
 SOONG_CONFIG_IMXPLUGIN_NUM_FRAMEBUFFER_SURFACE_BUFFERS = 3
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_RECOVERY_UI_LIB := librecovery_ui_imx
 
 PREBUILT_FSL_IMX_GPU_MALI := true
@@ -204,14 +214,6 @@ SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_ISP = true
 ifneq (,$(filter ISP ALL,$(DISABLE_FSL_PREBUILT)))
     PREBUILT_FSL_IMX_ISP := false
     SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_ISP = false
-endif
-
-# -------@block_sensor-------
-PREBUILT_FSL_IMX_SENSOR_FUSION := true
-
-# override some prebuilt setting if DISABLE_FSL_PREBUILT is define
-ifneq (,$(filter SENSOR_FUSION ALL,$(DISABLE_FSL_PREBUILT)))
-    PREBUILT_FSL_IMX_SENSOR_FUSION := false
 endif
 
 # -------@block_treble-------

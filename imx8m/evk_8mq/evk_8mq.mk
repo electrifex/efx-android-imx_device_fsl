@@ -330,17 +330,14 @@ PRODUCT_PACKAGES += \
         libvulkan_VIVANTE \
         vulkan.$(TARGET_BOARD_PLATFORM) \
         libCLC \
-        libLLVM_viv \
         libOpenCL \
         libg2d-viv \
         libOpenVX \
         libOpenVXU \
         libNNVXCBinary-evis \
         libNNVXCBinary-evis2 \
-        libNNVXCBinary-lite \
         libOvx12VXCBinary-evis \
         libOvx12VXCBinary-evis2 \
-        libOvx12VXCBinary-lite \
         libNNGPUBinary-evis \
         libNNGPUBinary-evis2 \
         libNNGPUBinary-lite \
@@ -358,13 +355,6 @@ PRODUCT_COPY_FILES += \
 
 # GPU openCL SDK header file
 -include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/include/CL/cl_sdk.mk
-
-# GPU openVX SDK header file
--include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/include/nnxc_kernels/nnxc_kernels.mk
-
-# GPU openCL icdloader config file
--include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/gpu-viv/icdloader/icdloader.mk
-
 
 # -------@block_wifi-------
 PRODUCT_COPY_FILES += \

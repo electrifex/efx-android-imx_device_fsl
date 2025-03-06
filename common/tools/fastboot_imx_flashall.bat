@@ -52,7 +52,6 @@ set super_partition=super
 set vendor_boot_partition=vendor_boot
 set init_boot_partition=init_boot
 set /A flash_mcu=0
-set /A statisc=0
 set /A lock=0
 set /A erase=0
 set /A has_system_ext_partition=0
@@ -77,6 +76,7 @@ set imx95_dtb_feature=mipi-lvds1 lvds0 verdin verdin-adv7535
 :: an array to collect the supported soc_names
 set supported_soc_names=imx8qm imx8qxp imx95
 
+set supported_card_sizes=0 7 13 14 28
 
 
 ::---------------------------------------------------------------------------------
@@ -131,11 +131,10 @@ if not [%uboot_feature_test:dual=%] == [%uboot_feature_test%] set /A support_dua
 
 
 :: If sdcard size is not correctly set, exit
-if %card_size% neq 0 set /A statisc+=1
-if %card_size% neq 7 set /A statisc+=1
-if %card_size% neq 13 set /A statisc+=1
-if %card_size% neq 28 set /A statisc+=1
-if %statisc% == 4 echo card_size is not a legal value & goto :eof
+call :whether_in_array card_size supported_card_sizes
+if %flag% neq 0 (
+    echo card_size %card_size% is not a legal value & goto :eof
+)
 
 :: Android Automotive by default support dual bootloader, no "dual" in its partition table name
 if [%support_dual_bootloader%] == [1] (
@@ -232,10 +231,10 @@ echo  -h                displays this help message
 echo  -f soc_name       flash android image file with soc_name
 echo  -a                only flash image to slot_a
 echo  -b                only flash image to slot_b
-echo  -c card_size      optional setting: 13 / 28
-echo                        If not set, use partition-table.img/partition-table-dual.img
-echo                        If set to 13, use partition-table-13GB.img/partition-table-13GB-dual.img for 16GB SD card
-echo                        If set to 28, use partition-table-28GB.img/partition-table-28GB-dual.img for 32GB SD card
+echo  -c card_size      optional setting: 7 / 13 / 14 / 28
+echo                        If this option is not used, partition-table.img or partition-table-dual.img is flashed
+echo                        If this option is used, partition-table-^<card_size^>GB.img or partition-table-^<card_size^>GB-dual.img is flashed
+echo                    Make sure the corresponding partition table image file exists
 echo  -m                flash mcu image
 echo  -u uboot_feature  flash uboot or spl and bootloader image with "uboot_feature" in their names
 echo                        For Standard Android:

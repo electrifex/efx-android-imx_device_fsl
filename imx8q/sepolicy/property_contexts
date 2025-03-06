@@ -16,6 +16,7 @@ vendor.all.system_server.start      u:object_r:vendor_public_default_prop:s0
 vendor.sys.hwc.disable              u:object_r:vendor_public_default_prop:s0
 vendor.hwc.disable.overlay          u:object_r:vendor_public_default_prop:s0
 vendor.hwc.prefer.2d-composition    u:object_r:vendor_public_default_prop:s0
+vendor.hwc.framebuffer_format       u:object_r:vendor_public_default_prop:s0
 vendor.2d.ocl.enable                u:object_r:vendor_public_default_prop:s0
 vendor.imx.default-g2d              u:object_r:vendor_public_default_prop:s0
 vendor.TEMP                                u:object_r:vendor_public_default_prop:s0
@@ -48,8 +49,8 @@ vendor.VS80COMNTOOLS                       u:object_r:vendor_public_default_prop
 vendor.VS90COMNTOOLS                       u:object_r:vendor_public_default_prop:s0
 vendor.VSC_OPTION                          u:object_r:vendor_public_default_prop:s0
 vendor.G2D_YUV_COLOR_MODE                  u:object_r:vendor_public_default_prop:s0
-vendor.hwc.enable.dump_frame               u:object_r:vendor_public_default_prop:s0
 vendor.hwc.debug.dump_refresh_rate         u:object_r:vendor_public_default_prop:s0
+vendor.hwc.debug.dump_frame                u:object_r:vendor_public_default_prop:s0
 vendor.hwc.drm.fbTileSupport               u:object_r:vendor_public_default_prop:s0
 vendor.OPENCL_TIMEOUT                      u:object_r:vendor_public_default_prop:s0
 vendor.VIV_CL_EXT_OPTION                   u:object_r:vendor_public_default_prop:s0

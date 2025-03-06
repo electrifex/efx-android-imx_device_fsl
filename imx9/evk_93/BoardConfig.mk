@@ -4,6 +4,7 @@
 #
 
 TARGET_IMX_KERNEL := true
+TARGET_GKI_SYSTEM_DLKM := false
 include $(CONFIG_REPO_PATH)/imx9/BoardConfigCommon.mk
 
 # -------@block_common_config-------
@@ -161,3 +162,6 @@ ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx9/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy
+
+HAS_SYSTEM_EXT_SEPOLICY := true
+

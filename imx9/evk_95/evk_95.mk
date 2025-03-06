@@ -391,8 +391,9 @@ PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
 # -----some limiataion of overlay/g2d in hwcomposer3 --------
 SOONG_CONFIG_NAMESPACES += nxp_hwc
-SOONG_CONFIG_nxp_hwc += overlay_ip
-SOONG_CONFIG_nxp_hwc_overlay_ip := DPU
+SOONG_CONFIG_nxp_hwc += overlay_ip g2d_ip
+SOONG_CONFIG_nxp_hwc_overlay_ip := DPU95
+SOONG_CONFIG_nxp_hwc_g2d_ip := DPU95
 
 PRODUCT_PACKAGES += \
         android.hardware.graphics.composer3-service.imx \
@@ -433,6 +434,7 @@ PRODUCT_PACKAGES += \
     libarm_egl_properties_sysprop \
     libarm_gralloc_properties_sysprop \
     libarm_mali_config_sysprops \
+    libgpudataproducer \
     libGLES_mali \
     libOpenCL \
     vulkan.mali
@@ -446,6 +448,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_VENDOR_PROPERTIES += \
     ro.hardware.egl = mali \
     ro.hardware.vulkan = mali
+
+PRODUCT_VENDOR_PROPERTIES += \
+    graphics.gpu.profiler.support=true
 
 # -------@block_wifi-------
 
@@ -464,6 +469,7 @@ PRODUCT_PACKAGES += \
 
 # nxp 9098 wifi and bluetooth combo Firmware
 PRODUCT_COPY_FILES += \
+    vendor/nxp/imx-firmware/nxp/FwImage_IW416_SD/sduartiw416_combo.bin:vendor/firmware/sduartiw416_combo.bin \
     vendor/nxp/imx-firmware/nxp/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
     vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
     vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf
@@ -483,6 +489,12 @@ PRODUCT_PACKAGES += \
 #nxp 8997 Bluetooth vendor config
 PRODUCT_PACKAGES += \
     bt_vendor.conf
+
+# Bluetooth LE Audio
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.bluetooth.leaudio_offload.supported=false \
+    persist.bluetooth.leaudio_offload.disabled=false \
+    ro.bluetooth.leaudio_switcher.supported=true
 
 # -------@block_usb-------
 
@@ -541,6 +553,7 @@ endif
 
 # Neural Network HAL and lib
 PRODUCT_PACKAGES += \
+    libNeutronConverter \
     libNeutronDriver \
     NeutronFirmware.elf \
     NeutronKernels.bin \

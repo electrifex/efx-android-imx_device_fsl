@@ -176,8 +176,6 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
     TARGET_BOARD_DTS_CONFIG += imx8mm-mipi-panel-rm67191:imx8mm-evk-rm67191.dtb
     # imx8mm with MIPI-HDMI display, NXP wifi and m4 image to support LPA
     TARGET_BOARD_DTS_CONFIG += imx8mm-m4:imx8mm-evk-rpmsg.dtb
-    # imx8mm with 8mic module
-    TARGET_BOARD_DTS_CONFIG += imx8mm-8mic:imx8mm-evk-8mic-revE.dtb
     # imx8mm with IW612 module
     TARGET_BOARD_DTS_CONFIG += imx8mm-iw612:imx8mm-evk-iw612.dtb
   endif
@@ -197,3 +195,6 @@ ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx8m/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy
+
+HAS_SYSTEM_EXT_SEPOLICY := true
+
