@@ -641,8 +641,13 @@ endif
 endif
 
 # Display Device Config
+ifeq ($(PRODUCT_IMX_CAR),true)
+PRODUCT_COPY_FILES += \
+    device/nxp/imx8q/displayconfig/display_layout_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_layout_configuration.xml
+else
 PRODUCT_COPY_FILES += \
     device/nxp/imx8q/displayconfig/display_port_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_port_1.xml
+endif
 
 # ONLY devices that meet the CDD's requirements may declare these features
 PRODUCT_PACKAGES += \

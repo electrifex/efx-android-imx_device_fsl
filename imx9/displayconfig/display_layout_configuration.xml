@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<!-- Use below commands to get display port number:
+# dumpsys SurfaceFlinger - -display-id
+Display 4616379502225925632 (HWC display 0): port=0 pnpId=DEL displayName="DELL P2314T"
+Display 4616378750182017537 (HWC display 1): port=1 pnpId=DEL displayName="DELL S2740L"
+
+Then bind the display port with below table. This table need
+to modify according to actual connection.
+-->
+<layouts>
+  <layout>
+    <!-- Use the default state -->
+    <state>-1</state>
+
+    <!-- display enabled="true" defaultDisplay="true">
+      <address>4616379502225925632</address>
+    </display -->
+
+    <!-- display enabled="true" defaultDisplay="false">
+      <address>4616378750182017537</address>
+    </display -->
+
+  </layout>
+</layouts>
