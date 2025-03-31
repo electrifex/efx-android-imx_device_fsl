@@ -37,7 +37,6 @@ options:
                            │   imx8qm       │  mek-uuu secure-unlock md                                                                            │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
                            │   imx95        │  evk-uuu secure-unlock verdin verdin-uuu                                                             │
-                           │                │  15x15 15x15-dual trusty-15x15-dual 15x15-evk-uuu rpmsg                                              │
                            └────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
   -d dtb_feature    flash dtbo, vbmeta and recovery image file with "dtb_feature" in their names
@@ -51,8 +50,6 @@ options:
                            │   imx8qm       │  md sof revd md-revd sof-revd                                                                        │
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
                            │   imx95        │  mipi-lvds1 lvds0 verdin verdin-adv7535                                                              │
-                           │                │  verdin-ap1302 verdin-lt8912 verdin-10inch-panel-lvds verdin-10inch-panel-dsi verdin-mipi-panel      │
-                           │                │  verdin-mipi4k 15x15 15x15-ap1302 15x15-mipi-panel 15x15-aud-hat 15x15-mqs 15x15-mipi4k 15x15-boe-panel-lvds1  │
                            └────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
   -e                erase user data after all image files being flashed
