@@ -90,4 +90,7 @@
 
     <!-- Disable hidding the NavBars (CarSystemBars), as a workaround for b/259604616 -->
     <bool name="config_hideNavBarForKeyboard">false</bool>
+    <!-- True if the device requires AppWidgetService even if it does not have
+         the PackageManager.FEATURE_APP_WIDGETS feature. -->
+    <bool name="config_enableAppWidgetService">true</bool>
 </resources>
