@@ -19,6 +19,20 @@
   },
   "cameras" : [
     {
+      "cameraId" : "/base/soc/bus@42000000/i2c@42530000/ap1302_mipi@3c",
+      "function" : "reverse,park",
+      "x" : 0.0,
+      "y" : -40.0,
+      "z" : 100,
+      "yaw" : 180,
+      "pitch" : -35,
+      "roll" : 0,
+      "hfov" : 120,
+      "vfov" : 103,
+      "hflip" : true,
+      "vflip" : false
+    },
+    {
       "cameraId" : "/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@0/mx95mbcam@40",
       "function" : "reverse,park",
       "x" : 0.0,

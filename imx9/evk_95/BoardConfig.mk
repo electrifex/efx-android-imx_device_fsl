@@ -185,9 +185,13 @@ endif
 ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(PRODUCT_IMX_CAR_M7),true)
     TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car-adv7535.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-ap1302:imx95-19x19-evk-car-adv7535-ap1302.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-car-adv7535-it6263-lvds1.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1-ap1302:imx95-19x19-evk-car-adv7535-it6263-lvds1-ap1302.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-car-lt8912.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-verdin-ap1302:imx95-19x19-verdin-car-lt8912-ap1302.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535:imx95-19x19-verdin-car-adv7535.dtb
+    TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535-ap1302:imx95-19x19-verdin-car-adv7535-ap1302.dtb
   else #PRODUCT_IMX_CAR_M7
     TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car2-adv7535.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-car2-adv7535-it6263-lvds1.dtb

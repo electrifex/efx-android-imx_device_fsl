@@ -26,7 +26,7 @@
     <!-- system configuration -->
     <system>
         <!-- number of cameras available to EVS -->
-        <num_cameras value='4'/>
+        <num_cameras value='5'/>
     </system>
 
     <!-- camera device information -->
@@ -80,7 +80,88 @@
                />
             </characteristics>
         </group>
+        <!-- camera group 1 -->
+        <group id='group1' synchronized='CALIBRATED'>
+            <caps>
+                <!-- list of stream configuration supported by all physical devices -->
+                <stream id='0' width='1280' height='720' format='RGB_888' framerate='30'/>
+            </caps>
 
+            <!-- list of parameters -->
+            <!-- LOGICAL_MULTI_CAMERA_PHYSICAL_IDS list all camera in this group -->
+            <!-- the evs camera video item is not fix. just list two camera here -->
+            <characteristics>
+                <parameter
+                    name='REQUEST_AVAILABLE_CAPABILITIES'
+                    type='enum'
+                    size='1'
+                    value='LOGICAL_MULTI_CAMERA'
+                />
+                <parameter
+                    name='LOGICAL_MULTI_CAMERA_PHYSICAL_IDS'
+                    type='byte[]'
+                    size='2'
+                    value='/base/soc/bus@42000000/i2c@42530000/ap1302_mipi@3c'
+                />
+                <parameter
+                    name='LENS_DISTORTION'
+                    type='float'
+                    size='5'
+                    value='-0.03711481733589263,-0.0014805627895442888,-0.00030212056866592464,-0.00020149538570397933,0.0'
+               />
+               <parameter
+                    name='LENS_INTRINSIC_CALIBRATION'
+                    type='float'
+                    size='5'
+                    value='608.0026093794693,608.205469489769,968.699544102168,476.38843298898996,0.0'
+               />
+               <parameter
+                   name='LENS_POSE_TRANSLATION'
+                   type='float'
+                   size='3'
+                   value='-7.8028875403817685e-02,1.4537396465103221e+00,-8.4197165554645001e-02'
+               />
+               <parameter
+                   name='LENS_POSE_ROTATION'
+                   type='float'
+                   size='3'
+                   value='1.81080639,-0.01254808,0.22454604'
+               />
+            </characteristics>
+        </group>
+        <!-- camera device starts Rear -->
+        <device id='/base/soc/bus@42000000/i2c@42530000/ap1302_mipi@3c' position='rear'>
+            <caps>
+                <!-- list of supported stream configurations -->
+                <stream id='0' width='1920' height='1280'  format='RGB_888' framerate='30'/>
+            </caps>
+            <characteristics>
+                 <parameter
+                     name='LENS_DISTORTION'
+                     type='float'
+                     size='5'
+                     value='-0.017278829037307854,-0.008386205507497259,0.007214656916952731,-0.003014981423176122,0.0'
+                />
+                <parameter
+                     name='LENS_INTRINSIC_CALIBRATION'
+                     type='float'
+                     size='5'
+                     value='435.92451924,434.35194308,646.57033235,390.30687001,0.0'
+                />
+                <parameter
+                    name='LENS_POSE_TRANSLATION'
+                    type='float'
+                    size='3'
+                    value='-0.02859015,0.33999272,-0.05377325'
+                />
+                <parameter
+                    name='LENS_POSE_ROTATION'
+                    type='float'
+                    size='3'
+                    value='-0.12984119,2.49551644,-1.74079733'
+                />
+            </characteristics>
+        </device>
         <!-- camera device starts Front -->
         <device id='/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@0/mx95mbcam@40' position='front'>
             <caps>
