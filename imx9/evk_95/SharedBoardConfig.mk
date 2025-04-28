@@ -97,7 +97,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/max96789-dsi.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6263.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/nwl-dsi.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/lontium-lt8912b.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-link.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx-ldb-helper.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-ldb.ko \
@@ -115,6 +114,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
 
 BOARD_VENDOR_DISPLAY_KERNEL_MODULES = \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/adv7511/adv7511.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/bridge/lontium-lt8912b.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-interleaver.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-mipi-dsi.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/dpu95/imx95-dpu-drm.ko
