@@ -55,6 +55,12 @@ on init
     write /dev/cpuctl/rt/cpu.uclamp.latency_sensitive 1
     write /dev/cpuctl/background/cpu.uclamp.max 50
 
+service vpu_firmware_load /vendor/bin/firmware_loader /vendor/firmware/amphion/vpu/vpu_fw_imx8_dec.bin.signed
+    user root
+    group root system
+    disabled
+    oneshot
+
 on init && property:ro.product.system.device=generic_arm64
     start boot_completed_main_sh
 
@@ -172,6 +178,7 @@ on late-fs
 
     # Mount RW partitions which need run fsck
     mount_all /vendor/etc/fstab.nxp --late
+    start vpu_firmware_load
 
     # boot time fs tune
     write /sys/block/mmcblk0/queue/iostats 0
