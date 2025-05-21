@@ -19,7 +19,7 @@
   },
   "cameras" : [
     {
-      "cameraId" : "/base/soc/bus@42000000/i2c@42530000/ap1302_mipi@3c",
+      "cameraId" : "/base/i2c-rpbus-3/ap1302_mipi@3c",
       "function" : "reverse,park",
       "x" : 0.0,
       "y" : -40.0,
@@ -33,7 +33,7 @@
       "vflip" : false
     },
     {
-      "cameraId" : "/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@0/mx95mbcam@40",
+      "cameraId" : "/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@0/mx95mbcam@40",
       "function" : "reverse,park",
       "x" : 0.0,
       "y" : -40.0,
@@ -47,7 +47,7 @@
       "vflip" : false
     },
     {
-      "cameraId" : "/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@1/mx95mbcam@40",
+      "cameraId" : "/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@1/mx95mbcam@40",
       "function" : "front,park",
       "x" : 0.0,
       "y" : 100.0,
@@ -61,7 +61,7 @@
       "vflip" : false
     },
     {
-      "cameraId" : "/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@2/mx95mbcam@40",
+      "cameraId" : "/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@2/mx95mbcam@40",
       "function" : "right,park",
       "x" : 36.0,
       "y" : 60.0,
@@ -75,7 +75,7 @@
       "vflip" : false
     },
     {
-      "cameraId" : "/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@3/mx95mbcam@40",
+      "cameraId" : "/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@3/mx95mbcam@40",
       "function" : "left,park",
       "x" : -36.0,
       "y" : 60.0,

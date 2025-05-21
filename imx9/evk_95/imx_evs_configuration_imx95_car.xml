@@ -52,7 +52,7 @@
                     name='LOGICAL_MULTI_CAMERA_PHYSICAL_IDS'
                     type='byte[]'
                     size='2'
-                    value='/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@0/mx95mbcam@40,/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@1/mx95mbcam@40,/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@2/mx95mbcam@40,/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@3/mx95mbcam@40'
+                    value='/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@0/mx95mbcam@40,/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@1/mx95mbcam@40,/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@2/mx95mbcam@40,/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@3/mx95mbcam@40'
                 />
                 <parameter
                     name='LENS_DISTORTION'
@@ -80,8 +80,8 @@
                />
             </characteristics>
         </group>
-        <!-- camera device starts Rear -->
-        <device id='/base/soc/bus@42000000/i2c@42530000/ap1302_mipi@3c' position='rear'>
+        <!-- Rear camera of Car image type-->
+        <device id='/base/i2c-rpbus-3/ap1302_mipi@3c' position='rear'>
             <caps>
                 <!-- list of supported stream configurations -->
                 <stream id='0' width='1920' height='1280'  format='RGB_888' framerate='30'/>
@@ -114,7 +114,7 @@
             </characteristics>
         </device>
         <!-- camera device starts Front -->
-        <device id='/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@0/mx95mbcam@40' position='front'>
+        <device id='/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@0/mx95mbcam@40' position='front'>
             <caps>
                 <!-- list of supported stream configurations -->
                 <stream id='0' width='1920' height='1280'  format='RGB_888' framerate='30'/>
@@ -147,7 +147,7 @@
             </characteristics>
         </device>
         <!-- camera device starts, Right -->
-        <device id='/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@1/mx95mbcam@40' position='right'>
+        <device id='/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@1/mx95mbcam@40' position='right'>
             <caps>
                 <!-- list of supported stream configurations -->
                 <stream id='0' width='1920' height='1280'  format='RGB_888' framerate='30'/>
@@ -180,7 +180,7 @@
             </characteristics>
         </device>
         <!-- camera device starts Rear -->
-        <device id='/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@2/mx95mbcam@40' position='rear'>
+        <device id='/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@2/mx95mbcam@40' position='rear'>
             <caps>
                 <!-- list of supported stream configurations -->
                 <stream id='0' width='1920' height='1280'  format='RGB_888' framerate='30'/>
@@ -213,7 +213,7 @@
             </characteristics>
         </device>
         <!-- camera device starts Left -->
-        <device id='/base/soc/bus@42000000/i2c@42530000/max96724@27/i2c-mux/i2c@3/mx95mbcam@40' position='left'>
+        <device id='/base/i2c-rpbus-3/max96724@27/i2c-mux/i2c@3/mx95mbcam@40' position='left'>
             <caps>
                 <!-- list of supported stream configurations -->
                 <stream id='0' width='1920' height='1280'  format='RGB_888' framerate='30'/>
