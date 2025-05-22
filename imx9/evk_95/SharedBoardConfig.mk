@@ -88,13 +88,9 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6161.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/max96752-lvds.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/display-connector.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/fsl-imx-ldb.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/max96789-dsi.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6263.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/nwl-dsi.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-link.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx-ldb-helper.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-ldb.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/mxsfb/imx-lcdif.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm67191.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-nxp-rm67162.ko \
@@ -118,7 +114,12 @@ BOARD_VENDOR_DISPLAY_KERNEL_MODULES = \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/lontium-lt8912b.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-interleaver.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-mipi-dsi.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/imx/dpu95/imx95-dpu-drm.ko
+    $(KERNEL_OUT)/drivers/gpu/drm/imx/dpu95/imx95-dpu-drm.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6263.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/bridge/fsl-imx-ldb.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx-ldb-helper.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-ldb.ko \
+
 ifeq ($(PRODUCT_IMX_CAR),true)
     ifeq ($(PRODUCT_IMX_CAR_M7),true)
         # Display drivers are in /vendor_dlkm  for Car image type.

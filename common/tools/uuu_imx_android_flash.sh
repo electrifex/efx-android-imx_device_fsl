@@ -52,6 +52,7 @@ options:
                            ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
                            │   imx95        │  mipi-lvds1 lvds0 verdin verdin-adv7535                                                              │
                            │                |  mipi-lvds1-ap1302 verdin-ap1302 verdin-adv7535-ap1302                                               │
+                           │                │  lvds0-ap1302                                                                                        │
                            └────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
   -e                erase user data after all image files being flashed
@@ -429,7 +430,7 @@ imx95_uboot_feature=(evk-uuu secure-unlock verdin verdin-uuu)
 
 imx8qxp_dtb_feature=(sof)
 imx8qm_dtb_feature=(md sof revd md-revd sof-revd)
-imx95_dtb_feature=(mipi-lvds1 lvds0 verdin verdin-adv7535 mipi-lvds1-ap1302 verdin-ap1302 verdin-adv7535-ap1302)
+imx95_dtb_feature=(mipi-lvds1 lvds0 verdin verdin-adv7535 mipi-lvds1-ap1302 verdin-ap1302 verdin-adv7535-ap1302 lvds0-ap1302)
 
 tmp_files_before_uuu=()
 tmp_files_in_uuu=()
