@@ -13,14 +13,11 @@ service display_init_sh /vendor/bin/init.insmod.sh /vendor/etc/display.init.cfg
 
 # start display driver load service
 on property:vendor.vehicle.register=1
-    stop evs_driver
-    stop vendor.camera-provider-2-7-google
     start display_init_sh
 
-# restart camera provider
 on property:sys.boot_completed=1 && property:vendor.vehicle.register=1
+    stop vendor.camera-provider-2-7-google
     start vendor.camera-provider-2-7-google
-    start evs_driver
 
 # register android
 on property:service.sf.present_timestamp=1
