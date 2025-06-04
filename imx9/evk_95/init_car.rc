@@ -6,6 +6,17 @@ on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
+    write /sys/block/mmcblk0/queue/iostats 0
+    write /sys/block/mmcblk0/queue/scheduler kyber
+    write /sys/block/mmcblk0/queue/nr_requests 256
+    write /sys/block/mmcblk0/queue/read_ahead_kb 1024
+
+on property:sys.boot_completed=1
+    write /sys/block/mmcblk0/queue/iostats 1
+    write /sys/block/mmcblk0/queue/scheduler mq-deadline
+    write /sys/block/mmcblk0/queue/nr_requests 128
+    write /sys/block/mmcblk0/queue/read_ahead_kb 128
+
 on early-init
     start early_init_sh
     # Set the host name which used in console
@@ -84,7 +95,21 @@ on late-fs
     exec_start wait_for_keymaster
 
     mount_all /vendor/etc/fstab.nxp --late
-    start vpu_firmware_load
+
+    write /sys/block/dm-6/queue/read_ahead_kb 1024
+    write /sys/block/dm-7/queue/read_ahead_kb 1024
+    write /sys/block/dm-8/queue/read_ahead_kb 1024
+    write /sys/block/dm-9/queue/read_ahead_kb 1024
+    write /sys/block/dm-10/queue/read_ahead_kb 1024
+    write /sys/block/dm-11/queue/read_ahead_kb 1024
+
+on property:sys.boot_completed=1
+    write /sys/block/dm-6/queue/read_ahead_kb 128
+    write /sys/block/dm-7/queue/read_ahead_kb 128
+    write /sys/block/dm-8/queue/read_ahead_kb 128
+    write /sys/block/dm-9/queue/read_ahead_kb 128
+    write /sys/block/dm-10/queue/read_ahead_kb 128
+    write /sys/block/dm-11/queue/read_ahead_kb 128
 
 on early-boot
     # For evk_95, when swap used about 400M, upgrade the level.
@@ -101,12 +126,9 @@ on early-boot
     setprop vendor.rw.VIDEO_RENDER_NAME video_render.surface
     setprop vendor.media.fsl_codec.flag 7
     setprop media.c2.hal.selection aidl
+    setprop media.c2.remove_rendering_depth true
 
     setprop camera.disable_zsl_mode 1
-
-   # Tweak the mmc device read ahead buffer size
-    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
-    write /sys/block/mmcblk2/queue/read_ahead_kb 2048
 
     # Prepare for wifi
     setprop wifi.interface wlan0
@@ -188,18 +210,12 @@ on fs
 # mount ext4 partitions
     mount_all /vendor/etc/fstab.nxp --early
 
-    # Adjust parameters for dm-verity device
-    write /sys/block/dm-0/queue/read_ahead_kb 4096
-
     # Update dm-verity state and set partition.*.verified properties
     verity_update_state
 
 on post-fs
     # Set netd memlock rlimit to 8MB
     setrlimit 8 8388608 8388608
-
-    # Turn on swap
-    swapon_all /vendor/etc/fstab.nxp
 
     # Swap in only 1 page at a time
     write /proc/sys/vm/page-cluster 0
@@ -214,6 +230,7 @@ on post-fs-data
     # tmp dir for opencl Compiler
     setprop vendor.TMPDIR /data/vendor/.opencl-cache
     mkdir /data/vendor/.opencl-cache 0771 system camera
+    mkdir /data/vendor/.opencl-g2d-bin 0771 cameraserver camera
     # HWC data
     mkdir /data/vendor/hwc 0771 system graphics
 
@@ -223,6 +240,9 @@ on zygote-start
     mkdir /data/vendor/wifi/wifi_dumps 0770 wifi wifi
     mkdir /data/vendor/wifi/wpa 0770 wifi wifi
     mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
+
+on zygote-start && property:vendor.skip.charger_not_need=0
+    start vpu_firmware_load
 
 service early_init_sh /vendor/bin/init.insmod.sh /vendor/etc/early.init.cfg vendor.all.early_init.ready
     class main
@@ -235,6 +255,10 @@ on post-fs-data && property:vendor.storageproxyd=trusty
     # create temp node for secure storage proxy
     mkdir /data/vendor/ss 0700 system system
     restart storageproxyd
+    # create node for secure enclave
+    mkdir /data/vendor/ele 0700 system system
+    # start nvmd to trigger ELE runtime FW load
+    start nvmd
 
 service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk0rpmb -d /dev/trusty-ipc-dev0
    group system
@@ -285,17 +309,18 @@ service imx_dek_extractor /vendor/bin/hw/imx_dek_extractor
     disabled
     oneshot
 
+on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
+    start imx_dek_extractor
+
 on property:ro.boot.camera.layout=ap1302
     setprop ro.media.xml_variant.profiles _95-ap1302
 
 on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
-    start imx_dek_extractor
-
-on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
-    # create node for secure enclave
-    mkdir /data/vendor/ele 0700 system system
-    start nvmd
     start vendor.secure-enclave
 
 on property:sys.boot_completed=1
     start vendor.secretkeeper.${ro.boot.keystore}
+
+on property:sys.boot_completed=1
+    # Turn on swap
+    swapon_all /vendor/etc/fstab.nxp

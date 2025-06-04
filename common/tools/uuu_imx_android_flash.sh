@@ -18,9 +18,8 @@ options:
   -f soc_name       flash android image file with soc_name
   -a                only flash image to slot_a
   -b                only flash image to slot_b
-  -c card_size      optional setting: 7 / 13 / 14 / 28
-                        If this option is not used, partition-table.img or partition-table-dual.img is flashed
-                        If this option is used, partition-table-<card_size>GB.img or partition-table-<card_size>GB-dual.img is flashed
+  -c card_size      If this option is not used, partition-table.img or partition-table-dual.img is flashed
+                    If this option is used, partition-table-<card_size>GB.img or partition-table-<card_size>GB-dual.img is flashed
                     Make sure the corresponding partition table image file exists
   -m                flash mcu image
   -u uboot_feature  flash uboot or spl&bootloader image with "uboot_feature" in their names
@@ -436,9 +435,8 @@ tmp_files_before_uuu=()
 tmp_files_in_uuu=()
 all_cmd_options=(-h -f -c -u -d -a -b -m -mo -e -D -t -y -p -i -daemon -dryrun -usb)
 
-supported_card_sizes=(0 7 13 14 28)
+echo -e This script is validated with ${RED}uuu 1.5.201${STD} version, it is recommended to align with this version.
 
-echo -e This script is validated with ${RED}uuu 1.5.179${STD} version, it is recommended to align with this version.
 
 if [ $# -eq 0 ]; then
     echo -e >&2 ${RED}please provide more information with command script options${STD}
@@ -530,14 +528,6 @@ else
     yocto_image_sym_link=${yocto_image_sym_link}${yocto_image}
 fi
 
-
-# if card_size is not correctly set, exit.
-whether_in_array card_size supported_card_sizes
-if [ ${result_value} != 0 ]; then
-    echo -e >&2 ${RED}card size ${card_size} is not legal${STD};
-    help; exit 1;
-fi
-
 # dual bootloader support will use different gpt, this is for imx8m and imx8ulp
 if [ ${support_dual_bootloader} -eq 1 ]; then
     if [ ${card_size} -gt 0 ]; then
@@ -552,6 +542,11 @@ else
         partition_file="partition-table.img";
     fi
 fi
+if [ ! -f ${sym_link_directory}${partition_file} ]; then
+    echo ${partition_file} does not exist, the "-c" option is not correctly used
+    exit 1;
+fi
+
 
 if [ ${dryrun} -eq 0 ]; then
     randome_part=$RANDOM
@@ -642,6 +637,11 @@ case ${soc_name%%-*} in
             uboot_env_start=0x3800; uboot_env_len=0x20;
             emmc_num=0; sd_num=1;
             board=evk ;;
+    imx943)
+            vid=0x1fc9; pid=0x0152; chip=MX943;
+            uboot_env_start=0x3800; uboot_env_len=0x20;
+            emmc_num=0; sd_num=1;
+            board=evk ;;
     imx95)
             vid=0x1fc9; pid=0x0152; chip=MX95;
             uboot_env_start=0x3800; uboot_env_len=0x20;
@@ -729,7 +729,7 @@ if [ -n "${dtb_feature}" ]; then
 fi
 
 # set sdp command name based on soc_name
-if [[ ${soc_name#imx8q} != ${soc_name} ]] || [[ ${soc_name} == "imx8mn" ]] || [[ ${soc_name} == "imx8mp" ]] || [[ ${soc_name} == "imx8ulp" ]] || [[ ${soc_name} == "imx93" ]] || [[ ${soc_name} == "imx95" ]]; then
+if [[ ${soc_name#imx8q} != ${soc_name} ]] || [[ ${soc_name} == "imx8mn" ]] || [[ ${soc_name} == "imx8mp" ]] || [[ ${soc_name} == "imx8ulp" ]] || [[ ${soc_name} == "imx93" ]] || [[ ${soc_name} == "imx943" ]] || [[ ${soc_name} == "imx95" ]]; then
     sdp="SDPS"
 fi
 
@@ -773,6 +773,12 @@ fi
 if [ "${soc_name}" = imx95 ]; then
     if [[ "${uboot_feature}" = *"15x15"* ]]; then
         bootloader_used_by_uuu=u-boot-${soc_name}-15x15-evk-uuu.imx
+    fi
+fi
+
+if [ "${soc_name}" = imx943 ]; then
+    if [[ "${uboot_feature}" = *"lpddr5"* ]]; then
+        bootloader_used_by_uuu=u-boot-${soc_name}-lpddr5-evk-uuu.imx
     fi
 fi
 

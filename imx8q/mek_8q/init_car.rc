@@ -5,7 +5,8 @@ import /vendor/etc/init/hw/init.car_additional.rc
 on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
-    mount overlay overlay /vendor/etc ro lowerdir=/vendor/vendor_overlay_soc/${ro.boot.soc_type}/vendor/etc:/vendor/etc,override_creds=off
+    mount overlay overlay /vendor/etc ro lowerdir=/vendor/vendor_overlay_soc/${ro.boot.soc_type}/vendor/etc:/vendor/etc
+    mount overlay overlay /vendor/firmware/tee ro lowerdir=/vendor/vendor_widevine_overlay_soc/${ro.boot.soc_type}/vendor/firmware/tee:/vendor/firmware/tee
     start early_init_sh
     # Set the host name which used in console
     export HOSTNAME mek_8q
@@ -178,7 +179,6 @@ on late-fs
 
     # Mount RW partitions which need run fsck
     mount_all /vendor/etc/fstab.nxp --late
-    start vpu_firmware_load
 
     # boot time fs tune
     write /sys/block/mmcblk0/queue/iostats 0
@@ -188,6 +188,9 @@ on late-fs
     write /sys/block/mmcblk0/queue/nr_requests 256
     write /sys/block/dm-0/queue/read_ahead_kb 4096
     write /sys/block/dm-1/queue/read_ahead_kb 4096
+
+on late-fs
+    start vpu_firmware_load
 
 on property:sys.boot_completed=1
     write /sys/block/mmcblk0/queue/read_ahead_kb 1024

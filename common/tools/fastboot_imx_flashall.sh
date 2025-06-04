@@ -17,9 +17,8 @@ options:
   -f soc_name       flash android image file with soc_name
   -a                only flash image to slot_a
   -b                only flash image to slot_b
-  -c card_size      optional setting: 7 / 13 / 14 / 28
-                        If this option is not used, partition-table.img or partition-table-dual.img is flashed
-                        If this option is used, partition-table-<card_size>GB.img or partition-table-<card_size>GB-dual.img is flashed
+  -c card_size      If this option is not used, partition-table.img or partition-table-dual.img is flashed
+                    If this option is used, partition-table-<card_size>GB.img or partition-table-<card_size>GB-dual.img is flashed
                     Make sure the corresponding partition table image file exists
   -m                flash mcu image
   -u uboot_feature  flash uboot or spl&bootloader image with "uboot_feature" in their names
@@ -336,8 +335,6 @@ imx95_dtb_feature=(mipi-lvds1 lvds0 verdin verdin-adv7535 mipi-lvds1-ap1302 verd
 # an array to collect the supported soc_names
 supported_soc_names=(imx8qm imx8qxp imx95)
 
-supported_card_sizes=(0 7 13 14 28)
-
 if [ $# -eq 0 ]; then
     echo -e ${RED}no parameter specified, will directly exit after displaying help message${STD}
     help; exit 1;
@@ -379,12 +376,11 @@ if [[ "${uboot_feature}" = *"dual"* ]]; then
     support_dual_bootloader=1;
 fi
 
-# if card_size is not correctly set, exit.
-whether_in_array card_size supported_card_sizes
-if [ ${result_value} != 0 ]; then
-    echo -e >&2 ${RED}card size ${card_size} is not legal${STD};
-    help; exit 1;
+# if directory is specified, make sure there is a slash at the end
+if [[ "${image_directory}" = "" ]]; then
+    image_directory=`pwd`
 fi
+image_directory="${image_directory%/}/"
 
 # Android Automotive by default support dual bootloader, no "dual" in its partition table name
 if [ ${support_dual_bootloader} -eq 1 ]; then
@@ -401,12 +397,10 @@ else
         partition_file="partition-table.img";
     fi
 fi
-
-# if directory is specified, make sure there is a slash at the end
-if [[ "${image_directory}" = "" ]]; then
-    image_directory=`pwd`
+if [ ! -f ${image_directory}${partition_file} ]; then
+    echo ${partition_file} does not exist, the "-c" option is not correctly used
+    exit 1;
 fi
-image_directory="${image_directory%/}/"
 
 if [[ "${ser_num}" != "" ]]; then
     fastboot_tool="fastboot -s ${ser_num}"

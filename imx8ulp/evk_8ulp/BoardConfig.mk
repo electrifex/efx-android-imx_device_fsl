@@ -32,10 +32,10 @@ TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 
 # Support gpt
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
-  BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab_super.bpt
-  ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab_super.bpt \
-                           partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt \
-                           partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt
+  BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab_super.bpt
+  ADDITION_BPT_PARTITION = partition-table-13GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab_super.bpt \
+                           partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt \
+                           partition-table-13GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt
 else
   ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
     BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-no-product.bpt
@@ -120,7 +120,7 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 BOARD_KERNEL_BASE := 0x80400000
 
 # NXP default config
-BOARD_KERNEL_CMDLINE := init=/init firmware_class.path=/vendor/firmware,/ loop.max_part=7 bootconfig
+BOARD_KERNEL_CMDLINE := init=/init firmware_class.path=/vendor/firmware loop.max_part=7 bootconfig
 BOARD_BOOTCONFIG += androidboot.hardware=nxp
 
 # memory config
@@ -166,8 +166,6 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
     TARGET_BOARD_DTS_CONFIG += imx8ulp-sof:imx8ulp-evk-sof-btsco.dtb
     # Support lpa
     TARGET_BOARD_DTS_CONFIG += imx8ulp-lpa:imx8ulp-evk-lpa.dtb
-    # Support lpd
-    TARGET_BOARD_DTS_CONFIG += imx8ulp-lpd:imx8ulp-evk-lpd.dtb
     #TARGET_BOARD_DTS_CONFIG += imx8ulp-lpd:imx8ulp-evk-g1120b0mipi.dtb
   endif
 else

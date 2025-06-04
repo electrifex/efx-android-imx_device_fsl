@@ -81,6 +81,7 @@ PRODUCT_PACKAGES += \
     media_codecs_c2_rv.xml \
     media_codecs_c2_dsp.xml \
     media_profiles_V1_0.xml \
+    media_profiles_8qxp.xml \
     media_codecs_c2.xml \
     media_codecs_performance_c2.xml \
     media_codecs_performance_c2_8qm.xml \
@@ -179,6 +180,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PREBUILT_FSL_IMX_CODEC := true
 
 # -------@block_storage-------
+PRODUCT_PACKAGES_DEBUG += \
+    overlay_remounter
 
 TARGET_USERIMAGES_USE_F2FS := true
 
@@ -280,11 +283,6 @@ PRODUCT_PACKAGES += \
     CubeLiveWallpapers \
     LiveWallpapersPicker \
     WallpaperPicker
-endif
-
-ifneq ($(PRODUCT_IMX_CAR),true)
-PRODUCT_COPY_FILES += \
-   $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
 endif
 
 PRODUCT_PACKAGES += \

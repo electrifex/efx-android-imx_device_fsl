@@ -7,6 +7,10 @@ PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
 #Enable this to choose 32 bit user space build
 IMX_BUILD_32BIT_ROOTFS ?= false
 
+#true means each display can show different contents, false means secondary display is just a
+#simple mirror from primary display.
+MULTIDISPLAY_WITH_INDEPENDENT_CONTROL ?= true
+
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
 
@@ -68,6 +72,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/thermal_info_config_imx95.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx95.json
 
+# Media c2_component_register
+PRODUCT_COPY_FILES += \
+    $(IMX_MEDIA_CODEC_XML_PATH)/codec2/store/registry/c2_component_register_95:$(TARGET_COPY_OUT_VENDOR)/etc/c2_component_register
 
 # -------@block_app-------
 ifneq ($(PRODUCT_IMX_CAR),true)
@@ -203,6 +210,9 @@ endif
 PRODUCT_PACKAGES += \
     android.hardware.security.keymint-service-imx
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.keystore_desede=true
+
 # Confirmation UI
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
@@ -269,6 +279,10 @@ PRODUCT_PACKAGES += \
 
 $(call  inherit-product-if-exists, vendor/nxp-private/security/nxp_security.mk)
 
+# ELE FW
+PRODUCT_COPY_FILES += \
+    vendor/nxp/ele/mx95b0runtime-ahab-container.img:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/ele/mx95b0runtime-ahab-container.img
+
 # Resume on Reboot support
 PRODUCT_PACKAGES += \
     android.hardware.rebootescrow-service.default
@@ -329,7 +343,8 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml
+    $(IMX_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(IMX_DEVICE_PATH)/audio_policy_configuration_multichannel.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration_multichannel.xml
 endif
 # AudioControl service
 ifeq ($(PRODUCT_IMX_CAR),true)
@@ -369,7 +384,7 @@ PRODUCT_PACKAGES += \
     media_profiles_95-ap1302.xml
 
 PRODUCT_PACKAGES += \
-    ap130x_ar0144_single_fw.bin
+    ap1302_ar0144_single_fw.bin
 endif
 
 PREBUILT_LIBCAMERA := false
@@ -426,12 +441,12 @@ ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/car_display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
 else
+  ifeq ($(MULTIDISPLAY_WITH_INDEPENDENT_CONTROL),true)
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
-endif
-
-PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml \
     $(IMX_DEVICE_PATH)/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
+  endif
+endif
 
 # Display Device Config
 ifeq ($(PRODUCT_IMX_CAR),true)
@@ -472,6 +487,10 @@ PRODUCT_VENDOR_PROPERTIES += \
 PRODUCT_VENDOR_PROPERTIES += \
     graphics.gpu.profiler.support=true
 
+# gpu debug tool
+PRODUCT_PACKAGES += \
+    gpu-top
+
 # -------@block_wifi-------
 
 PRODUCT_COPY_FILES += \
@@ -492,7 +511,9 @@ PRODUCT_COPY_FILES += \
     vendor/nxp/imx-firmware/nxp/FwImage_IW416_SD/sduartiw416_combo.bin:vendor/firmware/sduartiw416_combo.bin \
     vendor/nxp/imx-firmware/nxp/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
     vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
-    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf
+    vendor/nxp/imx-firmware/nxp/FwImage_AW693_PCIE/pcieuartaw693_combo_v1.bin.se:vendor/firmware/pcieuartaw693_combo_v1.bin.se \
+    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
+    hardware/nxp/libbt/conf/nxp/evk_95/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \
@@ -573,10 +594,9 @@ endif
 
 # Neural Network HAL and lib
 PRODUCT_PACKAGES += \
-    libNeutronConverter \
     libNeutronDriver \
     NeutronFirmware.elf \
-    NeutronKernels.bin \
+    NeutronFwllm.elf \
     android.hardware.neuralnetworks-shell-service-imx
 
 # Tensorflow lite camera demo

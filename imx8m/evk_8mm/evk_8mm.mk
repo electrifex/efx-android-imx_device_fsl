@@ -58,6 +58,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/thermal_info_config_imx8mm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mm.json
 
+# Media c2_component_register
+PRODUCT_COPY_FILES += \
+    $(IMX_MEDIA_CODEC_XML_PATH)/codec2/store/registry/c2_component_register_8mm:$(TARGET_COPY_OUT_VENDOR)/etc/c2_component_register
 
 # -------@block_app-------
 
@@ -178,6 +181,9 @@ endif
 PRODUCT_PACKAGES += \
     android.hardware.security.keymint-service-imx
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.keystore_desede=true
+
 # Confirmation UI
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
@@ -272,6 +278,11 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
     $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
 
+# libcamera
+PRODUCT_PACKAGES += \
+    libcamera-base \
+    libcamera \
+    libyaml
 
 # -------@block_camera-------
 PRODUCT_COPY_FILES += \
@@ -355,7 +366,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     vendor/nxp/imx-firmware/nxp/FwImage_8987/sduart8987_combo.bin:vendor/firmware/sduart8987_combo.bin \
     vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
-    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para_sd8987.conf
+    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para_sd8987.conf \
+    hardware/nxp/libbt/conf/nxp/evk_8mm/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \

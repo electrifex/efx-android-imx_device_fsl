@@ -18,6 +18,7 @@
 /dev/mmcblk0rpmb    0600   system     system
 /dev/trusty-ipc-dev0      0660   system     drmrpc
 /dev/trusty-log0          0660   system     system
+/dev/hsm0_ch0      0660   system     drmrpc
 /dev/block/pmem0          0660 system system
 /dev/dma_heap/reserved    0666   system     system
 /dev/dma_heap/reserved-uncached    0666   system     system
@@ -36,3 +37,7 @@
 /sys/bus/iio/devices/iio:device*    events/in_steps_change_period    0660    system     system
 /sys/bus/iio/devices/iio:device*    events/in_steps_change_value     0660    system     system
 /sys/class/backlight/* brightness 0660 system system
+
+# for libcamera
+/dev/media* 0660 system camera
+/dev/v4l-subdev* 0660 system camera

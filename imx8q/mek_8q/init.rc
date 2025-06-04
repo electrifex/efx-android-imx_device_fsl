@@ -5,7 +5,8 @@ on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
-    mount overlay overlay /vendor/etc ro lowerdir=/vendor/vendor_overlay_soc/${ro.boot.soc_type}/vendor/etc:/vendor/etc,override_creds=off
+    mount overlay overlay /vendor/etc ro lowerdir=/vendor/vendor_overlay_soc/${ro.boot.soc_type}/vendor/etc:/vendor/etc
+    mount overlay overlay /vendor/firmware/tee ro lowerdir=/vendor/vendor_widevine_overlay_soc/${ro.boot.soc_type}/vendor/firmware/tee:/vendor/firmware/tee
 
     setprop vendor.all.car false
 
@@ -80,6 +81,8 @@ on late-fs && property:vendor.skip.charger_not_need=0
     exec_start wait_for_keymaster
 
     mount_all /vendor/etc/fstab.nxp --late
+
+on late-fs && property:vendor.skip.charger_not_need=0
     start vpu_firmware_load
 
 on early-boot && property:vendor.skip.charger_not_need=0
@@ -98,6 +101,7 @@ on early-boot && property:vendor.skip.charger_not_need=0
     setprop vendor.media.fsl_codec.flag 7
     setprop vendor.media.amphion_vpu.enable-tile 0
     setprop media.c2.hal.selection aidl
+    setprop media.c2.remove_rendering_depth true
 
     setprop camera.disable_zsl_mode 1
 

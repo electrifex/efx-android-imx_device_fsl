@@ -174,6 +174,9 @@ endif
 PRODUCT_PACKAGES += \
     android.hardware.security.keymint-service-imx
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.keystore_desede=true
+
 # new gatekeeper HAL
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper-service-imx
@@ -260,6 +263,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx93/imx93_mcu_demo.img:imx93_mcu_demo.img
 
+# libcamera
+PRODUCT_PACKAGES += \
+    libcamera-base \
+    libcamera \
+    libyaml
+
 # -------@block_camera-------
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/camera_config_imx93.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx93.json \
@@ -298,8 +307,9 @@ PRODUCT_PACKAGES += \
     mapper.imx
 
 # -------@block_gpu-------
-# ANGLE OpenGL implementation based on SwiftShader Vulkan
-$(call inherit-product, build/make/target/product/angle_default.mk)
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.hardware.egl = angle \
+    ro.hardware.vulkan = pastel
 
 # TODO(b/65201432): Swiftshader needs to create executable memory.
 PRODUCT_REQUIRES_INSECURE_EXECMEM_FOR_SWIFTSHADER := true
@@ -331,7 +341,8 @@ PRODUCT_PACKAGES += \
 # NXP 8987 WiFi Firmware
 PRODUCT_COPY_FILES += \
     vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
-    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para_sd612.conf
+    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para_sd612.conf \
+    hardware/nxp/libbt/conf/nxp/evk_93/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \
@@ -340,7 +351,7 @@ PRODUCT_COPY_FILES += \
 
 # NXP ap1302 camera Firmware
 PRODUCT_PACKAGES += \
-    ap1302.fw
+    ap1302_ar0144_single_fw.bin
 
 # -------@block_bluetooth-------
 
@@ -481,3 +492,10 @@ PRODUCT_COPY_FILES += \
 
 # Add imx private apps
 $(call inherit-product-if-exists, vendor/nxp-private/imx-apps/imx-private-app.mk)
+
+# Secure enclave
+PRODUCT_PACKAGES += \
+    nvmd \
+    nxp.hardware.secure-enclave \
+    SecureEnclaveDemo \
+    el2go_demo

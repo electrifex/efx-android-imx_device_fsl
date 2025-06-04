@@ -53,22 +53,66 @@ TARGET_KERNEL_SRC := $(KERNEL_IMX_PATH)/kernel_imx
 
 CLANG_TO_COMPILE := LLVM=1
 
-# Uncomment below line to use prebuilt clang tool in android platform code
-#CLANG_PATH := $(realpath prebuilts/clang/host/linux-x86)
+# Define the path for kernel prebuilts
+#KERNEL_PREBUILTS_PATH := /opt/android-kernel-prebuilts-6.12
 
-# Or use external clang
-ifeq ($(CLANG_PATH),)
-$(error shell env CLANG_PATH is not set. Please follow user guide doc to set correct CLANG_PATH)
+ifeq (,$(wildcard $(KERNEL_PREBUILTS_PATH)))
+$(error Error: kenrel build tool path KERNEL_PREBUILTS_PATH $(KERNEL_PREBUILTS_PATH) does not exist. Please follow user guide doc to set correct KERNEL_PREBUILTS_PATH)
+endif
+
+# Define paths for kernel build tools
+KERNEL_BUILD_TOOLS_BIN := $(KERNEL_PREBUILTS_PATH)/kernel-build-tools/linux-x86/bin
+
+ifeq (,$(wildcard $(KERNEL_BUILD_TOOLS_BIN)))
+$(error Error: kenrel build tools KERNEL_BUILD_TOOLS_BIN $(KERNEL_BUILD_TOOLS_BIN) does not exist.)
+endif
+
+# Define paths for kernel build tools libraries
+KERNEL_BUILD_TOOLS_LIB64_PATH := $(KERNEL_PREBUILTS_PATH)/kernel-build-tools/linux-x86/lib64
+
+ifeq (,$(wildcard $(KERNEL_BUILD_TOOLS_LIB64_PATH)))
+$(error Error: kenrel build tools lib64 path KERNEL_BUILD_TOOLS_LIB64_PATH $(KERNEL_BUILD_TOOLS_LIB64_PATH) does not exist.)
+endif
+
+# Define Rust toolchain path
+RUST_BIN := $(KERNEL_PREBUILTS_PATH)/rust/linux-x86/1.82.0/bin
+
+ifeq (,$(wildcard $(RUST_BIN)))
+$(error Error: rust tools RUST_BIN $(RUST_BIN) does not exist.)
+endif
+
+# Define Clang tools path
+CLANG_TOOLS_BIN := $(KERNEL_PREBUILTS_PATH)/clang-tools/linux-x86/bin
+
+ifeq (,$(wildcard $(CLANG_TOOLS_BIN)))
+$(error Error: clang tools CLANG_TOOLS_BIN $(CLANG_TOOLS_BIN) does not exist.)
+endif
+
+# Define clang path
+CLANG_PATH := $(KERNEL_PREBUILTS_PATH)/clang/host/linux-x86
+
+ifeq (,$(wildcard $(CLANG_PATH)))
+$(error Error: CLANG_PATH $(CLANG_PATH) does not exist.)
 endif
 
 # This clang version need align with $(kernel_source)/build.config.common
-CLANG_BIN := $(CLANG_PATH)/clang-r510928/bin
+CLANG_BIN := $(CLANG_PATH)/clang-r536225/bin
 
 ifeq (,$(wildcard $(CLANG_BIN)))
 $(error CLANG_BIN:$(CLANG_BIN) does not exist. Please update clang to latest version: \
 cd $(CLANG_PATH); sudo git remote update; sudo git checkout origin/master )
 endif
 
+# Define the path for Clang libraries
+LIBCLANG_PATH := $(CLANG_PATH)/clang-r536225/lib
+
+ifeq (,$(wildcard $(LIBCLANG_PATH)))
+$(error Error: LIBCLANG_PATH $(LIBCLANG_PATH) does not exist.)
+endif
+
+# Set include path and linker path for kernel build tools
+KERNEL_HOSTCFLAGS += "-I$(KERNEL_PREBUILTS_PATH)/kernel-build-tools/linux-x86/include"
+KERNEL_HOSTLDFLAGS += "-L$(KERNEL_PREBUILTS_PATH)/kernel-build-tools/linux-x86/lib64"
 
 ifeq ($(TARGET_KERNEL_ARCH), arm)
 KERNEL_CFLAGS :=
@@ -167,8 +211,9 @@ $(KERNEL_CONFIG_REQUIRED): $(KERNEL_CONFIG_REQUIRED_SRC) | $(KERNEL_OUT)
 	$(hide) cat $^ > $@
 
 # use deferred expansion
-kernel_build_shell_env = KBUILD_SYMTYPES=1 PATH=$(CLANG_BIN):$(realpath prebuilts/misc/linux-x86/lz4):$${PATH} \
-        $(CLANG_TRIPLE) CCACHE_NODIRECT="true"
+kernel_build_shell_env = KBUILD_GENDWARFKSYMS_STABLE=1 KBUILD_SYMTYPES=1 PATH=$(CLANG_BIN):$(KERNEL_BUILD_TOOLS_BIN):$(RUST_BIN):$(CLANG_TOOLS_BIN):$(realpath prebuilts/misc/linux-x86/lz4):$${PATH} \
+        $(CLANG_TRIPLE) LIBCLANG_PATH="$(LIBCLANG_PATH)" CCACHE_NODIRECT="true" HOSTCFLAGS="$(KERNEL_HOSTCFLAGS)" HOSTLDFLAGS="$(KERNEL_HOSTLDFLAGS)"\
+        LD_LIBRARY_PATH=$(KERNEL_BUILD_TOOLS_LIB64_PATH):$${LD_LIBRARY_PATH}
 ifeq ($(CLANG_TO_COMPILE),)
 kernel_build_common_env = ARCH=$(KERNEL_ARCH) CROSS_COMPILE=$(strip $(KERNEL_CROSS_COMPILE_WRAPPER)) \
         KCFLAGS="$(KERNEL_CFLAGS)" KAFLAGS="$(KERNEL_AFLAGS)"

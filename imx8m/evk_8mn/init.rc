@@ -87,6 +87,7 @@ on early-boot && property:vendor.skip.charger_not_need=0
     setprop vendor.rw.VIDEO_RENDER_NAME video_render.surface
     setprop vendor.media.fsl_codec.flag 7
     setprop media.c2.hal.selection aidl
+    setprop media.c2.remove_rendering_depth true
 
     setprop camera.disable_zsl_mode 1
 
@@ -166,6 +167,7 @@ on post-fs-data && property:vendor.skip.charger_not_need=0
     # tmp dir for opencl Compiler
     setprop vendor.TMPDIR /data/vendor/.opencl-cache
     mkdir /data/vendor/.opencl-cache 0771 system camera
+    mkdir /data/vendor/.opencl-g2d-bin 0771 cameraserver camera
     # HWC data
     mkdir /data/vendor/hwc 0771 system graphics
 

@@ -58,6 +58,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/thermal_info_config_imx8ulp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8ulp.json
 
+# Media c2_component_register
+PRODUCT_COPY_FILES += \
+    $(IMX_MEDIA_CODEC_XML_PATH)/codec2/store/registry/c2_component_register_8ulp:$(TARGET_COPY_OUT_VENDOR)/etc/c2_component_register
 
 # -------@block_app-------
 
@@ -189,6 +192,9 @@ endif
 PRODUCT_PACKAGES += \
     android.hardware.security.keymint-service-imx
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.keystore_desede=true
+
 # new gatekeeper HAL
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper-service-imx
@@ -283,6 +289,12 @@ PRODUCT_COPY_FILES += \
 # enlarge the period size for usb device
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.audio.usb.period_us=25000
+
+# libcamera
+PRODUCT_PACKAGES += \
+    libcamera-base \
+    libcamera \
+    libyaml
 
 # -------@block_camera-------
 PRODUCT_COPY_FILES += \
@@ -392,7 +404,8 @@ PRODUCT_PACKAGES += \
 # NXP 8987 WiFi Firmware
 PRODUCT_COPY_FILES += \
     vendor/nxp/imx-firmware/nxp/FwImage_IW416_SD/sduartiw416_combo.bin:vendor/firmware/sduartiw416_combo.bin \
-    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para_sd416.conf
+    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para_sd416.conf \
+    hardware/nxp/libbt/conf/nxp/evk_8ulp/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \
@@ -544,8 +557,8 @@ PRODUCT_PACKAGES += \
 
 # ele fw
 PRODUCT_COPY_FILES += \
-    vendor/nxp/ele/mx8ulpa2ext-ahab-container.img:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/imx/ele/mx8ulpa2ext-ahab-container.img \
-    vendor/nxp/ele/mx8ulpa2-ahab-container.img:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/imx/ele/mx8ulpa2-ahab-container.img
+    vendor/nxp/ele/mx8ulpa2ext-ahab-container.img:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/ele/mx8ulpa2ext-ahab-container.img \
+    vendor/nxp/ele/mx8ulpa2-ahab-container.img:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/ele/mx8ulpa2-ahab-container.img
 
 # Add Virtualization support
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)

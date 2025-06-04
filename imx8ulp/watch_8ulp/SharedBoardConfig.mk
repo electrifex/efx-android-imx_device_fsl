@@ -17,7 +17,6 @@ PRODUCT_IMX_TRUSTY := true
 # CONFIG_ZSMALLOC: zsmalloc.ko
 # CONFIG_HWMON: hwmon.ko, hardware monitor
 # CONFIG_SENSORS_ARM_SCMI: scmi-hwmon.ko, ARM SCMI sensors
-# CONFIG_ARM_SCMI_POWER_DOMAIN: scmi_pm_domain.ko, SCMI power domain driver
 # CONFIG_MXC_CLK: mxc-clk.ko
 # CONFIG_CLK_IMX8ULP: clk-imx8ulp.ko
 # CONFIG_IMX_MBOX: imx-mailbox.ko
@@ -66,7 +65,7 @@ PRODUCT_IMX_TRUSTY := true
 # CONFIG_VIDEO_OV5640: ov5640.ko
 # CONFIG_IMX8_ISI_CAPTURE: imx8-capture.ko
 # CONFIG_IMX8_ISI_CORE: imx8-isi-hw.ko, imx8-isi-cap.ko, imx8-isi-m2m.ko
-# CONFIG_IMX8_MIPI_CSI2: imx8-mipi-csi2.ko
+# CONFIG_IMX8_MIPI_CSI2: imx8mq-mipi-csi2.ko
 # CONFIG_IMX8_MEDIA_DEVICE: imx8-media-dev.ko
 # CONFIG_TRUSTY: trusty-core.ko, trusty-irq.ko, trusty-log.ko, trusty-virtio.ko, trusty-ipc.ko
 # CONFIG_CFG80211: cfg80211.ko
@@ -76,10 +75,11 @@ ifeq ($(LOADABLE_KERNEL_MODULE),true)
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/hwmon/hwmon.ko \
     $(KERNEL_OUT)/drivers/hwmon/scmi-hwmon.ko \
-    $(KERNEL_OUT)/drivers/firmware/arm_scmi/scmi_pm_domain.ko \
     $(KERNEL_OUT)/drivers/clk/imx/mxc-clk.ko \
     $(KERNEL_OUT)/drivers/clk/imx/clk-imx8ulp.ko \
     $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
+    $(KERNEL_OUT)/drivers/firmware/imx/sm-cpu.ko \
+    $(KERNEL_OUT)/drivers/firmware/imx/sm-lmm.ko \
     $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko \
     $(KERNEL_OUT)/drivers/firmware/imx/sec_enclave.ko \
     $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
@@ -98,7 +98,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpio/gpio-imx-rpmsg.ko \
     $(KERNEL_OUT)/drivers/dma/pxp/pxp_device.ko \
     $(KERNEL_OUT)/drivers/dma/pxp/pxp_dma_v3.ko \
-    $(KERNEL_OUT)/drivers/dma/fsl-edma-v3.ko \
+    $(KERNEL_OUT)/drivers/dma/fsl-edma.ko \
     $(KERNEL_OUT)/drivers/clocksource/timer-imx-tpm.ko \
     $(KERNEL_OUT)/lib/stmp_device.ko \
     $(KERNEL_OUT)/drivers/dma/mxs-dma.ko \
@@ -132,16 +132,14 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/drm/drm_dma_helper.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/nwl-dsi.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6161.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/display/drm_display_helper.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/dcnano/imx-dcnano-drm.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-rocktech-hx8394f.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-nxp-rm67162.ko \
+    $(KERNEL_OUT)/drivers/reset/reset-imx8ulp-csr.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/imx8-isi/imx8-isi.ko \
     $(KERNEL_OUT)/drivers/media/i2c/ov5640.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-hw.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-capture.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-mem2mem.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-capture.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-mipi-csi2.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/imx8mq-mipi-csi2.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-core.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-log.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-virtio.ko \
@@ -149,8 +147,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
 else
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/input/touchscreen/goodix_ts.ko \
-    $(KERNEL_OUT)/drivers/input/touchscreen/elants_i2c.ko\
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko
+    $(KERNEL_OUT)/drivers/input/touchscreen/elants_i2c.ko
 endif
 
 # CONFIG_MFD_FP9931: fp9931-core.ko
@@ -171,7 +168,6 @@ endif
 # CONFIG_SND_SOC_FSL_RPMSG: snd-soc-fsl-rpmsg.ko
 # CONFIG_SND_SOC_IMX_AUDIO_RPMSG: snd-soc-imx-rpmsg.ko
 # CONFIG_SND_SOC_RPMSG_WM8960: snd-soc-rpmsg-wm8960.ko
-# CONFIG_SND_SOC_RPMSG_WM8960_I2C: snd-soc-rpmsg-wm8960-i2c.ko
 # CONFIG_IMX_DSP_REMOTEPROC: imx_dsp_rproc.ko
 # CONFIG_MPL3115: mpl3115.ko
 # CONFIG_RPMSG_IIO_PEDOMETER: rpmsg_iio_pedometer.ko
@@ -209,7 +205,8 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-utils.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-spdif.ko \
-    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-spdif.ko \
+    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-audmux.ko \
+    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asoc-card.ko \
     $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card-utils.ko \
     $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-sai.ko \
@@ -218,7 +215,6 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-rpmsg.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-rpmsg.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-rpmsg-wm8960.ko \
-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-rpmsg-wm8960-i2c.ko \
     $(KERNEL_OUT)/drivers/remoteproc/imx_dsp_rproc.ko \
     $(KERNEL_OUT)/drivers/firmware/imx/imx-dsp.ko \
     $(KERNEL_OUT)/sound/soc/sof/snd-sof-utils.ko \

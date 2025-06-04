@@ -11,7 +11,7 @@
   "camera_metadata": [
     {
       "camera_type": "back",
-      "camera_name": "mxc_isi.1.capture",
+      "camera_name": "i2c@58226000/ov5640_mipi",
       "orientation": "0",
       "mplane": "1",
       "buffer_type": "dma",
@@ -26,17 +26,39 @@
       "MinFrameDuration": "33333333",
       "MaxFrameDuration": "300000000",
       "MinFrameDurationBlob5M": "600000000",
+      "MaxWidth": "1920",
+      "MaxHeight": "1080",
       "OmitFrame": [
-          {
-              "width": "2592",
-              "height": "1944",
-              "omit_num": "2"
-          }
+        {
+            "width": "1920",
+            "height": "1080",
+            "omit_num": "5"
+        },
+        {
+            "width": "1280",
+            "height": "720",
+            "omit_num": "5"
+        },
+        {
+            "width": "1024",
+            "height": "768",
+            "omit_num": "5"
+        },
+        {
+            "width": "640",
+            "height": "480",
+            "omit_num": "5"
+        },
+        {
+            "width": "320",
+            "height": "240",
+            "omit_num": "5"
+        }
       ]
     },
     {
       "camera_type": "front",
-      "camera_name": "mxc_isi.4.capture",
+      "camera_name": "i2c-rpbus-5/ov5640",
       "orientation": "0",
       "mplane": "1",
       "buffer_type": "dma",
@@ -51,12 +73,19 @@
       "MinFrameDuration": "33333333",
       "MaxFrameDuration": "300000000",
       "MinFrameDurationBlob5M": "600000000",
+      "MaxWidth": "640",
+      "MaxHeight": "480",
       "OmitFrame": [
-          {
-              "width": "2592",
-              "height": "1944",
-              "omit_num": "2"
-          }
+        {
+            "width": "640",
+            "height": "480",
+            "omit_num": "5"
+        },
+        {
+            "width": "320",
+            "height": "240",
+            "omit_num": "5"
+        }
       ]
     }
   ]

@@ -11,7 +11,7 @@
   "camera_metadata": [
     {
       "camera_type": "back",
-      "camera_name": "mxc_isi.0.capture",
+      "camera_name": "ov5640",
       "orientation": "0",
       "mplane": "1",
       "buffer_type": "dma",
@@ -22,27 +22,12 @@
       "PhysicalWidth": "3.6288",
       "PhysicalHeight": "2.7216",
       "FocalLength": "3.37",
-      "MaxJpegSize": "8388608",
+      "MaxJpegSize": "4194304",
       "MinFrameDuration": "33333333",
       "MaxFrameDuration": "300000000",
       "MinFrameDurationBlob5M": "600000000",
-      "OmitFrame": [
-          {
-              "width": "2592",
-              "height": "1944",
-              "omit_num": "2"
-          },
-          {
-              "width": "1280",
-              "height": "720",
-              "omit_num": "1"
-          },
-          {
-              "width": "640",
-              "height": "480",
-              "omit_num": "1"
-          }
-      ]
+      "MaxWidth": "1920",
+      "MaxHeight": "1080"
     }
   ]
 }

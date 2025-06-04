@@ -46,7 +46,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/firmware/imx/imx-scu-firmware.ko \
     $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
     $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
-    $(KERNEL_OUT)/drivers/firmware/imx/seco_mu.ko \
     $(KERNEL_OUT)/drivers/pmdomain/imx/scu-pd.ko \
     $(KERNEL_OUT)/drivers/clk/imx/mxc-clk.ko \
     $(KERNEL_OUT)/drivers/clk/imx/clk-imx-scu.ko \
@@ -58,14 +57,14 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx8qxp.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx8qm.ko \
     $(KERNEL_OUT)/drivers/power/reset/imx-sm-reset.ko \
-    $(KERNEL_OUT)/drivers/trusty/trusty-core.ko \
-    $(KERNEL_OUT)/drivers/trusty/trusty-log.ko \
-    $(KERNEL_OUT)/drivers/trusty/trusty-virtio.ko \
-    $(KERNEL_OUT)/drivers/trusty/trusty-ipc.ko \
     $(KERNEL_OUT)/drivers/iommu/arm/arm-smmu/arm_smmu.ko \
     $(KERNEL_OUT)/drivers/cpufreq/cpufreq-dt.ko \
     $(KERNEL_OUT)/drivers/cpufreq/cpufreq-dt-platdev.ko \
     $(KERNEL_OUT)/drivers/tty/serial/fsl_lpuart.ko \
+    $(KERNEL_OUT)/drivers/trusty/trusty-core.ko \
+    $(KERNEL_OUT)/drivers/trusty/trusty-log.ko \
+    $(KERNEL_OUT)/drivers/trusty/trusty-ipc.ko \
+    $(KERNEL_OUT)/drivers/trusty/trusty-virtio.ko \
     $(KERNEL_OUT)/drivers/reset/gpio-reset.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-max732x.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
@@ -78,14 +77,14 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/i2c/muxes/i2c-mux-gpio.ko \
     $(KERNEL_OUT)/drivers/spi/spi-fsl-lpspi.ko \
     $(KERNEL_OUT)/drivers/spi/spi-nxp-fspi.ko \
-    $(KERNEL_OUT)/drivers/iio/imu/fxos8700_core.ko \
-    $(KERNEL_OUT)/drivers/iio/imu/fxos8700_i2c.ko \
-    $(KERNEL_OUT)/drivers/iio/light/isl29018.ko \
     $(KERNEL_OUT)/drivers/iio/buffer/kfifo_buf.ko \
     $(KERNEL_OUT)/drivers/iio/buffer/industrialio-triggered-buffer.ko \
+    $(KERNEL_OUT)/drivers/iio/light/isl29018.ko \
     $(KERNEL_OUT)/drivers/iio/pressure/mpl3115.ko \
     $(KERNEL_OUT)/drivers/iio/gyro/fxas21002c_core.ko \
     $(KERNEL_OUT)/drivers/iio/gyro/fxas21002c_i2c.ko \
+    $(KERNEL_OUT)/drivers/iio/imu/fxos8700_core.ko \
+    $(KERNEL_OUT)/drivers/iio/imu/fxos8700_i2c.ko \
     $(KERNEL_OUT)/drivers/iio/industrialio-configfs.ko \
     $(KERNEL_OUT)/drivers/iio/industrialio-sw-trigger.ko \
     $(KERNEL_OUT)/drivers/iio/trigger/iio-trig-hrtimer.ko \
@@ -102,6 +101,8 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mmc/host/cqhci.ko \
     $(KERNEL_OUT)/drivers/mmc/host/sdhci-esdhc-imx.ko \
     $(KERNEL_OUT)/lib/stmp_device.ko \
+    $(KERNEL_OUT)/drivers/firmware/imx/sm-cpu.ko \
+    $(KERNEL_OUT)/drivers/firmware/imx/sm-lmm.ko \
     $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko \
     $(KERNEL_OUT)/drivers/usb/typec/mux/gpio-switch.ko \
     $(KERNEL_OUT)/drivers/usb/phy/phy-mxs-usb.ko \
@@ -146,10 +147,9 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm67191.ko
 
 BOARD_VENDOR_CAPTURE_KERNEL_MODULES = \
-    $(KERNEL_OUT)/drivers/media/i2c/ov5640.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/gmsl-max9286.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-mipi-csi2.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-parallel-csi.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/imx8mq-mipi-csi2.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/imx-parallel-csi.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-capture.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-hw.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-capture.ko \
@@ -167,6 +167,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
 endif
 
 BOARD_VENDOR_KERNEL_MODULES_TEMP += \
+    $(KERNEL_OUT)/sound/soc/generic/snd-soc-audio-graph-card2.ko \
     $(KERNEL_OUT)/mm/zsmalloc.ko \
     $(KERNEL_OUT)/drivers/block/zram/zram.ko \
     $(KERNEL_OUT)/net/rfkill/rfkill.ko \
@@ -178,7 +179,7 @@ BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(KERNEL_OUT)/drivers/media/v4l2-core/v4l2-jpeg.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-encdec.ko \
     $(KERNEL_OUT)/drivers/media/platform/amphion/amphion-vpu.ko \
-    $(KERNEL_OUT)/drivers/dma/fsl-edma-v3.ko \
+    $(KERNEL_OUT)/drivers/dma/fsl-edma.ko \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-audmux.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-audmix.ko \
@@ -197,10 +198,11 @@ BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card-utils.ko \
     $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card.ko \
     $(KERNEL_OUT)/drivers/remoteproc/imx_dsp_rproc.ko \
-    $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8q-pcie.ko \
+    $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8qm-hsio.ko \
     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
     $(KERNEL_OUT)/drivers/net/phy/realtek.ko \
-    $(KERNEL_OUT)/drivers/net/phy/at803x.ko \
+    $(KERNEL_OUT)/drivers/net/phy/qcom/qcom-phy-lib.ko \
+    $(KERNEL_OUT)/drivers/net/phy/qcom/at803x.ko \
     $(KERNEL_OUT)/drivers/pps/pps_core.ko \
     $(KERNEL_OUT)/drivers/ptp/ptp.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \

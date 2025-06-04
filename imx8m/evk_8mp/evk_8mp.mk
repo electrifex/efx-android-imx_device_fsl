@@ -6,6 +6,9 @@ IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
 #Enable this to choose 32 bit user space build
 IMX_BUILD_32BIT_ROOTFS ?= false
+#true means each display can show different contents, false means secondary display is just a
+#simple mirror from primary display.
+MULTIDISPLAY_WITH_INDEPENDENT_CONTROL ?= true
 
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
@@ -69,6 +72,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/thermal_info_config_imx8mp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mp.json
 
+# Media c2_component_register
+PRODUCT_COPY_FILES += \
+    $(IMX_MEDIA_CODEC_XML_PATH)/codec2/store/registry/c2_component_register_8mp:$(TARGET_COPY_OUT_VENDOR)/etc/c2_component_register
 
 # -------@block_app-------
 
@@ -187,6 +193,9 @@ endif
 
 PRODUCT_PACKAGES += \
     android.hardware.security.keymint-service-imx
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.keystore_desede=true
 
 # Confirmation UI
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
@@ -320,6 +329,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 
+# -------@block_oclcvt-------
+PRODUCT_PACKAGES += \
+    lib_imx_opencl_converter \
+    ocl_converter.cl \
+    ocl_converter_ext.cl
+
 PRODUCT_PACKAGES += \
     media_profiles_8mp-ov5640.xml \
     media_profiles_8mp-ispsensor-ov5640.xml
@@ -358,11 +373,11 @@ endif
 PRODUCT_PACKAGES += \
     libg2d-opencl
 
+ifeq ($(MULTIDISPLAY_WITH_INDEPENDENT_CONTROL),true)
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml
-
-PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml \
     $(IMX_DEVICE_PATH)/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
+endif
 
 # -------@block_gpu-------
 PRODUCT_PACKAGES += \
@@ -422,7 +437,8 @@ PRODUCT_PACKAGES += \
 # nxp 8997 wifi and bluetooth combo Firmware
 PRODUCT_COPY_FILES += \
     vendor/nxp/imx-firmware/nxp/FwImage_8997/pcieuart8997_combo_v4.bin:vendor/firmware/pcieuart8997_combo_v4.bin \
-    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf
+    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
+    hardware/nxp/libbt/conf/nxp/evk_8mp/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \
@@ -655,7 +671,8 @@ PRODUCT_PACKAGES += \
     libsom_ctrl \
     libversion \
     libvom_ctrl \
-    libvvdisplay_shared
+    libvvdisplay_shared \
+    libacproc
 
 # bin
 PRODUCT_PACKAGES += \

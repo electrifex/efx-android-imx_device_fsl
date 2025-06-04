@@ -1,7 +1,7 @@
 :: Do not output the command
 @echo off
 
-echo This script is validated with uuu 1.5.179 version, it is recommended to align with this version.
+echo This script is validated with uuu 1.5.201 version, it is recommended to align with this version.
 
 ::---------------------------------------------------------------------------------
 ::Variables
@@ -97,8 +97,6 @@ set imx95_dtb_feature=mipi-lvds1 lvds0 verdin verdin-adv7535 mipi-lvds1-ap1302 v
 
 set all_cmd_options=-h -f -c -u -d -a -b -m -mo -e -D -t -y -p -i -daemon -dryrun -usb
 
-set supported_card_sizes=0 7 13 14 28
-
 ::---------------------------------------------------------------------------------
 :: Parse command line, since there is no syntax like "switch case" in bat file,
 :: the way to process the command line is a bit redundant, still, it can work.
@@ -185,12 +183,6 @@ if not [%yocto_image%] == [] (
     echo %yocto_image% | findstr \ > nul || set yocto_image="%cd%"\%yocto_image%
 )
 
-:: If sdcard size is not correctly set, exit
-call :whether_in_array card_size supported_card_sizes
-if %flag% neq 0 (
-    echo card_size %card_size% is not a legal value & set /A error_level=1 && goto :exit
-)
-
 :: dual bootloader support will use different gpt, this is for imx8m and imx8ulp
 if [%support_dual_bootloader%] equ [1] (
     if %card_size% == 0 (
@@ -201,10 +193,11 @@ if [%support_dual_bootloader%] equ [1] (
 )else (
     if %card_size% gtr 0 set partition_file=partition-table-%card_size%GB.img
 )
-
-IF NOT EXIST %image_directory%%partition_file% (
-    echo %partition_file% does not exist & set /A error_level=1 && goto :exit
+if not exist %image_directory%%partition_file% (
+    echo %partition_file% does not exist, the "-c" option is not correctly used
+    set /A error_level=1 && goto :exit
 )
+
 
 :: dump the partition table image file into text file and check whether some partition names are in it
 if exist %tmp_dir%partition-table_1.txt (
@@ -299,6 +292,13 @@ if not [%soc_name:imx8ulp=%] == [%soc_name%] (
 )
 if not [%soc_name:imx93=%] == [%soc_name%] (
     set vid=0x1fc9& set pid=00x0152& set chip=MX93
+    set uboot_env_start=0x3800& set uboot_env_len=0x20
+    set emmc_num=0& set sd_num=1
+    set board=evk
+    goto :device_info_end
+)
+if not [%soc_name:imx943=%] == [%soc_name%] (
+    set vid=0x1fc9& set pid=00x0152& set chip=MX943
     set uboot_env_start=0x3800& set uboot_env_len=0x20
     set emmc_num=0& set sd_num=1
     set board=evk
@@ -402,6 +402,7 @@ if [%soc_name%] == [imx8mn] goto :with_sdps
 if [%soc_name%] == [imx8mp] goto :with_sdps
 if [%soc_name%] == [imx8ulp] goto :with_sdps
 if [%soc_name%] == [imx93] goto :with_sdps
+if [%soc_name%] == [imx943] goto :with_sdps
 if [%soc_name%] == [imx95] goto :with_sdps
 goto :without_sdps
 :with_sdps
@@ -457,6 +458,12 @@ if [%soc_name%] == [imx95] (
 if [%soc_name%] == [imx95] (
     if not [%uboot_feature_test:15x15=%] == [%uboot_feature_test%] (
         set bootloader_used_by_uuu=u-boot-%soc_name%-15x15-evk-uuu.imx
+    )
+)
+
+if [%soc_name%] == [imx943] (
+    if not [%uboot_feature_test:lpddr5=%] == [%uboot_feature_test%] (
+        set bootloader_used_by_uuu=u-boot-%soc_name%-lpddr5-evk-uuu.imx
     )
 )
 ::---------------------------------------------------------------------------------
@@ -590,9 +597,8 @@ echo  -h                displays this help message
 echo  -f soc_name       flash android image file with soc_name
 echo  -a                only flash image to slot_a
 echo  -b                only flash image to slot_b
-echo  -c card_size      optional setting: 7 / 13 / 14 / 28
-echo                        If this option is not used, partition-table.img or partition-table-dual.img is flashed.
-echo                        If this option is used, partition-table-^<card_size^>GB.img or partition-table-^<card_size^>GB-dual.img is flashed
+echo  -c card_size      If this option is not used, partition-table.img or partition-table-dual.img is flashed.
+echo                    If this option is used, partition-table-^<card_size^>GB.img or partition-table-^<card_size^>GB-dual.img is flashed
 echo                    Make sure the corresponding partition table image file exists
 echo  -m                flash mcu image
 echo  -u uboot_feature  flash uboot or spl and bootloader image with "uboot_feature" in their names
@@ -611,7 +617,7 @@ echo                           ^|   imx8qm    ^|  mek-uuu secure-unlock md      
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx95     ^|  evk-uuu secure-unlock verdin verdin-uuu                                                           ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo
+echo:
 echo  -d dtbo_feature   flash dtbo, vbmeta and recovery image file with "dtb_feature" in their names
 echo                        If not set, default dtbo, vbmeta and recovery image will be flashed
 echo                        Below table lists the legal value supported now based on the soc_name provided:
