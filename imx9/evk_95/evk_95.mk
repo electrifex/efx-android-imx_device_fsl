@@ -61,11 +61,6 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     android.hardware.power-service.imx
 
-# Do not include product.prop for automotive builds
-ifneq ($(PRODUCT_IMX_CAR),true)
-    TARGET_VENDOR_PROP := $(LOCAL_PATH)/product.prop
-endif
-
 # Thermal HAL
 PRODUCT_PACKAGES += \
     android.hardware.thermal-service.imx

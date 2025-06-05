@@ -31,4 +31,13 @@
     <feature name="android.software.secure_lock_screen" />
     <feature name="android.hardware.keystore.app_attest_key" />
     <feature name="android.hardware.security.model.compatible" />
+    <!-- Devices shipped with 2024Q2 or later are required to declare FEATURE_TELEPHONY_* for individual sub-features (calling, messaging, data) -->
+    <feature name="android.hardware.telephony" />
+    <feature name="android.software.telecom" />
+    <feature name="android.hardware.telephony.radio.access" />
+    <feature name="android.hardware.telephony.subscription" />
+    <feature name="android.hardware.telephony.gsm" />
+    <feature name="android.hardware.telephony.calling" />
+    <feature name="android.hardware.telephony.data" />
+    <feature name="android.hardware.telephony.messaging" />
 </permissions>
