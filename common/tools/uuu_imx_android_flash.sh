@@ -29,30 +29,32 @@ options:
                         For Android Automotive:
                             only dual bootloader feature is supported, by default spl&bootloader image will be flashed
                         Below table lists the legal value supported now based on the soc_name provided:
-                           ┌────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────┐
-                           │   soc_name     │  legal parameter after "-u"                                                                          │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8qxp      │  mek-uuu secure-unlock c0 mek-c0-uuu                                                                 │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8qm       │  mek-uuu secure-unlock md                                                                            │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx95        │  evk-uuu secure-unlock verdin verdin-uuu                                                             │
-                           └────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                           ┌────────────────┬──────────────────────────────────────────────────────────┐
+                           │   soc_name     │  legal parameter after "-u"                              │
+                           ├────────────────┼──────────────────────────────────────────────────────────┤
+                           │   imx8qxp      │  mek-uuu secure-unlock c0 mek-c0-uuu                     │
+                           ├────────────────┼──────────────────────────────────────────────────────────┤
+                           │   imx8qm       │  mek-uuu secure-unlock md                                │
+                           ├────────────────┼──────────────────────────────────────────────────────────┤
+                           │   imx95        │  evk-uuu secure-unlock verdin verdin-uuu                 │
+                           └────────────────┴──────────────────────────────────────────────────────────┘
 
   -d dtb_feature    flash dtbo, vbmeta and recovery image file with "dtb_feature" in their names
                         If not set, default dtbo, vbmeta and recovery image will be flashed
                         Below table lists the legal value supported now based on the soc_name provided:
-                           ┌────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────┐
-                           │   soc_name     │  legal parameter after "-d"                                                                          │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8qxp      │  sof                                                                                                 │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx8qm       │  md sof revd md-revd sof-revd                                                                        │
-                           ├────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-                           │   imx95        │  mipi-lvds1 lvds0 verdin verdin-adv7535                                                              │
-                           │                |  mipi-lvds1-ap1302 verdin-ap1302 verdin-adv7535-ap1302                                               │
-                           │                │  lvds0-ap1302                                                                                        │
-                           └────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                           ┌────────────────┬──────────────────────────────────────────────────────────┐
+                           │   soc_name     │  legal parameter after "-d"                              │
+                           ├────────────────┼──────────────────────────────────────────────────────────┤
+                           │   imx8qxp      │  sof                                                     │
+                           ├────────────────┼──────────────────────────────────────────────────────────┤
+                           │   imx8qm       │  md sof revd md-revd sof-revd                            │
+                           ├────────────────┼──────────────────────────────────────────────────────────┤
+                           │   imx95        │                lvds0                  mipi-lvds1         │
+                           │                |  ap1302        lvds0-ap1302           mipi-lvds1-ap1302  │
+                           │                │                                                          │
+                           │                │  verdin        verdin-adv7535                            │
+                           │                │  verdin-ap1302 verdin-adv7535-ap1302                     │
+                           └────────────────┴──────────────────────────────────────────────────────────┘
 
   -e                erase user data after all image files being flashed
   -D directory      the directory of images
@@ -429,7 +431,7 @@ imx95_uboot_feature=(evk-uuu secure-unlock verdin verdin-uuu)
 
 imx8qxp_dtb_feature=(sof)
 imx8qm_dtb_feature=(md sof revd md-revd sof-revd)
-imx95_dtb_feature=(mipi-lvds1 lvds0 verdin verdin-adv7535 mipi-lvds1-ap1302 verdin-ap1302 verdin-adv7535-ap1302 lvds0-ap1302)
+imx95_dtb_feature=(ap1302 lvds0 lvds0-ap1302 mipi-lvds1 mipi-lvds1-ap1302 verdin verdin-ap1302 verdin-adv7535 verdin-adv7535-ap1302)
 
 tmp_files_before_uuu=()
 tmp_files_in_uuu=()

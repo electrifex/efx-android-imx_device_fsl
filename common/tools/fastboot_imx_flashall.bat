@@ -71,7 +71,7 @@ set imx95_uboot_feature=evk-uuu secure-unlock verdin verdin-uuu
 
 set imx8qxp_dtb_feature=sof
 set imx8qm_dtb_feature=md sof revd md-revd sof-revd
-set imx95_dtb_feature=mipi-lvds1 lvds0 verdin verdin-adv7535 mipi-lvds1-ap1302 verdin-ap1302 verdin-adv7535-ap1302 lvds0-ap1302
+set imx95_dtb_feature=ap1302 lvds0 lvds0-ap1302 mipi-lvds1 mipi-lvds1-ap1302 verdin verdin-ap1302 verdin-adv7535 verdin-adv7535-ap1302 
 
 :: an array to collect the supported soc_names
 set supported_soc_names=imx8qm imx8qxp imx95
@@ -257,9 +257,11 @@ echo                           ^|   imx8qxp   ^|  sof                           
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx8qm    ^|  md sof revd md-revd sof-revd                                                                      ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
-echo                           ^|   imx95     ^|  mipi-lvds1 lvds0 verdin verdin-adv7535                                                            ^|
-echo                           ^|             ^|  mipi-lvds1-ap1302 verdin-ap1302 verdin-adv7535-ap1302                                             ^|
-echo                           ^|             ^|  lvds0-ap1302                                                                                      ^|
+echo                           ^|   imx95     ^|                lvds0                  mipi-lvds1                                                   ^|
+echo                           ^|             ^|  ap1302        lvds0-ap1302           mipi-lvds1-ap1302                                            ^|
+echo                           ^|             ^|                                                                                                    ^|
+echo                           ^|             ^|  verdin        verdin-adv7535                                                                      ^|
+echo                           ^|             ^|  verdin-ap1302 verdin-adv7535-ap1302                                                               ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo:
 echo  -e                erase user data after all image files being flashed
