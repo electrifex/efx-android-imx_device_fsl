@@ -84,8 +84,7 @@
     <bool translatable="false" name="config_wifiSoftApDynamicCountryCodeUpdateSupported">true</bool>
 
     <!-- Indicates that bridged AP concurrency mode is supported on this device (AP+AP)-->
-    <!-- Currently not used, use this config onlz if you want AP+AP concurrency enabled but STA+AP+AP concurrency disabled at the same time -->
-    <!-- <bool translatable="false" name="config_wifiBridgedSoftApSupported">true</bool>-->
+    <bool translatable="false" name="config_wifiBridgedSoftApSupported">true</bool>
 
     <!-- Indicates that STA + bridged AP concurrency mode is supported on this device (STA+AP+AP)-->
     <bool translatable="false" name="config_wifiStaWithBridgedSoftApConcurrencySupported">true</bool>
