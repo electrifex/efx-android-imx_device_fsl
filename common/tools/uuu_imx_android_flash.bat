@@ -89,7 +89,7 @@ set mcu_demo=
 :: images when flash another set of images can not be detect early with this scenario.
 set imx8qxp_uboot_feature=mek-uuu secure-unlock c0 mek-c0-uuu
 set imx8qm_uboot_feature=mek-uuu secure-unlock md
-set imx95_uboot_feature=evk-uuu secure-unlock verdin verdin-uuu
+set imx95_uboot_feature=evk-uuu secure-unlock verdin verdin-uuu a1 evk-a1-uuu verdin-a1 verdin-a1-uuu
 
 set imx8qxp_dtb_feature=sof
 set imx8qm_dtb_feature=md sof revd md-revd sof-revd
@@ -458,6 +458,12 @@ if [%soc_name%] == [imx95] (
 if [%soc_name%] == [imx95] (
     if not [%uboot_feature_test:15x15=%] == [%uboot_feature_test%] (
         set bootloader_used_by_uuu=u-boot-%soc_name%-15x15-evk-uuu.imx
+    )
+)
+
+if [%soc_name%] == [imx95] (
+    if not [%uboot_feature_test:a1=%] == [%uboot_feature_test%] (
+        set bootloader_used_by_uuu=u-boot-%soc_name%-%board%-a1-uuu.imx
     )
 )
 

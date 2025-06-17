@@ -64,6 +64,13 @@ else
 	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evk-android 1>/dev/null || exit 1
 fi
 	echo Building imx-oei ...
+	# A0/1
+	make -C ${BOARD_OEI_PATH} really-clean
+	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 r=a0 DDR_CONFIG=XIMX95LPD5EVK19_6400mbps_train_timing_a1 oei=tcm d=1 all 1>/dev/null || exit 1
+	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 r=a0 DDR_CONFIG=XIMX95LPD5EVK19_6400mbps_train_timing_a1 oei=ddr d=1 all 1>/dev/null || exit 1
+	cp -f ${BOARD_OEI_PATH}/build/mx95lp5/ddr/oei-m33-ddr.bin ${BOARD_OEI_PATH}/oei-m33-ddr.bin
+	cp -f ${BOARD_OEI_PATH}/build/mx95lp5/tcm/oei-m33-tcm.bin ${BOARD_OEI_PATH}
+	# B0
 	make -C ${BOARD_OEI_PATH} really-clean
 	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 r=b0 oei=tcm d=1 all 1>/dev/null || exit 1
 if echo "$2" | grep -q "15x15" ; then
@@ -96,12 +103,17 @@ fi
 build_imx_uboot()
 {
 	echo Building i.MX U-Boot with firmware
-	if echo "$2" | grep -q "15x15" ; then
-		cp ${BOARD_OEI_PATH}/build/mx95lp4x-15/ddr/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}/oei-m33-ddr.bin
+	if echo "$2" | grep -q "a1" ; then
+		cp ${BOARD_OEI_PATH}/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}/oei-m33-ddr.bin
+		cp ${BOARD_OEI_PATH}/oei-m33-tcm.bin ${BOARD_MKIMAGE_PATH}
 	else
-		cp ${BOARD_OEI_PATH}/build/mx95lp5/ddr/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}/oei-m33-ddr.bin
+		if echo "$2" | grep -q "15x15" ; then
+			cp ${BOARD_OEI_PATH}/build/mx95lp4x-15/ddr/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}/oei-m33-ddr.bin
+		else
+			cp ${BOARD_OEI_PATH}/build/mx95lp5/ddr/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}/oei-m33-ddr.bin
+		fi
+		cp ${BOARD_OEI_PATH}/build/mx95lp5/tcm/oei-m33-tcm.bin ${BOARD_MKIMAGE_PATH}
 	fi
-	cp ${BOARD_OEI_PATH}/build/mx95lp5/tcm/oei-m33-tcm.bin ${BOARD_MKIMAGE_PATH}
 
 	if [ "${PRODUCT_IMX_CAR_M7}" = "true" ] && [ `echo $2 | rev | cut -d '-' -f1` != "uuu" ]; then
 		cp ${BOARD_SM_PATH}/build/mx95evk-automotive_car/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
@@ -124,7 +136,12 @@ build_imx_uboot()
 		fi
 	fi
 
-	cp ${FSL_PROPRIETARY_PATH}/ele/mx95b0-ahab-container.img ${BOARD_MKIMAGE_PATH}/mx95b0-ahab-container.img
+	if echo "$2" | grep -q "a1" ; then
+		cp ${FSL_PROPRIETARY_PATH}/ele/mx95a0-ahab-container.img ${BOARD_MKIMAGE_PATH}/mx95a0-ahab-container.img
+	else
+		cp ${FSL_PROPRIETARY_PATH}/ele/mx95b0-ahab-container.img ${BOARD_MKIMAGE_PATH}/mx95b0-ahab-container.img
+	fi
+
 	cp ${UBOOT_OUT}/u-boot.$1 ${BOARD_MKIMAGE_PATH}
 	cp ${UBOOT_OUT}/spl/u-boot-spl.bin ${BOARD_MKIMAGE_PATH}
 	cp ${UBOOT_OUT}/tools/mkimage ${BOARD_MKIMAGE_PATH}/mkimage_uboot
@@ -136,7 +153,11 @@ build_imx_uboot()
 	# build ATF based on whether tee is involved
 	make -C ${IMX_PATH}/arm-trusted-firmware/ PLAT=`echo $2 | cut -d '-' -f1` clean
 	if ([ "${PRODUCT_IMX_CAR}" = "true" ] || [ `echo $2 | cut -d '-' -f2` = "trusty" ]) && [ `echo $2 | rev | cut -d '-' -f1` != "uuu" ]; then
-		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/tee-imx95.bin ${BOARD_MKIMAGE_PATH}/tee.bin
+		if echo "$2" | grep -q "a1" ; then
+			cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/tee-imx95_a0.bin ${BOARD_MKIMAGE_PATH}/tee.bin
+		else
+			cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/tee-imx95.bin ${BOARD_MKIMAGE_PATH}/tee.bin
+		fi
 		make -C ${IMX_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` bl31 -B SPD=trusty 1>/dev/null || exit 1
 	else
 		if [ -f ${BOARD_MKIMAGE_PATH}/tee.bin ] ; then
@@ -158,7 +179,11 @@ build_imx_uboot()
 	elif [ `echo $2 | cut -d '-' -f2` = "rpmsg" ]; then
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 REV=B0 MSEL=1 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
 	else
-		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
+		if echo "$2" | grep -q "a1" ; then
+			make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all REV=A1 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
+		else
+			make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
+		fi
 	fi
 
 	PWD=${pwd_backup}
@@ -169,5 +194,4 @@ build_imx_uboot()
 	else
 		cp ${BOARD_MKIMAGE_PATH}/flash.bin ${UBOOT_COLLECTION}/u-boot-$2.imx
 	fi
-
 }

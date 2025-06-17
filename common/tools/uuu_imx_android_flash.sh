@@ -427,7 +427,7 @@ randome_part=
 # images when flash another set of images can not be detect early with this scenario.
 imx8qxp_uboot_feature=(mek-uuu secure-unlock c0 mek-c0-uuu)
 imx8qm_uboot_feature=(mek-uuu secure-unlock md)
-imx95_uboot_feature=(evk-uuu secure-unlock verdin verdin-uuu)
+imx95_uboot_feature=(evk-uuu secure-unlock verdin verdin-uuu a1 evk-a1-uuu verdin-a1 verdin-a1-uuu)
 
 imx8qxp_dtb_feature=(sof)
 imx8qm_dtb_feature=(md sof revd md-revd sof-revd)
