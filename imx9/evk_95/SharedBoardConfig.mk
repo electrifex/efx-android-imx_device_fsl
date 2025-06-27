@@ -114,6 +114,7 @@ IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-rocktech-hx8394f.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-lvds.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/display/drm_display_helper.ko \
+    $(KERNEL_OUT)/drivers/hwmon/pwm-fan.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/display-imx-rpmsg.ko
 
 BOARD_VENDOR_DISPLAY_KERNEL_MODULES = \
