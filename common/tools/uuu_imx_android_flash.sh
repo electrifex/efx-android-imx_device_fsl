@@ -778,6 +778,18 @@ if [ "${soc_name}" = imx95 ]; then
     fi
 fi
 
+if [ "${soc_name}" = imx95 ]; then
+    if [[ "${uboot_feature}" = *"a1"* ]]; then
+        bootloader_used_by_uuu=u-boot-${soc_name}-evk-a1-uuu.imx
+    fi
+fi
+
+if [ "${soc_name}" = imx95 ]; then
+    if [[ "${uboot_feature}" = *"verdin-a1"* ]]; then
+        bootloader_used_by_uuu=u-boot-${soc_name}-verdin-a1-uuu.imx
+    fi
+fi
+
 if [ "${soc_name}" = imx943 ]; then
     if [[ "${uboot_feature}" = *"lpddr5"* ]]; then
         bootloader_used_by_uuu=u-boot-${soc_name}-lpddr5-evk-uuu.imx

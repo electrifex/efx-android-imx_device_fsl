@@ -467,6 +467,12 @@ if [%soc_name%] == [imx95] (
     )
 )
 
+if [%soc_name%] == [imx95] (
+    if not [%uboot_feature_test:verdin-a1=%] == [%uboot_feature_test%] (
+        set bootloader_used_by_uuu=u-boot-%soc_name%-verdin-a1-uuu.imx
+    )
+)
+
 if [%soc_name%] == [imx943] (
     if not [%uboot_feature_test:lpddr5=%] == [%uboot_feature_test%] (
         set bootloader_used_by_uuu=u-boot-%soc_name%-lpddr5-evk-uuu.imx
