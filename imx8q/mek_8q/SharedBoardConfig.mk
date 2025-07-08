@@ -147,14 +147,12 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm67191.ko
 
 BOARD_VENDOR_CAPTURE_KERNEL_MODULES = \
-    $(KERNEL_OUT)/drivers/staging/media/imx/gmsl-max9286.ko \
-    $(KERNEL_OUT)/drivers/media/platform/nxp/imx8mq-mipi-csi2.ko \
-    $(KERNEL_OUT)/drivers/media/platform/nxp/imx-parallel-csi.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-capture.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-hw.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-capture.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-mem2mem.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko
+    $(KERNEL_OUT)/drivers/media/i2c/max9271.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/max9286.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/rdacm20.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/imx8-isi/imx8-isi.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/imx8mq-mipi-csi2.ko
+
 ifeq ($(PRODUCT_IMX_CAR),true)
     ifeq ($(PRODUCT_IMX_CAR_M4),true)
         # Camera drivers are in /vendor_dlkm  for Car image type.

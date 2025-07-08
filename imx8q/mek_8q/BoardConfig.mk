@@ -166,55 +166,55 @@ endif
 ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(PRODUCT_IMX_CAR_M4),true)
     ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
-      TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car-no-product.dtb
-      TARGET_BOARD_DTS_CONFIG += imx8qxp:imx8qxp-mek-car-no-product.dtb
+      TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car-no-product-max9286-csi0.dtb
+      TARGET_BOARD_DTS_CONFIG += imx8qxp:imx8qxp-mek-car-no-product-max9286.dtb
     else
       ifeq ($(IMX8QM_A72_BOOT),true)
         # imx8qm auto android, A72 boot
-        TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car-a72.dtb
+        TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car-a72-max9286-csi0.dtb
         # imx8qm auto with SOF
-        TARGET_BOARD_DTS_CONFIG += imx8qm-sof:imx8qm-mek-car-a72-sof.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-sof:imx8qm-mek-car-a72-sof-max9286-csi0.dtb
         # imx8qm auto android, A72 boot on revd
-        TARGET_BOARD_DTS_CONFIG += imx8qm-revd:imx8qm-mek-revd-car-a72.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-revd:imx8qm-mek-revd-car-a72-max9286-csi0.dtb
         # imx8qm auto with SOF on revd
-        TARGET_BOARD_DTS_CONFIG += imx8qm-sof-revd:imx8qm-mek-revd-car-a72-sof.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-sof-revd:imx8qm-mek-revd-car-a72-sof-max9286-csi0.dtb
       else
         # imx8qm auto android
-        TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car.dtb
+        TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car-max9286-csi0.dtb
         # imx8qm auto android with multi-display
-        TARGET_BOARD_DTS_CONFIG += imx8qm-md:imx8qm-mek-car-md.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-md:imx8qm-mek-car-md-max9286-csi0.dtb
       endif
       # imx8qxp auto android
-      TARGET_BOARD_DTS_CONFIG += imx8qxp:imx8qxp-mek-car.dtb
-      TARGET_BOARD_DTS_CONFIG += imx8qxp-sof:imx8qxp-mek-car-sof.dtb
+      TARGET_BOARD_DTS_CONFIG += imx8qxp:imx8qxp-mek-car-max9286.dtb
+      TARGET_BOARD_DTS_CONFIG += imx8qxp-sof:imx8qxp-mek-car-sof-max9286.dtb
     endif # IMX_NO_PRODUCT_PARTITION
   else #PRODUCT_IMX_CAR_M4
     ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
-      TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car2-no-product.dtb
-      TARGET_BOARD_DTS_CONFIG += imx8qxp:imx8qxp-mek-car2-no-product.dtb
+      TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car2-no-product-max9286-csi0.dtb
+      TARGET_BOARD_DTS_CONFIG += imx8qxp:imx8qxp-mek-car2-no-product-max9286.dtb
     else
       ifeq ($(IMX8QM_A72_BOOT),true)
         # imx8qm auto android without m4 image, A72 boot
-        TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car2-a72.dtb
+        TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car2-a72-max9286-csi0.dtb
         # imx8qm auto android without m4 image for multi-display, A72 boot
-        TARGET_BOARD_DTS_CONFIG += imx8qm-md:imx8qm-mek-car2-md-a72.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-md:imx8qm-mek-car2-md-a72-max9286-csi0.dtb
         # imx8qm auto with SOF
-        TARGET_BOARD_DTS_CONFIG += imx8qm-sof:imx8qm-mek-car2-a72-sof.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-sof:imx8qm-mek-car2-a72-sof-max9286-csi0.dtb
         # imx8qm auto android without m4 image, A72 boot on revd
-        TARGET_BOARD_DTS_CONFIG += imx8qm-revd:imx8qm-mek-revd-car2-a72.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-revd:imx8qm-mek-revd-car2-a72-max9286-csi0.dtb
         # imx8qm auto android without m4 image for multi-display, A72 boot on revd
-        TARGET_BOARD_DTS_CONFIG += imx8qm-md-revd:imx8qm-mek-revd-car2-md-a72.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-md-revd:imx8qm-mek-revd-car2-md-a72-max9286-csi0.dtb
         # imx8qm auto with SOF on revd
-        TARGET_BOARD_DTS_CONFIG += imx8qm-sof-revd:imx8qm-mek-revd-car2-a72-sof.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-sof-revd:imx8qm-mek-revd-car2-a72-sof-max9286-csi0.dtb
       else
         # imx8qm auto android without m4 image
-        TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car2.dtb
+        TARGET_BOARD_DTS_CONFIG := imx8qm:imx8qm-mek-car2-max9286-csi0.dtb
         # imx8qm auto android without m4 image for multi-display
-        TARGET_BOARD_DTS_CONFIG += imx8qm-md:imx8qm-mek-car2-md.dtb
+        TARGET_BOARD_DTS_CONFIG += imx8qm-md:imx8qm-mek-car2-md-max9286-csi0.dtb
       endif
       # imx8qxp auto android without m4 image
-      TARGET_BOARD_DTS_CONFIG += imx8qxp:imx8qxp-mek-car2.dtb
-      TARGET_BOARD_DTS_CONFIG += imx8qxp-sof:imx8qxp-mek-car2-sof.dtb
+      TARGET_BOARD_DTS_CONFIG += imx8qxp:imx8qxp-mek-car2-max9286.dtb
+      TARGET_BOARD_DTS_CONFIG += imx8qxp-sof:imx8qxp-mek-car2-sof-max9286.dtb
     endif #IMX_NO_PRODUCT_PARTITION
   endif #PRODUCT_IMX_CAR_M4
 else
