@@ -50,9 +50,11 @@ options:
                            │   imx8qm       │  md sof revd md-revd sof-revd                            │
                            ├────────────────┼──────────────────────────────────────────────────────────┤
                            │   imx95        │                lvds0                  mipi-lvds1         │
+                           │                │  a1            lvds0-a1               mipi-lvds1-a1      │
                            │                |  ap1302        lvds0-ap1302           mipi-lvds1-ap1302  │
                            │                │                                                          │
                            │                │  verdin        verdin-adv7535                            │
+                           │                │  verdin-a1     verdin-adv7535-a1                         │
                            │                │  verdin-ap1302 verdin-adv7535-ap1302                     │
                            └────────────────┴──────────────────────────────────────────────────────────┘
 
@@ -431,7 +433,7 @@ imx95_uboot_feature=(evk-uuu secure-unlock verdin verdin-uuu a1 evk-a1-uuu verdi
 
 imx8qxp_dtb_feature=(sof)
 imx8qm_dtb_feature=(md sof revd md-revd sof-revd)
-imx95_dtb_feature=(ap1302 lvds0 lvds0-ap1302 mipi-lvds1 mipi-lvds1-ap1302 verdin verdin-ap1302 verdin-adv7535 verdin-adv7535-ap1302)
+imx95_dtb_feature=(a1 ap1302 lvds0 lvds0-a1 lvds0-ap1302 mipi-lvds1 mipi-lvds1-a1 mipi-lvds1-ap1302 verdin verdin-a1 verdin-ap1302 verdin-adv7535 verdin-adv7535-a1 verdin-adv7535-ap1302)
 
 tmp_files_before_uuu=()
 tmp_files_in_uuu=()
