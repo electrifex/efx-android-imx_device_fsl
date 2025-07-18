@@ -61,7 +61,7 @@
       "vflip" : false
     },
     {
-      "cameraId" : "mxc_isi.5.capture",
+      "cameraId" : "mxc_isi.4.capture",
       "function" : "left,park",
       "x" : -36.0,
       "y" : 60.0,

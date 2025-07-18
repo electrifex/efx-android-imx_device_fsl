@@ -1,0 +1,145 @@
+{
+  "__readme": [
+    "Basic Camera HAL v3 configuration."
+  ],
+
+  "hal_version": "3",
+  "cam_blit_copy": "DPU",
+  "cam_blit_csc": "DPU",
+  "hw_jpeg_enc": "mxc-jpeg-enc",
+
+  "camera_metadata": [
+    {
+      "camera_type": "back",
+      "orientation": "0",
+      "mplane": "1",
+      "buffer_type": "dma",
+      "ActiveArrayWidth": "1280",
+      "ActiveArrayHeight": "800",
+      "MaxWidth": "1280",
+      "MaxHeight": "800",
+      "PixelArrayWidth": "1280",
+      "PixelArrayHeight": "800",
+      "PhysicalWidth": "3.6288",
+      "PhysicalHeight": "2.7216",
+      "FocalLength": "3.37",
+      "MaxJpegSize": "6291456",
+      "MinFrameDuration": "33333333",
+      "MaxFrameDuration": "300000000",
+      "AvailableCapabilities":"11",
+
+      "PhysicalNames":["mxc_isi.1.capture", "mxc_isi.2.capture", "mxc_isi.3.capture", "mxc_isi.4.capture"],
+      "OmitFrame": [
+          {
+              "width": "1280",
+              "height": "800",
+              "omit_num": "2"
+          }
+      ]
+    },
+    {
+      "camera_name": "mxc_isi.1.capture",
+      "orientation": "0",
+      "mplane": "1",
+      "buffer_type": "dma",
+      "ActiveArrayWidth": "1280",
+      "ActiveArrayHeight": "800",
+      "PixelArrayWidth": "1280",
+      "PixelArrayHeight": "800",
+      "MaxWidth": "1280",
+      "MaxHeight": "800",
+      "PhysicalWidth": "3.6288",
+      "PhysicalHeight": "2.7216",
+      "FocalLength": "3.37",
+      "MaxJpegSize": "6291456",
+      "MinFrameDuration": "33333333",
+      "MaxFrameDuration": "300000000",
+
+      "OmitFrame": [
+          {
+              "width": "1280",
+              "height": "800",
+              "omit_num": "2"
+          }
+      ]
+    },
+    {
+      "camera_name": "mxc_isi.2.capture",
+      "orientation": "0",
+      "mplane": "1",
+      "buffer_type": "dma",
+      "ActiveArrayWidth": "1280",
+      "ActiveArrayHeight": "800",
+      "PixelArrayWidth": "1280",
+      "PixelArrayHeight": "800",
+      "MaxWidth": "1280",
+      "MaxHeight": "800",
+      "PhysicalWidth": "3.6288",
+      "PhysicalHeight": "2.7216",
+      "FocalLength": "3.37",
+      "MaxJpegSize": "6291456",
+      "MinFrameDuration": "33333333",
+      "MaxFrameDuration": "300000000",
+
+      "OmitFrame": [
+          {
+              "width": "1280",
+              "height": "800",
+              "omit_num": "2"
+          }
+      ]
+    },
+    {
+      "camera_name": "mxc_isi.3.capture",
+      "orientation": "0",
+      "mplane": "1",
+      "buffer_type": "dma",
+      "ActiveArrayWidth": "1280",
+      "ActiveArrayHeight": "800",
+      "PixelArrayWidth": "1280",
+      "PixelArrayHeight": "800",
+      "MaxWidth": "1280",
+      "MaxHeight": "800",
+      "PhysicalWidth": "3.6288",
+      "PhysicalHeight": "2.7216",
+      "FocalLength": "3.37",
+      "MaxJpegSize": "6291456",
+      "MinFrameDuration": "33333333",
+      "MaxFrameDuration": "300000000",
+
+      "OmitFrame": [
+          {
+              "width": "1280",
+              "height": "800",
+              "omit_num": "2"
+          }
+      ]
+    },
+    {
+      "camera_name": "mxc_isi.4.capture",
+      "orientation": "0",
+      "mplane": "1",
+      "buffer_type": "dma",
+      "ActiveArrayWidth": "1280",
+      "ActiveArrayHeight": "800",
+      "PixelArrayWidth": "1280",
+      "PixelArrayHeight": "800",
+      "MaxWidth": "1280",
+      "MaxHeight": "800",
+      "PhysicalWidth": "3.6288",
+      "PhysicalHeight": "2.7216",
+      "FocalLength": "3.37",
+      "MaxJpegSize": "6291456",
+      "MinFrameDuration": "33333333",
+      "MaxFrameDuration": "300000000",
+
+      "OmitFrame": [
+          {
+              "width": "1280",
+              "height": "800",
+              "omit_num": "2"
+          }
+      ]
+    }
+  ]
+}

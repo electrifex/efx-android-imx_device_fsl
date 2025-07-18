@@ -35,8 +35,8 @@
         <group id='group0' synchronized='CALIBRATED'>
             <caps>
                 <!-- list of stream configuration supported by all physical devices -->
-                <!-- nxp have camera ov10635 which support 720p for all evs cameras -->
-                <stream id='0' width='1280' height='720' format='RGB_888' framerate='30'/>
+                <!-- nxp have camera ov10635 which support 800p for all evs cameras -->
+                <stream id='0' width='1280' height='800' format='RGB_888' framerate='30'/>
             </caps>
 
             <!-- list of parameters -->
@@ -54,7 +54,7 @@
                     name='LOGICAL_MULTI_CAMERA_PHYSICAL_IDS'
                     type='byte[]'
                     size='2'
-                    value='mxc_isi.3.capture,mxc_isi.2.capture,mxc_isi.1.capture,mxc_isi.5.capture'
+                    value='mxc_isi.1.capture,mxc_isi.2.capture,mxc_isi.3.capture,mxc_isi.4.capture'
                 />
                 <parameter
                     name='LENS_DISTORTION'
@@ -84,12 +84,12 @@
         </group>
 
         <!-- camera device starts, Front -->
-        <device id='mxc_isi.3.capture' position='front'>
+        <device id='mxc_isi.1.capture' position='front'>
             <caps>
 
                 <!-- list of supported stream configurations -->
                 <!-- below configurations were taken from v4l2-ctrl query on Logitech Webcam C930e device -->
-                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
                 <stream id='1' width='960'  height='540'  format='RGB_888' framerate='30'/>
                 <stream id='2' width='848'  height='480'  format='RGB_888' framerate='30'/>
                 <stream id='3' width='640'  height='360'  format='RGB_888' framerate='30'/>
@@ -129,7 +129,7 @@
 
                 <!-- list of supported stream configurations -->
                 <!-- below configurations were taken from v4l2-ctrl query on Logitech Webcam C930e device -->
-                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
                 <stream id='1' width='960'  height='540'  format='RGB_888' framerate='30'/>
                 <stream id='2' width='848'  height='480'  format='RGB_888' framerate='30'/>
                 <stream id='3' width='640'  height='360'  format='RGB_888' framerate='30'/>
@@ -164,12 +164,12 @@
             </characteristics>
         </device>
         <!-- camera device starts Rear -->
-        <device id='mxc_isi.1.capture' position='rear'>
+        <device id='mxc_isi.3.capture' position='rear'>
             <caps>
 
                 <!-- list of supported stream configurations -->
                 <!-- below configurations were taken from v4l2-ctrl query on Logitech Webcam C930e device -->
-                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
                 <stream id='1' width='960'  height='540'  format='RGB_888' framerate='30'/>
                 <stream id='2' width='848'  height='480'  format='RGB_888' framerate='30'/>
                 <stream id='3' width='640'  height='360'  format='RGB_888' framerate='30'/>
@@ -204,12 +204,12 @@
             </characteristics>
         </device>
         <!-- camera device starts Left -->
-        <device id='mxc_isi.5.capture' position='left'>
+        <device id='mxc_isi.4.capture' position='left'>
             <caps>
 
                 <!-- list of supported stream configurations -->
                 <!-- below configurations were taken from v4l2-ctrl query on Logitech Webcam C930e device -->
-                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
                 <stream id='1' width='960'  height='540'  format='RGB_888' framerate='30'/>
                 <stream id='2' width='848'  height='480'  format='RGB_888' framerate='30'/>
                 <stream id='3' width='640'  height='360'  format='RGB_888' framerate='30'/>
