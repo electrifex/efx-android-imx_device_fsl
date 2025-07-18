@@ -224,9 +224,9 @@ PRODUCT_PACKAGES += \
     android.hardware.camera.provider-V1-external-impl.so \
     camera.device-external-imx-impl.so
 
-# external camera feature demo
-#PRODUCT_PACKAGES += \
-#     Camera2Basic
+# multicamera APK demo
+PRODUCT_PACKAGES += \
+     androidmulticam
 
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
