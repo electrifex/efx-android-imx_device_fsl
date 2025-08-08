@@ -170,11 +170,7 @@ BOARD_KERNEL_CMDLINE += cma=$(CMASIZE)@0xBF0M-0xFF0M
 
 # display config
 BOARD_BOOTCONFIG += androidboot.lcd_density=200
-ifeq ($(PRODUCT_IMX_CAR_M7),true)
-BOARD_BOOTCONFIG += androidboot.dpu_composition=0
-else
 BOARD_BOOTCONFIG += androidboot.dpu_composition=1
-endif
 
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=US
