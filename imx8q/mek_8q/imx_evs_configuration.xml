@@ -35,8 +35,7 @@
         <group id='group0' synchronized='CALIBRATED'>
             <caps>
                 <!-- list of stream configuration supported by all physical devices -->
-                <!-- nxp have camera ov10635 which support 800p for all evs cameras -->
-                <stream id='0' width='1280' height='800' format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='720' format='RGB_888' framerate='30'/>
             </caps>
 
             <!-- list of parameters -->
@@ -88,13 +87,7 @@
             <caps>
 
                 <!-- list of supported stream configurations -->
-                <!-- below configurations were taken from v4l2-ctrl query on Logitech Webcam C930e device -->
-                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
-                <stream id='1' width='960'  height='540'  format='RGB_888' framerate='30'/>
-                <stream id='2' width='848'  height='480'  format='RGB_888' framerate='30'/>
-                <stream id='3' width='640'  height='360'  format='RGB_888' framerate='30'/>
-                <stream id='4' width='480'  height='270'  format='RGB_888' framerate='30'/>
-                <stream id='5' width='160'  height='120'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
             </caps>
             <characteristics>
                  <parameter
@@ -128,13 +121,7 @@
             <caps>
 
                 <!-- list of supported stream configurations -->
-                <!-- below configurations were taken from v4l2-ctrl query on Logitech Webcam C930e device -->
-                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
-                <stream id='1' width='960'  height='540'  format='RGB_888' framerate='30'/>
-                <stream id='2' width='848'  height='480'  format='RGB_888' framerate='30'/>
-                <stream id='3' width='640'  height='360'  format='RGB_888' framerate='30'/>
-                <stream id='4' width='480'  height='270'  format='RGB_888' framerate='30'/>
-                <stream id='5' width='160'  height='120'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
             </caps>
             <characteristics>
                  <parameter
@@ -168,13 +155,7 @@
             <caps>
 
                 <!-- list of supported stream configurations -->
-                <!-- below configurations were taken from v4l2-ctrl query on Logitech Webcam C930e device -->
-                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
-                <stream id='1' width='960'  height='540'  format='RGB_888' framerate='30'/>
-                <stream id='2' width='848'  height='480'  format='RGB_888' framerate='30'/>
-                <stream id='3' width='640'  height='360'  format='RGB_888' framerate='30'/>
-                <stream id='4' width='480'  height='270'  format='RGB_888' framerate='30'/>
-                <stream id='5' width='160'  height='120'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
             </caps>
             <characteristics>
                  <parameter
@@ -208,13 +189,7 @@
             <caps>
 
                 <!-- list of supported stream configurations -->
-                <!-- below configurations were taken from v4l2-ctrl query on Logitech Webcam C930e device -->
-                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
-                <stream id='1' width='960'  height='540'  format='RGB_888' framerate='30'/>
-                <stream id='2' width='848'  height='480'  format='RGB_888' framerate='30'/>
-                <stream id='3' width='640'  height='360'  format='RGB_888' framerate='30'/>
-                <stream id='4' width='480'  height='270'  format='RGB_888' framerate='30'/>
-                <stream id='5' width='160'  height='120'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
             </caps>
             <characteristics>
                  <parameter

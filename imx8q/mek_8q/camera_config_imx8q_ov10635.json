@@ -15,11 +15,11 @@
       "mplane": "1",
       "buffer_type": "dma",
       "ActiveArrayWidth": "1280",
-      "ActiveArrayHeight": "800",
+      "ActiveArrayHeight": "720",
       "MaxWidth": "1280",
-      "MaxHeight": "800",
+      "MaxHeight": "720",
       "PixelArrayWidth": "1280",
-      "PixelArrayHeight": "800",
+      "PixelArrayHeight": "720",
       "PhysicalWidth": "3.6288",
       "PhysicalHeight": "2.7216",
       "FocalLength": "3.37",
@@ -32,7 +32,7 @@
       "OmitFrame": [
           {
               "width": "1280",
-              "height": "800",
+              "height": "720",
               "omit_num": "2"
           }
       ]
@@ -43,11 +43,11 @@
       "mplane": "1",
       "buffer_type": "dma",
       "ActiveArrayWidth": "1280",
-      "ActiveArrayHeight": "800",
+      "ActiveArrayHeight": "720",
       "PixelArrayWidth": "1280",
-      "PixelArrayHeight": "800",
+      "PixelArrayHeight": "720",
       "MaxWidth": "1280",
-      "MaxHeight": "800",
+      "MaxHeight": "720",
       "PhysicalWidth": "3.6288",
       "PhysicalHeight": "2.7216",
       "FocalLength": "3.37",
@@ -58,7 +58,7 @@
       "OmitFrame": [
           {
               "width": "1280",
-              "height": "800",
+              "height": "720",
               "omit_num": "2"
           }
       ]
@@ -69,11 +69,11 @@
       "mplane": "1",
       "buffer_type": "dma",
       "ActiveArrayWidth": "1280",
-      "ActiveArrayHeight": "800",
+      "ActiveArrayHeight": "720",
       "PixelArrayWidth": "1280",
-      "PixelArrayHeight": "800",
+      "PixelArrayHeight": "720",
       "MaxWidth": "1280",
-      "MaxHeight": "800",
+      "MaxHeight": "720",
       "PhysicalWidth": "3.6288",
       "PhysicalHeight": "2.7216",
       "FocalLength": "3.37",
@@ -84,7 +84,7 @@
       "OmitFrame": [
           {
               "width": "1280",
-              "height": "800",
+              "height": "720",
               "omit_num": "2"
           }
       ]
@@ -95,11 +95,11 @@
       "mplane": "1",
       "buffer_type": "dma",
       "ActiveArrayWidth": "1280",
-      "ActiveArrayHeight": "800",
+      "ActiveArrayHeight": "720",
       "PixelArrayWidth": "1280",
-      "PixelArrayHeight": "800",
+      "PixelArrayHeight": "720",
       "MaxWidth": "1280",
-      "MaxHeight": "800",
+      "MaxHeight": "720",
       "PhysicalWidth": "3.6288",
       "PhysicalHeight": "2.7216",
       "FocalLength": "3.37",
@@ -110,7 +110,7 @@
       "OmitFrame": [
           {
               "width": "1280",
-              "height": "800",
+              "height": "720",
               "omit_num": "2"
           }
       ]
@@ -121,11 +121,11 @@
       "mplane": "1",
       "buffer_type": "dma",
       "ActiveArrayWidth": "1280",
-      "ActiveArrayHeight": "800",
+      "ActiveArrayHeight": "720",
       "PixelArrayWidth": "1280",
-      "PixelArrayHeight": "800",
+      "PixelArrayHeight": "720",
       "MaxWidth": "1280",
-      "MaxHeight": "800",
+      "MaxHeight": "720",
       "PhysicalWidth": "3.6288",
       "PhysicalHeight": "2.7216",
       "FocalLength": "3.37",
@@ -136,7 +136,7 @@
       "OmitFrame": [
           {
               "width": "1280",
-              "height": "800",
+              "height": "720",
               "omit_num": "2"
           }
       ]
