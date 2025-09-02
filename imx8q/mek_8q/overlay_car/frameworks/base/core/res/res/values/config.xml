@@ -2,7 +2,7 @@
 <!--
 /*
 ** Copyright 2011, The Android Open Source Project
-** Copyright 2018 NXP
+** Copyright 2018, 2025 NXP
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
 ** You may obtain a copy of the License at
@@ -51,17 +51,8 @@
     <!-- Declare cluster as private display while all others remain public -->
     <integer-array translatable="false"
         name="config_localPrivateDisplayPorts">1</integer-array>
-    <!-- Force secondary home launcher specified in config_secondaryHomePackage always. If this is
-         not set, secondary home launcher can be replaced by user. -->
-    <bool name="config_useSystemProvidedLauncherForSecondary">true</bool>
     <!-- True if the device supports system decorations on secondary displays. -->
     <bool name="config_supportsSystemDecorsOnSecondaryDisplays">true</bool>
-    <!-- This is the default launcher package with an activity to use on secondary displays that
-         support system decorations.
-         This launcher package must have an activity that supports multiple instances and has
-         corresponding launch mode set in AndroidManifest.
-         {@see android.view.Display#FLAG_SHOULD_SHOW_SYSTEM_DECORATIONS} -->
-    <string name="config_secondaryHomePackage" translatable="false">com.android.car.multidisplay</string>
 
     <!-- Whether to only install system packages on a user if they're whitelisted for that user
          type. These are flags and can be freely combined.
@@ -82,6 +73,15 @@
         Package whitelist disabled for testing profile user as default whitelist does not
         support PROFILE user. -->
     <integer name="config_userTypePackageWhitelistMode">2</integer>
+
+    <!-- Whether the device allows users to start in background visible on displays.
+         Should be false for most devices, except automotive vehicle with passenger displays. -->
+    <!-- The config is enabled for the development purpose only. -->
+    <bool name="config_multiuserVisibleBackgroundUsers">true</bool>
+
+    <!-- Whether the system enables per-display focus. If the system has the input method for each
+         display, this value should be true. -->
+    <bool name="config_perDisplayFocusEnabled">true</bool>
 
     <!-- Disable hidding the NavBars (CarSystemBars), as a workaround for b/259604616 -->
     <bool name="config_hideNavBarForKeyboard">false</bool>

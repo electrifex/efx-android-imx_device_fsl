@@ -73,6 +73,7 @@ ifneq ($(PRODUCT_IMX_CAR),true)
 endif
 
 # HDMI CEC AIDL HAL
+ifneq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
     android.hardware.tv.hdmi.cec-service.imx \
     android.hardware.tv.hdmi.connection-service.imx \
@@ -84,6 +85,7 @@ PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4 \
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.hdmi.cec.xml:system/etc/permissions/android.hardware.hdmi.cec.xml
+endif
 
 # Thermal HAL
 PRODUCT_PACKAGES += \
@@ -760,6 +762,10 @@ ifneq ($(HAVE_GAS_INTEGRATED),true)
 PRODUCT_PACKAGES += \
     CarMapsPlaceholder
 endif
+
+# Car multidisplay APK configuratio/support
+PRODUCT_PACKAGES += CarSystemUIPassengerOverlay \
+                    MultiDisplayTest
 endif
 
 # Add imx private apps
