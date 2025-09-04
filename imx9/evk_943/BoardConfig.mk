@@ -36,26 +36,6 @@ TARGET_USERIMAGES_USE_EXT4 := true
 # use sparse image
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 
-# Support gpt
-ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
-  BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab_super.bpt
-  ADDITION_BPT_PARTITION = partition-table-13GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab_super.bpt \
-                           partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt \
-                           partition-table-13GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt
-else
-  ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
-    BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-no-product.bpt
-    ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-no-product.bpt \
-                             partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader-no-product.bpt \
-                             partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader-no-product.bpt
-  else
-    BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab.bpt
-    ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab.bpt \
-                             partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader.bpt \
-                             partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader.bpt
-  endif
-endif
-
 BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx943.img
 
 BOARD_USES_METADATA_PARTITION := true
@@ -127,14 +107,14 @@ BOARD_KERNEL_BASE := 0x90400000
 
 # NXP default config
 BOARD_KERNEL_CMDLINE := init=/init firmware_class.path=/vendor/firmware loop.max_part=7 bootconfig
-BOARD_BOOTCONFIG += androidboot.hardware=nxp
+BOARD_BOOTCONFIG += androidboot.hardware=nxp androidboot.hw_timeout_multiplier=4
 
 # memory config
 BOARD_KERNEL_CMDLINE += cma=640M transparent_hugepage=never
 BOARD_KERNEL_CMDLINE += swiotlb=256
 
 # display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=240
+BOARD_BOOTCONFIG += androidboot.lcd_density=160
 
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=CN

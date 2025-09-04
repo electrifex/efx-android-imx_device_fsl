@@ -41,6 +41,7 @@ PRODUCT_MANUFACTURER := nxp
 TARGET_BOARD_PLATFORM := imx
 
 PRODUCT_SHIPPING_API_LEVEL := 35
+BOARD_SHIPPING_API_LEVEL := 202404
 
 # -------@block_app-------
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -438,7 +439,3 @@ endif
 # vndservicemanager
 PRODUCT_PACKAGES += \
     vndservicemanager
-
-PRODUCT_HIDL_ENABLED := true
-PRODUCT_PACKAGES += \
-    hwservicemanager

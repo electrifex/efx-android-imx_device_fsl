@@ -7,10 +7,6 @@ IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 # Don't enable vendor boot for Android Auto with M4 EVS for now
 TARGET_USE_VENDOR_BOOT ?= true
 
-# -------@block_storage-------
-# Android Auto with M4 EVS does not use dynamic partition
-TARGET_USE_DYNAMIC_PARTITIONS ?= true
-
 # -------@block_infrastructure-------
 include $(IMX_DEVICE_PATH)/mek_8q.mk
 
@@ -27,6 +23,7 @@ PRODUCT_COPY_FILES += \
 # -------@block_camera-------
 # Android Auto with Camera2 enablement
 ENABLE_CAMERA_SERVICE ?= true
+
 # Add Car related HAL
 PRODUCT_PACKAGES += \
     android.hardware.automotive.vehicle@V1-imx-service \

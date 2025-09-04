@@ -66,9 +66,5 @@ TARGET_DEVICE_DIR := $(patsubst %/, %, $(dir $(realpath $(lastword $(MAKEFILE_LI
 # define bootloader rollback index
 BOOTLOADER_RBINDEX ?= 0
 
-ifeq ($(PRODUCT_IMX_DUAL_BOOTLOADER),true)
-  export PRODUCT_IMX_DUAL_BOOTLOADER
-endif
-
 export PRODUCT_IMX_CAR
 export PRODUCT_IMX_CAR_M7

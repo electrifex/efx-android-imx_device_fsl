@@ -37,7 +37,7 @@ PRODUCT_MANUFACTURER := nxp
 # related to the definition and load of library modules
 TARGET_BOARD_PLATFORM := imx
 
-PRODUCT_SHIPPING_API_LEVEL := 35
+PRODUCT_SHIPPING_API_LEVEL := 36
 
 # -------@block_app-------
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -387,7 +387,3 @@ endif
 # vndservicemanager
 PRODUCT_PACKAGES += \
     vndservicemanager
-
-PRODUCT_HIDL_ENABLED := true
-PRODUCT_PACKAGES += \
-    hwservicemanager

@@ -1,12 +1,10 @@
 # -------@block_infrastructure-------
-CONFIG_REPO_PATH := device/nxp
 CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
 IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
 #Enable this to choose 32 bit user space build
 IMX_BUILD_32BIT_ROOTFS ?= false
-
 #true means each display can show different contents, false means secondary display is just a
 #simple mirror from primary display.
 MULTIDISPLAY_WITH_INDEPENDENT_CONTROL ?= true
@@ -123,9 +121,6 @@ PRODUCT_PACKAGES += \
     tune2fs.vendor_ramdisk
 endif
 
-#Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
-TARGET_USE_DYNAMIC_PARTITIONS ?= true
-
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
   ifeq ($(TARGET_USE_VENDOR_BOOT),true)
     $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression_with_xor.mk)
@@ -136,9 +131,6 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
   BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
   BOARD_SUPER_IMAGE_IN_UPDATE_PACKAGE := true
 endif
-
-#Enable this to disable product partition build.
-IMX_NO_PRODUCT_PARTITION := false
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
@@ -353,9 +345,11 @@ else
 # LPA demo
 PRODUCT_COPY_FILES += \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_lpa.img:imx95_mcu_demo.img
+
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
+
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
     $(IMX_DEVICE_PATH)/audio_policy_configuration_multichannel.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration_multichannel.xml
@@ -377,31 +371,30 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/camera_config_imx95-mbcam.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
     $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
-ifeq ($(PRODUCT_IMX_CAR_M7),true)
+  ifeq ($(PRODUCT_IMX_CAR_M7),true)
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/evs_app_ImxConfig_car.json:$(TARGET_COPY_OUT_SYSTEM)/etc/automotive/evs/ImxConfig.json \
     $(IMX_DEVICE_PATH)/imx_evs_configuration_imx95_car.xml:$(TARGET_COPY_OUT_VENDOR)/etc/automotive/evs/imx_evs_aidl_configuration.xml
-else
+  else
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/evs_app_ImxConfig.json:$(TARGET_COPY_OUT_SYSTEM)/etc/automotive/evs/ImxConfig.json \
     $(IMX_DEVICE_PATH)/imx_evs_configuration_imx95.xml:$(TARGET_COPY_OUT_VENDOR)/etc/automotive/evs/imx_evs_aidl_configuration.xml
+  endif
+
+else
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/camera_config_imx95-os08a20.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
+    $(IMX_DEVICE_PATH)/camera_config_imx95-ap1302.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-ap1302.json \
+    $(IMX_DEVICE_PATH)/camera_config_imx95-mbcam.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-mbcam.json \
+    $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 endif
 
 PRODUCT_PACKAGES += \
-    media_profiles_95-ap1302.xml
-
-else
-
-PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/camera_config_imx95-os08a20.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
-    $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
-
-PRODUCT_PACKAGES += \
-    media_profiles_95-ap1302.xml
+    media_profiles_95-ap1302.xml \
+    media_profiles_95-mbcam.xml
 
 PRODUCT_PACKAGES += \
     ap1302_ar0144_single_fw.bin
-endif
 
 PREBUILT_LIBCAMERA := false
 PRODUCT_PACKAGES += \
@@ -417,11 +410,18 @@ PRODUCT_PACKAGES += \
 
 ifeq ($(PRODUCT_IMX_CAR),false)
 PRODUCT_PACKAGES += \
-    os08a20.yaml
+    ox03c_absolute_32bpp_dewarp_file-1920x1280.bin
+
 endif
 
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
+
+# -------@block_oclcvt-------
+PRODUCT_PACKAGES += \
+    lib_imx_opencl_converter \
+    ocl_converter.cl \
+    ocl_converter_ext.cl
 
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \
@@ -608,9 +608,9 @@ endif
 
 # Neural Network HAL and lib
 PRODUCT_PACKAGES += \
+    libneutron_delegate \
     libNeutronDriver \
     NeutronFirmware.elf \
-    NeutronFwllm.elf \
     android.hardware.neuralnetworks-shell-service-imx
 
 # Tensorflow lite camera demo
@@ -629,10 +629,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/init.recovery.nxp.car.rc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/init.recovery.nxp.rc
 
-ifeq ($(PRODUCT_IMX_CAR_M7),true)
-  PRODUCT_COPY_FILES += \
+  ifeq ($(PRODUCT_IMX_CAR_M7),true)
+PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/init_car_m7.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.car_additional.rc
-endif
+  endif
 
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/required_hardware_auto.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
@@ -682,10 +682,10 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
     frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
-    frameworks/native/data/etc/android.hardware.vulkan.version-1_3.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
+    frameworks/native/data/etc/android.hardware.vulkan.version-1_4.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
     frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
-    frameworks/native/data/etc/android.software.vulkan.deqp.level-2024-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
-    frameworks/native/data/etc/android.software.opengles.deqp.level-2024-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
+    frameworks/native/data/etc/android.software.vulkan.deqp.level-2025-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
+    frameworks/native/data/etc/android.software.opengles.deqp.level-2025-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
@@ -695,6 +695,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml \
     frameworks/native/data/etc/android.software.voice_recognizers.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.voice_recognizers.xml \
     frameworks/native/data/etc/android.software.activities_on_secondary_displays.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.activities_on_secondary_displays.xml \
+    frameworks/native/data/etc/android.software.freeform_window_management.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.freeform_window_management.xml \
+    frameworks/native/data/etc/android.software.app_compat_overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.app_compat_overrides.xml \
     frameworks/native/data/etc/android.software.credentials.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.credentials.xml
 
 ifneq ($(PRODUCT_IMX_CAR),true)

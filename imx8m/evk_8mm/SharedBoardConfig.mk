@@ -156,6 +156,18 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/input/touchscreen/synaptics_dsx/synaptics_dsx_i2c.ko \
     $(KERNEL_OUT)/drivers/reset/reset-dispmix.ko \
     $(KERNEL_OUT)/drivers/reset/reset-imx7.ko \
+    $(KERNEL_OUT)/drivers/video/logo/linux_logo.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/fb.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/fb_notify.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/cfbcopyarea.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/fb_io_fops.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/fb_sys_fops.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/sysimgblt.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/syscopyarea.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/sysfillrect.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/cfbfillrect.ko \
+    $(KERNEL_OUT)/drivers/video/fbdev/core/cfbimgblt.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/drm_fbdev_helper.ko \
     $(KERNEL_OUT)/drivers/gpu/imx/lcdif/imx8mm-lcdif-core.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/drm_dma_helper.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/adv7511/adv7511.ko \
@@ -193,3 +205,12 @@ PRODUCT_IMX_TRUSTY := true
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
 BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx8mm-trusty-dual.img
+
+#Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
+TARGET_USE_DYNAMIC_PARTITIONS ?= true
+
+#Enable this to disable product partition build.
+IMX_NO_PRODUCT_PARTITION := false
+
+# -------@block_infrastructure-------
+CONFIG_REPO_PATH := device/nxp

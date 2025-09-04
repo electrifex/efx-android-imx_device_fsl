@@ -3,15 +3,11 @@
 ifeq ($(TARGET_PRODUCT),evk_95_car)
   PRODUCT_IMX_CAR := true
   PRODUCT_IMX_CAR_M7 := true
-  # Enable dual bootloader feature
-  PRODUCT_IMX_DUAL_BOOTLOADER := true
 endif
 ifeq ($(TARGET_PRODUCT),evk_95_car2)
   PRODUCT_IMX_CAR := true
   # the env setting in mek_8q_car to make the build without M4 image
   PRODUCT_IMX_CAR_M7 := false
-  # Enable dual bootloader feature
-  PRODUCT_IMX_DUAL_BOOTLOADER := true
 endif
 # -------@block_kernel_bootimg-------
 KERNEL_NAME := Image.lz4
@@ -304,3 +300,13 @@ ifeq ($(PRODUCT_IMX_CAR),true)
 else
   BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
 endif
+
+#Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
+TARGET_USE_DYNAMIC_PARTITIONS ?= true
+
+#Enable this to disable product partition build.
+IMX_NO_PRODUCT_PARTITION := false
+
+# -------@block_infrastructure-------
+CONFIG_REPO_PATH := device/nxp
+

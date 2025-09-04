@@ -232,6 +232,8 @@ on post-fs-data
 
     # dir for g2d opencl bin
     mkdir /data/vendor/.opencl-g2d-bin 0771 mediacodec camera
+    # HWC data
+    mkdir /data/vendor/hwc 0771 system graphics
 
 on zygote-start
     # Create the directories used by the Wireless subsystem

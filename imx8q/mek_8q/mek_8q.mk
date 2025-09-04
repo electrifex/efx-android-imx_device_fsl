@@ -1,5 +1,4 @@
 # -------@block_infrastructure-------
-CONFIG_REPO_PATH := device/nxp
 CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
 IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 
@@ -142,9 +141,6 @@ PRODUCT_PACKAGES += \
     tune2fs.vendor_ramdisk
 endif
 
-#Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
-TARGET_USE_DYNAMIC_PARTITIONS ?= true
-
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
   ifeq ($(TARGET_USE_VENDOR_BOOT),true)
     $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression_with_xor.mk)
@@ -155,9 +151,6 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
   BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
   BOARD_SUPER_IMAGE_IN_UPDATE_PACKAGE := true
 endif
-
-#Enable this to disable product partition build.
-IMX_NO_PRODUCT_PARTITION := false
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
@@ -403,10 +396,17 @@ endif
 # Audio SOF firmware and tplg files
 PRODUCT_COPY_FILES += \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/sof/sof-tplg/sof-imx8-wm8960.tplg:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sof-tplg/sof-imx8-wm8960.tplg \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/sof/sof-tplg/sof-imx8-compr-wm8960.tplg:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sof-tplg/sof-imx8-compr-wm8960.tplg \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/sof/sof-gcc/sof-imx8x.ldc:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sof/sof-imx8x.ldc \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/sof/sof-gcc/sof-imx8x.ri:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sof/sof-imx8x.ri \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/sof/sof-gcc/sof-imx8.ldc:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sof/sof-imx8.ldc \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/sof/sof-gcc/sof-imx8.ri:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sof/sof-imx8.ri
+
+# libcamera
+#PRODUCT_PACKAGES += \
+#    libcamera-base \
+#    libcamera \
+#    libyaml
 
 # -------@block_camera-------
 ifeq ($(PRODUCT_IMX_CAR),true)
@@ -427,6 +427,10 @@ endif
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 ifneq ($(PRODUCT_IMX_CAR),true)
+# Concurrent camera
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.camera.concurrent.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.concurrent.xml
+
 # Add WebCam option in settings
 PRODUCT_VENDOR_PROPERTIES += ro.usb.uvc.enabled=true
 
@@ -748,11 +752,7 @@ PRODUCT_PACKAGES += \
     privapp_whitelist_com.android.emergency
 else
 # Included GAS package
-#ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_ROOTFS) $(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
-#$(call inherit-product-if-exists, vendor/partner_gas/products/gms_64bit_only.mk)
-#else
 $(call inherit-product-if-exists, vendor/partner_gas/products/gms.mk)
-#endif
 PRODUCT_SOONG_NAMESPACES += vendor/partner_gas
 endif
 

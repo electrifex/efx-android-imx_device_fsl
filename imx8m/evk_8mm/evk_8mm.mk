@@ -1,6 +1,4 @@
 # -------@block_infrastructure-------
-
-CONFIG_REPO_PATH := device/nxp
 CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
 IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 
@@ -64,10 +62,6 @@ PRODUCT_COPY_FILES += \
 
 # -------@block_app-------
 
-# Set permission for GMS packages
-PRODUCT_COPY_FILES += \
-    $(CONFIG_REPO_PATH)/imx8m/permissions/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp.permissions-imx.xml
-
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/app_whitelist.xml:system/etc/sysconfig/app_whitelist.xml
 
@@ -108,9 +102,6 @@ PRODUCT_PACKAGES += \
     tune2fs.vendor_ramdisk
 endif
 
-#Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
-TARGET_USE_DYNAMIC_PARTITIONS ?= true
-
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
   ifeq ($(TARGET_USE_VENDOR_BOOT),true)
     $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression_with_xor.mk)
@@ -121,9 +112,6 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
   BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
   BOARD_SUPER_IMAGE_IN_UPDATE_PACKAGE := true
 endif
-
-#Enable this to disable product partition build.
-IMX_NO_PRODUCT_PARTITION := false
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
@@ -249,16 +237,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.rebootescrow.device=/dev/block/pmem0
-
-#DRM Widevine 1.4 L3 support
-PRODUCT_PACKAGES += \
-    android.hardware.drm-service.clearkey \
-    libwvdrmcryptoplugin
-
-TARGET_BUILD_WIDEVINE :=
-TARGET_BUILD_WIDEVINE_USE_PREBUILT := true
-
-$(call inherit-product-if-exists, vendor/nxp-private/widevine/apex/device.mk)
 
 # -------@block_audio-------
 
@@ -498,6 +476,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.voice_recognizers.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.voice_recognizers.xml \
     frameworks/native/data/etc/android.software.activities_on_secondary_displays.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.activities_on_secondary_displays.xml \
     frameworks/native/data/etc/android.software.picture_in_picture.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.picture_in_picture.xml \
+    frameworks/native/data/etc/android.software.freeform_window_management.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.freeform_window_management.xml \
+    frameworks/native/data/etc/android.software.app_compat_overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.app_compat_overrides.xml \
     frameworks/native/data/etc/android.software.credentials.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.credentials.xml
 
 PERMISSION_EXTCAM ?= true
@@ -517,16 +497,8 @@ PRODUCT_COPY_FILES += \
 # Add Virtualization support
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
 
-# Included GMS package
-ifeq ($(filter TRUE true 1,$(IMX_BUILD_32BIT_ROOTFS) $(IMX_BUILD_32BIT_64BIT_ROOTFS)),)
-$(call inherit-product-if-exists, vendor/partner_gms/products/gms_64bit_only.mk)
-else
-$(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
-endif
-PRODUCT_SOONG_NAMESPACES += vendor/partner_gms
-
 PRODUCT_PACKAGES += \
-    privapp_whitelist_com.android.emergency
+    android.hardware.drm-service.clearkey
 
 # Add imx private apps
 $(call inherit-product-if-exists, vendor/nxp-private/imx-apps/imx-private-app.mk)

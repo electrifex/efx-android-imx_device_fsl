@@ -47,41 +47,6 @@ TARGET_USERIMAGES_USE_EXT4 := true
 # use sparse image.
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 
-# Support gpt
-ifeq ($(PRODUCT_IMX_DUAL_BOOTLOADER),true)
-  ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
-    BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt
-    ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt
-  else
-    ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
-      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader-no-product.bpt
-      ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader-no-product.bpt
-    else
-      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader.bpt
-      ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader.bpt
-    endif
-  endif
-else
-  ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
-      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab_super.bpt
-      ADDITION_BPT_PARTITION = partition-table-13GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab_super.bpt \
-                               partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt \
-                               partition-table-13GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt
-  else
-    ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
-      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-no-product.bpt
-      ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-no-product.bpt \
-                               partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader-no-product.bpt \
-                               partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader-no-product.bpt
-    else
-      BOARD_BPT_INPUT_FILES += $(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab.bpt
-      ADDITION_BPT_PARTITION = partition-table-28GB:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab.bpt \
-                               partition-table-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-13GB-ab-dual-bootloader.bpt \
-                               partition-table-28GB-dual:$(CONFIG_REPO_PATH)/common/partition/device-partitions-28GB-ab-dual-bootloader.bpt
-    endif
-  endif
-endif
-
 ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(OTA_TARGET),95-a1)
     BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx95-a1.img
@@ -217,6 +182,7 @@ ifeq ($(PRODUCT_IMX_CAR),true)
   endif #PRODUCT_IMX_CAR_M7
 else
   TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-os08a20-isp-adv7535.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-ox03c10:imx95-19x19-evk-ox03c10-isp-adv7535.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-ap1302:imx95-19x19-evk-adv7535-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-adv7535-it6263-lvds1-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-mipi-panel:imx95-19x19-evk-rm692c9.dtb
@@ -228,6 +194,7 @@ else
   TARGET_BOARD_DTS_CONFIG += imx95-mipi4k:imx95-19x19-evk-lt9611uxc-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-dsi-serdes:imx95-19x19-evk-dsi-serdes.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-os08a20-isp-adv7535.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-verdin-ox03c10:imx95-19x19-verdin-ox03c10-isp-adv7535.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-verdin-ap1302:imx95-19x19-verdin-adv7535-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-verdin-lt8912:imx95-19x19-verdin-lt8912-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-verdin-10inch-panel-lvds:imx95-19x19-verdin-panel-cap-touch-10inch-lvds.dtb
@@ -235,6 +202,7 @@ else
   TARGET_BOARD_DTS_CONFIG += imx95-verdin-mipi-panel:imx95-19x19-verdin-rm692c9.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-verdin-mipi4k:imx95-19x19-verdin-lt9611uxc-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-15x15:imx95-15x15-evk-os08a20-isp-adv7535.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15-ox03c10:imx95-15x15-evk-ox03c10-isp-adv7535.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-15x15-ap1302:imx95-15x15-evk-adv7535-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-15x15-mipi-panel:imx95-15x15-evk-rm692c9.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-15x15-aud-hat:imx95-15x15-evk-adv7535-aud-hat.dtb
