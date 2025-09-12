@@ -360,6 +360,9 @@ PRODUCT_PACKAGES += \
     android.hardware.automotive.audiocontrol-service.example
 endif
 
+PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_policy=2
+PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_exclusive_policy=1
+
 # -------@block_camera-------
 
 PRODUCT_COPY_FILES += \
@@ -613,9 +616,11 @@ PRODUCT_PACKAGES += \
     NeutronFirmware.elf \
     android.hardware.neuralnetworks-shell-service-imx
 
-# Tensorflow lite camera demo
+# Tensorflow lite demo
 PRODUCT_PACKAGES += \
-                    tflitecamerademo
+    benchmark_model \
+    label_image \
+    TfliteCameraDemo
 
 # -------@block_miscellaneous-------
 

@@ -528,11 +528,14 @@ endif
 PRODUCT_PACKAGES += \
     libtim-vx \
     libVsiSupportLibrary \
+    libvx_delegate \
     android.hardware.neuralnetworks-shell-service-imx
 
-# Tensorflow lite camera demo
+# Tensorflow lite demo
 PRODUCT_PACKAGES += \
-                    tflitecamerademo
+    benchmark_model \
+    label_image \
+    TfliteCameraDemo
 
 # -------@block_miscellaneous-------
 

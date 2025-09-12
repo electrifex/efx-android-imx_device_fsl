@@ -34,25 +34,13 @@ ENV ARMGCC_DIR=/opt/gcc-arm-none-eabi-9-2020-q2-update
 # If failed to connect to android.googlesource.com, you can refer to the line below.
 # ENV https_proxy=http://username:password@example.com:8080
 
-RUN git clone --no-checkout --depth 1 https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 /opt/android-kernel-prebuilts-6.12/clang/host/linux-x86 \
-  && cd /opt/android-kernel-prebuilts-6.12/clang/host/linux-x86 \
-  && git fetch --depth 1 origin 66acdd82ee62e4aaa4248f03191c59dfed9db193 \
-  && git checkout 66acdd82ee62e4aaa4248f03191c59dfed9db193
+RUN git clone -b main-kernel --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 /opt/android-kernel-prebuilts-6.12/clang/host/linux-x86
 
-RUN git clone --no-checkout --depth 1 https://android.googlesource.com/kernel/prebuilts/build-tools /opt/android-kernel-prebuilts-6.12/kernel-build-tools \
-  && cd /opt/android-kernel-prebuilts-6.12/kernel-build-tools \
-  && git fetch --depth 1 origin 3c5e4f14b451ec85167c38b917d2459687abd7f4 \
-  && git checkout 3c5e4f14b451ec85167c38b917d2459687abd7f4
+RUN git clone -b main --single-branch --depth 1 https://android.googlesource.com/kernel/prebuilts/build-tools /opt/android-kernel-prebuilts-6.12/kernel-build-tools
 
-RUN git clone --no-checkout --depth 1 https://android.googlesource.com/platform/prebuilts/rust /opt/android-kernel-prebuilts-6.12/rust \
-  && cd /opt/android-kernel-prebuilts-6.12/rust \
-  && git fetch --depth 1 origin 5156e7f81ae254c79ee736e44c960e75ad685c67 \
-  && git checkout 5156e7f81ae254c79ee736e44c960e75ad685c67
+RUN git clone -b main-kernel --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/rust /opt/android-kernel-prebuilts-6.12/rust
 
-RUN git clone --no-checkout --depth 1 https://android.googlesource.com/platform/prebuilts/clang-tools /opt/android-kernel-prebuilts-6.12/clang-tools \
-  && cd /opt/android-kernel-prebuilts-6.12/clang-tools \
-  && git fetch --depth 1 origin 17329f6590e2872dcf04a0c96a176be089470cd9 \
-  && git checkout 17329f6590e2872dcf04a0c96a176be089470cd9
+RUN git clone -b main --single-branch --depth 1 https://android.googlesource.com/platform/prebuilts/clang-tools /opt/android-kernel-prebuilts-6.12/clang-tools
 
 ENV KERNEL_PREBUILTS_PATH=/opt/android-kernel-prebuilts-6.12
 

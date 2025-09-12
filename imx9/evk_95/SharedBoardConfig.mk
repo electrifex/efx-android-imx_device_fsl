@@ -13,7 +13,9 @@ endif
 KERNEL_NAME := Image.lz4
 TARGET_KERNEL_ARCH := arm64
 LOADABLE_KERNEL_MODULE ?= true
+BAZEL_BUILD_VENDOR_MODULES ?= false
 
+ifeq ($(BAZEL_BUILD_VENDOR_MODULES),false)
 #ARM GPU driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/arm/midgard/mali_kbase.ko
@@ -186,6 +188,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma.ko \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-rpmsg.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-utils.ko \
+    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-dmic.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-micfil.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-mqs.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asrc.ko \
@@ -272,7 +275,7 @@ ifeq ($(LOADABLE_KERNEL_MODULE),true)
 
     BOARD_VENDOR_KERNEL_MODULES += \
         $(IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES)
-
+endif
     ifeq ($(PRODUCT_IMX_CAR),true)
         ifeq ($(PRODUCT_IMX_CAR_M7),true)
         BOARD_VENDOR_KERNEL_MODULES += \
