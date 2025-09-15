@@ -156,20 +156,11 @@ ifneq ($(filter TRUE true 1,$(IMX_OTA_POSTINSTALL)),)
     POSTINSTALL_OPTIONAL_vendor=false
 
   ifeq ($(PRODUCT_IMX_CAR),true)
-    ifeq ($(OTA_TARGET),95-a1)
+    PRODUCT_COPY_FILES += \
+      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx95.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
+    ifeq ($(BUILD_ENCRYPTED_BOOT),true)
       PRODUCT_COPY_FILES += \
-        $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx95-a1.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
-      ifeq ($(BUILD_ENCRYPTED_BOOT),true)
-        PRODUCT_COPY_FILES += \
-          $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx95-a1.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
-      endif
-    else
-      PRODUCT_COPY_FILES += \
-        $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx95.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
-      ifeq ($(BUILD_ENCRYPTED_BOOT),true)
-        PRODUCT_COPY_FILES += \
-          $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx95.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
-      endif
+        $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx95.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
     endif
   else
     PRODUCT_COPY_FILES += \

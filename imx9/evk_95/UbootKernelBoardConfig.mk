@@ -5,16 +5,12 @@ UBOOT_POST_PROCESS := true
 ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(PRODUCT_IMX_CAR_M7),true)
     TARGET_BOOTLOADER_CONFIG := imx95:imx95_19x19_evk_androidauto_trusty_defconfig
-    TARGET_BOOTLOADER_CONFIG += imx95-a1:imx95_19x19_evk_androidauto_trusty_defconfig
     TARGET_BOOTLOADER_CONFIG += imx95-secure-unlock:imx95_19x19_evk_androidauto_trusty_secure_unlock_defconfig
     TARGET_BOOTLOADER_CONFIG += imx95-verdin:imx95_19x19_verdin_androidauto_trusty_defconfig
-    TARGET_BOOTLOADER_CONFIG += imx95-verdin-a1:imx95_19x19_verdin_androidauto_trusty_defconfig
   else
     TARGET_BOOTLOADER_CONFIG := imx95:imx95_19x19_evk_androidauto2_trusty_defconfig
-    TARGET_BOOTLOADER_CONFIG += imx95-a1:imx95_19x19_evk_androidauto2_trusty_defconfig
     TARGET_BOOTLOADER_CONFIG += imx95-secure-unlock:imx95_19x19_evk_androidauto2_trusty_secure_unlock_defconfig
     TARGET_BOOTLOADER_CONFIG += imx95-verdin:imx95_19x19_verdin_androidauto2_trusty_defconfig
-    TARGET_BOOTLOADER_CONFIG += imx95-verdin-a1:imx95_19x19_verdin_androidauto2_trusty_defconfig
   endif #PRODUCT_IMX_CAR_M7
 else
   # u-boot target
@@ -32,9 +28,7 @@ else
 endif #PRODUCT_IMX_CAR
 
 TARGET_BOOTLOADER_CONFIG += imx95-evk-uuu:imx95_19x19_evk_android_uuu_defconfig
-TARGET_BOOTLOADER_CONFIG += imx95-evk-a1-uuu:imx95_19x19_evk_android_uuu_defconfig
 TARGET_BOOTLOADER_CONFIG += imx95-verdin-uuu:imx95_19x19_verdin_android_uuu_defconfig
-TARGET_BOOTLOADER_CONFIG += imx95-verdin-a1-uuu:imx95_19x19_verdin_android_uuu_defconfig
 ifneq ($(PRODUCT_IMX_CAR),true)
   TARGET_BOOTLOADER_CONFIG += imx95-15x15-evk-uuu:imx95_15x15_evk_android_uuu_defconfig
 endif

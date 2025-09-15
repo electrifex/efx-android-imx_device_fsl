@@ -294,11 +294,7 @@ PRODUCT_IMX_TRUSTY := true
 # -------@block_storage-------
 ifeq ($(PRODUCT_IMX_CAR),true)
   # the bootloader image used in dual-bootloader OTA
-  ifeq ($(OTA_TARGET),95-a1)
-    BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-a1.img
-  else
-    BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95.img
-  endif
+  BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95.img
 else
   BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
 endif

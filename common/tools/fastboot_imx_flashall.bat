@@ -67,11 +67,11 @@ set /A flag=1
 :: images when flash another set of images can not be detect early with this scenario.
 set imx8qxp_uboot_feature=mek-uuu secure-unlock c0 mek-c0-uuu
 set imx8qm_uboot_feature=mek-uuu secure-unlock md
-set imx95_uboot_feature=evk-uuu secure-unlock verdin verdin-uuu a1 evk-a1-uuu verdin-a1 verdin-a1-uuu
+set imx95_uboot_feature=evk-uuu secure-unlock verdin verdin-uuu
 
 set imx8qxp_dtb_feature=sof
 set imx8qm_dtb_feature=md sof revd md-revd sof-revd
-set imx95_dtb_feature=a1 ap1302 lvds0 lvds0-a1 lvds0-ap1302 mipi-lvds1 mipi-lvds1-a1 mipi-lvds1-ap1302 verdin verdin-a1 verdin-ap1302 verdin-adv7535 verdin-adv7535-a1 verdin-adv7535-ap1302
+set imx95_dtb_feature=ap1302 lvds0 lvds0-ap1302 mipi-lvds1 mipi-lvds1-ap1302 verdin verdin-ap1302 verdin-adv7535 verdin-adv7535-ap1302
 
 :: an array to collect the supported soc_names
 set supported_soc_names=imx8qm imx8qxp imx95
@@ -258,11 +258,9 @@ echo                           +-------------+----------------------------------
 echo                           ^|   imx8qm    ^|  md sof revd md-revd sof-revd                                                                      ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   imx95     ^|                lvds0                  mipi-lvds1                                                   ^|
-echo                           ^|             ^|  a1            lvds0-a1               mipi-lvds1-a1                                                ^|
 echo                           ^|             ^|  ap1302        lvds0-ap1302           mipi-lvds1-ap1302                                            ^|
 echo                           ^|             ^|                                                                                                    ^|
 echo                           ^|             ^|  verdin        verdin-adv7535                                                                      ^|
-echo                           ^|             ^|  verdin-a1     verdin-adv7535-a1                                                                   ^|
 echo                           ^|             ^|  verdin-ap1302 verdin-adv7535-ap1302                                                               ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo:
