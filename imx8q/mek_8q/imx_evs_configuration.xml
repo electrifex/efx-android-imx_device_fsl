@@ -35,7 +35,7 @@
         <group id='group0' synchronized='CALIBRATED'>
             <caps>
                 <!-- list of stream configuration supported by all physical devices -->
-                <stream id='0' width='1280' height='720' format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='800' format='RGB_888' framerate='30'/>
             </caps>
 
             <!-- list of parameters -->
@@ -87,7 +87,7 @@
             <caps>
 
                 <!-- list of supported stream configurations -->
-                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
             </caps>
             <characteristics>
                  <parameter
@@ -121,7 +121,7 @@
             <caps>
 
                 <!-- list of supported stream configurations -->
-                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
             </caps>
             <characteristics>
                  <parameter
@@ -155,7 +155,7 @@
             <caps>
 
                 <!-- list of supported stream configurations -->
-                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
             </caps>
             <characteristics>
                  <parameter
@@ -189,7 +189,7 @@
             <caps>
 
                 <!-- list of supported stream configurations -->
-                <stream id='0' width='1280' height='720'  format='RGB_888' framerate='30'/>
+                <stream id='0' width='1280' height='800'  format='RGB_888' framerate='30'/>
             </caps>
             <characteristics>
                  <parameter
