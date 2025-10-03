@@ -1,0 +1,7 @@
+type evs_service_recovery, domain;
+type evs_service_recovery_exec, exec_type, file_type, system_file_type;
+
+allow evs_service_recovery self:netlink_kobject_uevent_socket { create setopt getopt bind read };
+allow evs_service_recovery property_socket:sock_file { write };
+allow evs_service_recovery init:unix_stream_socket { connectto };
+allow evs_service_recovery vendor_evs_prop:property_service { set };

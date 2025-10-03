@@ -1,0 +1,14 @@
+gpio-adp5585.ko
+adp5585.ko
+clk-imx95-blk-ctl.ko
+phy-fsl-imx9-dphy-rx.ko
+dw-mipi-dsi.ko
+adv7511.ko
+lontium-lt8912b.ko
+imx95-pixel-interleaver.ko
+imx95-mipi-dsi.ko
+imx95-dpu-drm.ko
+it6263.ko
+fsl-imx-ldb.ko
+imx-ldb-helper.ko
+imx95-ldb.ko

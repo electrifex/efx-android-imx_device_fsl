@@ -1,0 +1,5 @@
+type display_modules_recovery, domain;
+type display_modules_recovery_exec, exec_type, file_type, system_file_type;
+
+allow display_modules_recovery self:capability { sys_module };
+allow display_modules_recovery rootfs:system { module_load };

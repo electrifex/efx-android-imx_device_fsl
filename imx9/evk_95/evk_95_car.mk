@@ -56,5 +56,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.evs.video.ready=1
 else
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/display.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/display.init.cfg
+    $(IMX_DEVICE_PATH)/display.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/display.init.cfg \
+    $(IMX_DEVICE_PATH)/display.modules.load.recovery:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/modules/modules.load.display.recovery
+
+PRODUCT_PACKAGES += \
+    evs_service.recovery
 endif # PRODUCT_IMX_CAR_M7

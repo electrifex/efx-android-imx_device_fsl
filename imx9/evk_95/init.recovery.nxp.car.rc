@@ -4,12 +4,37 @@ on init
 
     setprop sys.usb.configfs 1
 
+    # register the vehicle_rpmsg_m7 which will relase display module
+    write /sys/devices/platform/vehicle_rpmsg_m7/register 1
+    # register the vehicle_rpmsg_m7 which will relase display module in XEN
+    write /sys/devices/platform/passthrough/passthrough\:vehicle_rpmsg_m7/register  1
+
 on post-fs-data
     setprop sys.usb.controller "4c100000.usb"
 
+# display drivers load service
+service display_modules_recovery /system/bin/modprobe --all=/lib/modules/modules.load.display.recovery
+    class main
+    user root
+    group root system
+    disabled
+    oneshot
+    seclabel u:r:display_modules_recovery:s0
+
+service evs_service_recovery /system/bin/evs_service_recovery
+    class main
+    user root
+    group system
+    seclabel u:r:evs_service_recovery:s0
+
+# start display driver load service
+on property:vendor.vehicle.register=1
+    start display_modules_recovery
+
 on early-init
-    # register the vehicle_rpmsg_m4 which will relase display module
-    write /sys/devices/platform/vehicle_rpmsg_m4/register 1
-    # register the vehicle_rpmsg_m4 which will relase display module in XEN
-    write /sys/devices/platform/passthrough/passthrough\:vehicle_rpmsg_m4/register  1
+    # create /dev/dri folder for display detection in display service
+    mkdir /dev/dri
+    chmod 755 /dev/dri
+
+    start evs_service_recovery
 

@@ -279,6 +279,8 @@ endif
         ifeq ($(PRODUCT_IMX_CAR_M7),true)
         BOARD_VENDOR_KERNEL_MODULES += \
             $(BOARD_VENDOR_DISPLAY_KERNEL_MODULES)
+        BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+            $(BOARD_VENDOR_DISPLAY_KERNEL_MODULES)
         endif
      endif
 endif
