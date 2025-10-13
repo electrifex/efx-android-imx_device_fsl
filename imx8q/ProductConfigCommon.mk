@@ -370,7 +370,7 @@ PRODUCT_PACKAGES += \
     hostapd_cli \
     wpa_supplicant \
     wpa_cli \
-    wpa_supplicant.conf
+    wpa_supplicant.conf.imx
 
 PRODUCT_PACKAGES += \
     mlanutl
