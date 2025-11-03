@@ -81,9 +81,6 @@ IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES += \
     $(KERNEL_OUT)/drivers/mfd/max96789-core.ko \
     $(KERNEL_OUT)/drivers/mfd/max96789-i2c.ko \
     $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8mq-usb.ko \
-    $(KERNEL_OUT)/drivers/input/touchscreen/focaltech_ts.ko \
-    $(KERNEL_OUT)/drivers/input/touchscreen/ilitek_ts_i2c.ko \
-    $(KERNEL_OUT)/drivers/input/touchscreen/exc3000.ko \
     $(KERNEL_OUT)/drivers/input/keyboard/imx-sm-bbm-key.ko \
     $(KERNEL_OUT)/drivers/usb/chipidea/usbmisc_imx.ko \
     $(KERNEL_OUT)/drivers/usb/common/ulpi.ko \
@@ -94,25 +91,12 @@ IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES += \
     $(KERNEL_OUT)/drivers/usb/typec/mux/gpio-switch.ko \
     $(KERNEL_OUT)/drivers/mux/mux-core.ko \
     $(KERNEL_OUT)/drivers/mux/mux-mmio.ko \
-    $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8mp-lvds.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/drm_dma_helper.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/it6161.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/max96752-lvds.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/display-connector.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/max96789-dsi.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/ti-sn65dsi83.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/nwl-dsi.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/bridge/lontium-lt9611uxc.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-link.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/mxsfb/imx-lcdif.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm67191.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-nxp-rm67162.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-simple.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm692c9.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-rocktech-hx8394f.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-lvds.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/display/drm_display_helper.ko \
-    $(KERNEL_OUT)/drivers/hwmon/pwm-fan.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/display-imx-rpmsg.ko
 
 BOARD_VENDOR_DISPLAY_KERNEL_MODULES = \
@@ -159,6 +143,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
 endif
 
 BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/hwmon/pwm-fan.ko \
     $(KERNEL_OUT)/mm/zsmalloc.ko \
     $(KERNEL_OUT)/drivers/block/zram/zram.ko \
     $(KERNEL_OUT)/net/rfkill/rfkill.ko \
@@ -254,8 +239,14 @@ BOARD_VENDOR_KERNEL_MODULES += \
 
 ifeq ($(LOADABLE_KERNEL_MODULE),true)
     ifeq ($(PRODUCT_IMX_CAR),true)
-    BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := \
-        $(foreach m,$(BOARD_VENDOR_RAMDISK_KERNEL_MODULES),$(notdir $(m)))
+        ifeq ($(PRODUCT_IMX_CAR_M7),true)
+            BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := \
+            $(foreach m,$(BOARD_VENDOR_RAMDISK_KERNEL_MODULES),$(notdir $(m)))
+         else
+            BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := \
+            $(foreach m,$(IMX_ANDROID_FIRST_STAGE_MODULES),$(notdir $(m))) \
+            $(foreach m,$(BOARD_VENDOR_DISPLAY_KERNEL_MODULES),$(notdir $(m)))
+         endif
     else
     BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := \
         $(foreach m,$(IMX_ANDROID_FIRST_STAGE_MODULES),$(notdir $(m)))
@@ -263,9 +254,16 @@ ifeq ($(LOADABLE_KERNEL_MODULE),true)
     BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := \
         $(foreach m,$(BOARD_VENDOR_RAMDISK_KERNEL_MODULES),$(notdir $(m)))
 
-    BOARD_VENDOR_KERNEL_MODULES_LOAD := \
-        $(foreach m,$(IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES),$(notdir $(m))) \
-        $(foreach m,$(BOARD_VENDOR_KERNEL_MODULES),$(notdir $(m)))
+    ifeq ($(PRODUCT_IMX_CAR),true)
+        ifeq ($(PRODUCT_IMX_CAR_M7),true)
+            BOARD_VENDOR_KERNEL_MODULES_LOAD := \
+                $(foreach m,$(BOARD_VENDOR_KERNEL_MODULES),$(notdir $(m))) \
+        else
+            BOARD_VENDOR_KERNEL_MODULES_LOAD := \
+                $(foreach m,$(IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES),$(notdir $(m))) \
+                $(foreach m,$(BOARD_VENDOR_KERNEL_MODULES),$(notdir $(m)))
+        endif
+    endif
 
     ifneq ($(PRODUCT_IMX_CAR),true)
     BOARD_VENDOR_RAMDISK_CHARGER_KERNEL_MODULES_LOAD := \
