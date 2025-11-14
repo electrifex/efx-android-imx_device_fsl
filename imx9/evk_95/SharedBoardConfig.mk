@@ -91,6 +91,7 @@ IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES += \
     $(KERNEL_OUT)/drivers/usb/typec/mux/gpio-switch.ko \
     $(KERNEL_OUT)/drivers/mux/mux-core.ko \
     $(KERNEL_OUT)/drivers/mux/mux-mmio.ko \
+    $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8mp-lvds.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/drm_dma_helper.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/display-connector.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/imx/imx95-pixel-link.ko \
@@ -109,7 +110,6 @@ BOARD_VENDOR_DISPLAY_KERNEL_MODULES = \
     $(KERNEL_OUT)/drivers/media/platform/nxp/imx8-isi/imx8-isi.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/imx-csi-formatter.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/dwc-mipi-csi2.ko \
-    $(KERNEL_OUT)/drivers/media/i2c/ap1302.ko \
     $(KERNEL_OUT)/drivers/media/i2c/ox03c10.ko \
     $(KERNEL_OUT)/drivers/media/i2c/max96717_lib.ko \
     $(KERNEL_OUT)/drivers/media/i2c/mx95mbcam.ko \
@@ -130,13 +130,18 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
 
 ifeq ($(PRODUCT_IMX_CAR),true)
     ifeq ($(PRODUCT_IMX_CAR_M7),true)
+        BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+            $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle-core.ko \
+            $(KERNEL_OUT)/drivers/media/i2c/ap1302.ko
         # Display drivers are in /vendor_dlkm  for Car image type.
     else
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
-        $(BOARD_VENDOR_DISPLAY_KERNEL_MODULES)
+        BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+            $(BOARD_VENDOR_DISPLAY_KERNEL_MODULES)
+        BOARD_VENDOR_KERNEL_MODULES += \
+            $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle-core.ko \
+            $(KERNEL_OUT)/drivers/media/i2c/ap1302.ko
     endif
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
-    $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle-core.ko
+
 else
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
         $(BOARD_VENDOR_DISPLAY_KERNEL_MODULES)
@@ -216,7 +221,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle_rpmsg_m4.ko
         else
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle_dummy_hw.ko
         endif
     endif
@@ -257,7 +262,7 @@ ifeq ($(LOADABLE_KERNEL_MODULE),true)
     ifeq ($(PRODUCT_IMX_CAR),true)
         ifeq ($(PRODUCT_IMX_CAR_M7),true)
             BOARD_VENDOR_KERNEL_MODULES_LOAD := \
-                $(foreach m,$(BOARD_VENDOR_KERNEL_MODULES),$(notdir $(m))) \
+                $(foreach m,$(BOARD_VENDOR_KERNEL_MODULES),$(notdir $(m)))
         else
             BOARD_VENDOR_KERNEL_MODULES_LOAD := \
                 $(foreach m,$(IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES),$(notdir $(m))) \
