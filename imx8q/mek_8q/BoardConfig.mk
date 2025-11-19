@@ -95,7 +95,7 @@ BOARD_KERNEL_CMDLINE += swiotlb=768
 BOARD_BOOTCONFIG += androidboot.lcd_density=200
 
 # wifi config
-BOARD_BOOTCONFIG += androidboot.wificountrycode=US
+BOARD_BOOTCONFIG += androidboot.wificountrycode=DE
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf pci=nomsi
 
 ifeq ($(PRODUCT_IMX_CAR),true)
