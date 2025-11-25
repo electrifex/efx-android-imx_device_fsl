@@ -23,6 +23,8 @@ on early-init
 
     # Disable edge extension shader cache
     setprop debug.sf.prime_shader_cache.edge_extension_shader false
+    # Enable virtual display in HWC
+    setprop debug.sf.enable_hwc_vds 1
 
     setprop ro.hw_timeout_multiplier ${ro.boot.hw_timeout_multiplier}
 
