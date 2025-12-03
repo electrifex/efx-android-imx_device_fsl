@@ -126,8 +126,6 @@ ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
 
-# When dtbs was included into vendor_boot image, below dtbs should be aligned
-# with the same sequence in "imx_android_dt_mapping.h" in u-boot.
 # Support MIPI panel
 TARGET_BOARD_DTS_CONFIG := imx8ulp:imx8ulp-watch.dtb
 
