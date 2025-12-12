@@ -165,6 +165,8 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
     TARGET_BOARD_DTS_CONFIG += imx8mp-basler:imx8mp-evk-basler.dtb
     # Only ov5640
     TARGET_BOARD_DTS_CONFIG += imx8mp-ov5640:imx8mp-evk.dtb
+    # 8MP PCIe interface
+    TARGET_BOARD_DTS_CONFIG += imx8mp-pciewifi:imx8mp-evk-pciewifi.dtb
     # Used to support mcu image
     ifeq ($(POWERSAVE),true)
     TARGET_BOARD_DTS_CONFIG += imx8mp-rpmsg:imx8mp-evk-hifiberry-dacpp-m-rpmsg.dtb

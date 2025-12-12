@@ -467,6 +467,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     bt_vendor.conf
 
+# Bluetooth LE Audio
+PRODUCT_PRODUCT_PROPERTIES += \
+     ro.bluetooth.leaudio_offload.supported=false \
+     persist.bluetooth.leaudio_offload.disabled=false \
+     ro.bluetooth.leaudio_switcher.supported=true
+
+
 # -------@block_usb-------
 
 # Usb HAL
