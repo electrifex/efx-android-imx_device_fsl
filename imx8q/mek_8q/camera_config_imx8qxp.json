@@ -73,8 +73,8 @@
       "MinFrameDuration": "33333333",
       "MaxFrameDuration": "300000000",
       "MinFrameDurationBlob5M": "600000000",
-      "MaxWidth": "640",
-      "MaxHeight": "480",
+      "MaxWidth": "1280",
+      "MaxHeight": "720",
       "OmitFrame": [
         {
             "width": "640",
