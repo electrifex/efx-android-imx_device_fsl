@@ -102,7 +102,8 @@ PRODUCT_COPY_FILES += \
 ifneq ($(PRODUCT_IMX_CAR),true)
 # Set permission for GMS packages
 PRODUCT_COPY_FILES += \
-	  $(CONFIG_REPO_PATH)/imx8q/permissions/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp.permissions-imx.xml
+	  $(CONFIG_REPO_PATH)/imx8q/permissions/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp.permissions-imx.xml \
+	  $(CONFIG_REPO_PATH)/imx8q/permissions/privapp-permissions_system_ext-imx.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp.permissions-imx.xml
 endif
 
 PRODUCT_COPY_FILES += \
@@ -248,6 +249,10 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/security/testkey_public_rsa4096.bin:testkey_public_rsa4096.bin
 endif
 
+# GBL public key
+PRODUCT_COPY_FILES += \
+    $(CONFIG_REPO_PATH)/common/security/testkey_gbl_public_rsa4096.bin:testkey_gbl_public_rsa4096.bin
+
 # hardware backed keymaster service
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
@@ -317,6 +322,13 @@ ifneq ($(AVB_INIT_BOOT_RBINDEX),)
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := $(AVB_INIT_BOOT_RBINDEX)
 else
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := 0
+endif
+
+# GBL rollback index
+ifneq ($(GBL_RBINDEX),)
+BOARD_GBL_ROLLBACK_INDEX := $(GBL_RBINDEX)
+else
+BOARD_GBL_ROLLBACK_INDEX := 0
 endif
 
 $(call  inherit-product-if-exists, vendor/nxp-private/security/nxp_security.mk)
@@ -571,10 +583,10 @@ PRODUCT_PACKAGES += \
 
 # NXP 8997 Wifi and Bluetooth Combo Firmware
 PRODUCT_COPY_FILES += \
-    vendor/nxp/imx-firmware/nxp/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
-    vendor/nxp/imx-firmware/nxp/FwImage_8997/pcieuart8997_combo_v4.bin:vendor/firmware/pcieuart8997_combo_v4.bin \
-    vendor/nxp/imx-firmware/nxp/FwImage_AW693_PCIE/pcieuartaw693_combo_v1.bin.se:vendor/firmware/pcieuartaw693_combo_v1.bin.se \
-    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
+    vendor/nxp/imx-firmware/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
+    vendor/nxp/imx-firmware/FwImage_8997_PCIE/pcieuart8997_combo_v4.bin:vendor/firmware/pcieuart8997_combo_v4.bin \
+    vendor/nxp/imx-firmware/FwImage_AW693_PCIE/pcieuartaw693_combo_v1.bin.se:vendor/firmware/pcieuartaw693_combo_v1.bin.se \
+    vendor/nxp/imx-firmware/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
     hardware/nxp/libbt/conf/nxp/mek_8q/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory

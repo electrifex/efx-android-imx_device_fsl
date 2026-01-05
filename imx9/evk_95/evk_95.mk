@@ -73,7 +73,8 @@ PRODUCT_COPY_FILES += \
 ifneq ($(PRODUCT_IMX_CAR),true)
 # Set permission for GMS packages
 PRODUCT_COPY_FILES += \
-	  $(CONFIG_REPO_PATH)/imx9/permissions/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp.permissions-imx.xml
+	  $(CONFIG_REPO_PATH)/imx9/permissions/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp.permissions-imx.xml \
+	  $(CONFIG_REPO_PATH)/imx9/permissions/privapp-permissions_system_ext-imx.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp.permissions-imx.xml
 endif
 
 PRODUCT_COPY_FILES += \
@@ -113,6 +114,11 @@ PRODUCT_COPY_FILES += \
 
 
 # -------@block_storage-------
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.prefetch_boot.enabled=true \
+    ro.prefetch_boot.duration_s=8 \
+    ro.prefetch_boot.io_depth=4
+
 # support metadata checksum during first stage mount
 ifeq ($(TARGET_USE_VENDOR_BOOT),true)
 PRODUCT_PACKAGES += \
@@ -197,6 +203,10 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/security/testkey_public_rsa4096.bin:testkey_public_rsa4096.bin
 endif
 
+# GBL public key
+PRODUCT_COPY_FILES += \
+    $(CONFIG_REPO_PATH)/common/security/testkey_gbl_public_rsa4096.bin:testkey_gbl_public_rsa4096.bin
+
 # Keymaster HAL
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
@@ -265,6 +275,13 @@ ifneq ($(AVB_INIT_BOOT_RBINDEX),)
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := $(AVB_INIT_BOOT_RBINDEX)
 else
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := 0
+endif
+
+# GBL rollback index
+ifneq ($(GBL_RBINDEX),)
+BOARD_GBL_ROLLBACK_INDEX := $(GBL_RBINDEX)
+else
+BOARD_GBL_ROLLBACK_INDEX := 0
 endif
 
 # Secure enclave
@@ -397,7 +414,12 @@ PRODUCT_PACKAGES += \
     libcamera_ipa_sign \
     libyaml \
     libnxp_ipa_cam_helper \
+    libcam_helper \
+    libuguzzi \
+    libuguzzi_connect \
     ipa_nxp_neo \
+    neo_ipa_uguzzi \
+    neo_ipa_uguzzi_dtp \
     config.yaml \
     mx95mbcam.yaml \
     nxpneo_ipa_proxy
@@ -513,11 +535,11 @@ PRODUCT_PACKAGES += \
 
 # nxp 9098 wifi and bluetooth combo Firmware
 PRODUCT_COPY_FILES += \
-    vendor/nxp/imx-firmware/nxp/FwImage_IW416_SD/sduartiw416_combo.bin:vendor/firmware/sduartiw416_combo.bin \
-    vendor/nxp/imx-firmware/nxp/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
-    vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
-    vendor/nxp/imx-firmware/nxp/FwImage_AW693_PCIE/pcieuartaw693_combo_v1.bin.se:vendor/firmware/pcieuartaw693_combo_v1.bin.se \
-    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
+    vendor/nxp/imx-firmware/FwImage_IW416_SD/sduartiw416_combo.bin:vendor/firmware/sduartiw416_combo.bin \
+    vendor/nxp/imx-firmware/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
+    vendor/nxp/imx-firmware/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
+    vendor/nxp/imx-firmware/FwImage_AW693_PCIE/pcieuartaw693_combo_v1.bin.se:vendor/firmware/pcieuartaw693_combo_v1.bin.se \
+    vendor/nxp/imx-firmware/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
     hardware/nxp/libbt/conf/nxp/evk_95/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory

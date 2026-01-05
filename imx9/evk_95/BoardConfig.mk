@@ -47,7 +47,9 @@ TARGET_USERIMAGES_USE_EXT4 := true
 # use sparse image.
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 
+ifneq ($(TARGET_INCLUDE_DTB_TO_VENDOR_BOOT),true)
 BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx95.img
+endif
 
 BOARD_USES_METADATA_PARTITION := true
 BOARD_ROOT_EXTRA_FOLDERS += metadata
@@ -80,6 +82,11 @@ BOARD_AVB_PRODUCT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+
+# Build GBL image
+BOARD_GBL_PARTITION_SIZE := 8388608
+BOARD_GBL_KEY_PATH := device/nxp/common/security/testkey_gbl_rsa4096.pem
+BOARD_GBL_ROLLBACK_INDEX_LOCATION := 15
 
 # -------@block_treble-------
 # Vendor Interface manifest and compatibility
@@ -132,11 +139,6 @@ BOARD_BOOTCONFIG += androidboot.dpu_composition=1
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=DE
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf
-
-ifeq ($(PRODUCT_IMX_CAR),true)
-# automotive config
-#BOARD_KERNEL_CMDLINE += video=HDMI-A-2:d
-endif
 # Add KVM support
 BOARD_BOOTCONFIG += androidboot.hypervisor.vm.supported=true
 ifeq ($(BAZEL_BUILD_VENDOR_MODULES),true)
@@ -148,6 +150,8 @@ ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
 
+# When dtbs was included into vendor_boot image, below dtbs should be aligned
+# with the same sequence in "imx_android_dt_mapping.h" in u-boot.
 ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(PRODUCT_IMX_CAR_M7),true)
     TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car-adv7535.dtb
@@ -201,6 +205,7 @@ else
   TARGET_BOARD_DTS_CONFIG += imx95-15x15-mqs:imx95-15x15-evk-adv7535-mqs.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-15x15-mipi4k:imx95-15x15-evk-lt9611uxc-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-15x15-boe-panel-lvds1:imx95-15x15-evk-boe-wxga-lvds1-panel.dtb
+  TARGET_BOARD_DTS_CONFIG += imx95-15x15-frdm:imx95-15x15-frdm.dtb
 endif
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)

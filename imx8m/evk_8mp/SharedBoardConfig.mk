@@ -60,6 +60,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8962.ko \
     $(KERNEL_OUT)/drivers/mxc/hantro_vc8000e/hx280enc_vc8000e.ko \
     $(KERNEL_OUT)/drivers/mxc/hantro_845/hantrodec_845s.ko \
+    $(KERNEL_OUT)/drivers/mxc/vpu/memory_usage/memory_usage.ko \
     $(KERNEL_OUT)/drivers/mxc/hantro_v4l2/vsiv4l2.ko \
     $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
     $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
@@ -179,6 +180,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx8mp.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-mxc.ko \
+    $(KERNEL_OUT)/drivers/leds/leds-gpio.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
     $(KERNEL_OUT)/drivers/tty/serial/imx.ko \
     $(KERNEL_OUT)/drivers/watchdog/imx2_wdt.ko \
@@ -291,3 +293,8 @@ IMX_NO_PRODUCT_PARTITION := false
 
 # -------@block_infrastructure-------
 CONFIG_REPO_PATH := device/nxp
+
+ifeq ($(SUPPORT_GBL),true)
+# Enable this to include the dtb images into vendor_boot image.
+TARGET_INCLUDE_DTB_TO_VENDOR_BOOT ?= true
+endif

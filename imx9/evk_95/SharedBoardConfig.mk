@@ -18,6 +18,8 @@ BAZEL_BUILD_VENDOR_MODULES ?= false
 ifeq ($(BAZEL_BUILD_VENDOR_MODULES),false)
 #ARM GPU driver module
 BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/gpu/arm/pma/protected_memory_allocator.ko \
+    $(KERNEL_OUT)/drivers/gpu/arm/pma/protected_heap.ko \
     $(KERNEL_OUT)/drivers/gpu/arm/midgard/mali_kbase.ko
 
 ifeq ($(LOADABLE_KERNEL_MODULE),true)
@@ -169,9 +171,11 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/leds/leds-gpio.ko \
     $(KERNEL_OUT)/drivers/leds/leds-pca995x.ko \
     $(KERNEL_OUT)/drivers/leds/leds-pca963x.ko \
+    $(KERNEL_OUT)/drivers/mxc/vpu/memory_usage/memory_usage.ko \
     $(KERNEL_OUT)/drivers/mxc/vpu/wave6/wave6-vpu-ctrl.ko \
     $(KERNEL_OUT)/drivers/mxc/vpu/wave6/wave6.ko \
-    $(KERNEL_OUT)/drivers/media/i2c/ox05b1s/ox05b1s_mipi.ko \
+    $(KERNEL_OUT)/drivers/media/v4l2-core/v4l2-cci.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/ox05b1s/ox05b1s.ko \
     $(KERNEL_OUT)/drivers/media/v4l2-core/v4l2-jpeg.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-encdec.ko \
     $(KERNEL_OUT)/drivers/media/platform/nxp/neoisp/neoisp.ko \
@@ -313,3 +317,7 @@ IMX_NO_PRODUCT_PARTITION := false
 # -------@block_infrastructure-------
 CONFIG_REPO_PATH := device/nxp
 
+ifeq ($(SUPPORT_GBL),true)
+# Enable this to include the dtb images into vendor_boot image.
+TARGET_INCLUDE_DTB_TO_VENDOR_BOOT ?= true
+endif

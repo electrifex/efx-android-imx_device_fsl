@@ -5,8 +5,9 @@ include $(CONFIG_REPO_PATH)/common/build/imx-recovery.mk
 include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/media-profile.mk
 -include $(IMX_MEDIA_CODEC_XML_PATH)/mediacodec-profile/mediacodec-profile.mk
 
-ifneq ($(BOARD_OTA_BOOTLOADERIMAGE),)
-  INSTALLED_RADIOIMAGE_TARGET += $(PRODUCT_OUT)/bootloader.img
-  BOARD_PACK_RADIOIMAGES += bootloader.img
-  $(shell cp -fp $(BOARD_OTA_BOOTLOADERIMAGE) $(PRODUCT_OUT)/bootloader.img)
-endif
+BOARD_PACK_RADIOIMAGES += bootloader.img
+INSTALLED_RADIOIMAGE_TARGET  += $(PRODUCT_OUT)/bootloader.img
+
+# uncomment below to enable gbl OTA
+#BOARD_PACK_RADIOIMAGES += efisp.img
+#INSTALLED_RADIOIMAGE_TARGET  += $(PRODUCT_OUT)/efisp.img

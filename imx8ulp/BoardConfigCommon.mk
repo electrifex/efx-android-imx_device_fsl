@@ -60,7 +60,9 @@ BOARD_RAMDISK_OFFSET := 0x04280000
 ifeq ($(TARGET_USE_VENDOR_BOOT),true)
 BOARD_BOOT_HEADER_VERSION := 4
 BOARD_INIT_BOOT_HEADER_VERSION := 4
-BOARD_INCLUDE_DTB_IN_BOOTIMG := false
+ifeq ($(TARGET_INCLUDE_DTB_TO_VENDOR_BOOT),true)
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+endif
 else
 BOARD_BOOT_HEADER_VERSION := 1
 endif
@@ -101,14 +103,24 @@ PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := lz4
 ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
 AB_OTA_PARTITIONS += dtbo boot system system_dlkm system_ext vendor vendor_dlkm vbmeta
 else
-ifeq ($(TARGET_USE_VENDOR_BOOT),true)
-AB_OTA_PARTITIONS += dtbo boot init_boot vendor_boot system system_dlkm system_ext vendor vendor_dlkm vbmeta product
-else
-AB_OTA_PARTITIONS += dtbo boot system system_dlkm system_ext vendor vendor_dlkm vbmeta product
-endif
+  ifeq ($(TARGET_USE_VENDOR_BOOT),true)
+    ifeq ($(TARGET_INCLUDE_DTB_TO_VENDOR_BOOT),true)
+      AB_OTA_PARTITIONS += boot init_boot vendor_boot system system_dlkm system_ext vendor vendor_dlkm vbmeta product
+    else
+      AB_OTA_PARTITIONS += dtbo boot init_boot vendor_boot system system_dlkm system_ext vendor vendor_dlkm vbmeta product
+      endif
+  else
+    AB_OTA_PARTITIONS += dtbo boot system system_dlkm system_ext vendor vendor_dlkm vbmeta product
+  endif
 endif
 
+ifneq ($(TARGET_INCLUDE_DTB_TO_VENDOR_BOOT),true)
 BOARD_DTBOIMG_PARTITION_SIZE := 4194304
+endif
+
+# uncomment below to enable gbl OTA
+#AB_OTA_PARTITIONS += efisp
+
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
 BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608
 ifeq ($(TARGET_USE_VENDOR_BOOT),true)
@@ -142,7 +154,9 @@ TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 BOARD_USES_SYSTEM_DLKMIMAGE := true
 BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
 TARGET_COPY_OUT_SYSTEM_DLKM := system_dlkm
+ifeq ($(LOADABLE_KERNEL_MODULE),true)
 BOARD_SYSTEM_KERNEL_MODULES += $(wildcard vendor/nxp-opensource/imx-gki/system_dlkm_staging/flatten/lib/modules/*.ko)
+endif
 
 BOARD_FLASH_BLOCK_SIZE := 4096
 
