@@ -24,8 +24,8 @@
       "MaxJpegSize": "12582912",
       "MinFrameDuration": "16666666",
       "MaxFrameDuration": "300000000",
-      "exposure_ns_min": "115000",
-      "exposure_ns_max": "33218000",
+      "exposure_ns_min": "14000",
+      "exposure_ns_max": "33180000",
       "PreviewBuffers": 5,
       "LibcameraBuffers": 5,
       "OmitFrame": [
