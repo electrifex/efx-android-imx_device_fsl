@@ -154,7 +154,6 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/net/mac80211/mac80211.ko \
     $(KERNEL_OUT)/drivers/perf/fsl_imx9_ddr_perf.ko \
     $(KERNEL_OUT)/drivers/iio/adc/imx93_adc.ko \
-    $(KERNEL_OUT)/drivers/reset/gpio-reset.ko \
     $(KERNEL_OUT)/drivers/power/reset/imx-sm-reset.ko \
     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
     $(KERNEL_OUT)/drivers/spi/spidev.ko \
