@@ -421,7 +421,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libcamera-base \
     libcamera \
-    libyaml
+    libyaml \
+    cam
 
 # -------@block_camera-------
 PRODUCT_COPY_FILES += \

@@ -350,7 +350,8 @@ PRODUCT_PACKAGES += \
     config.yaml \
     os08a20.yaml \
     mx95mbcam.yaml \
-    nxpneo_ipa_proxy
+    nxpneo_ipa_proxy \
+    cam
 
 PRODUCT_PACKAGES += \
     ox03c_absolute_32bpp_dewarp_file-1920x1280.bin

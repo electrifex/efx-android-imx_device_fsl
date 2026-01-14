@@ -301,7 +301,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     libcamera-base \
     libcamera \
-    libyaml
+    libyaml \
+    cam
 
 # -------@block_camera-------
 PRODUCT_COPY_FILES += \
