@@ -365,6 +365,17 @@ PRODUCT_PACKAGES += \
     ocl_converter.cl \
     ocl_converter_ext.cl
 
+# 2d test
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PACKAGES += \
+    2d-test \
+    libg2d-opencl
+
+PRODUCT_COPY_FILES += \
+    $(IMX_PATH)/imx/opencl-2d/cl_g2d.cl:$(TARGET_COPY_OUT_VENDOR)/etc/cl_g2d.cl
+
+endif
+
 # -------@block_display-------
 
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
