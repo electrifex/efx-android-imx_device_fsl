@@ -339,6 +339,7 @@ PRODUCT_PACKAGES += \
     libcamera-base \
     libcamera \
     libcamera_ipa_sign \
+    libcamera_yaml \
     libyaml \
     libnxp_ipa_cam_helper \
     libcam_helper \
@@ -347,9 +348,6 @@ PRODUCT_PACKAGES += \
     ipa_nxp_neo \
     neo_ipa_uguzzi \
     neo_ipa_uguzzi_dtp \
-    config.yaml \
-    os08a20.yaml \
-    mx95mbcam.yaml \
     nxpneo_ipa_proxy \
     cam
 
