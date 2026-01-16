@@ -139,8 +139,9 @@ ifeq ($(PRODUCT_IMX_CAR),true)
     else
         BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
             $(BOARD_VENDOR_DISPLAY_KERNEL_MODULES)
+        IMX_ANDROID_FIRST_STAGE_MODULES += \
+            $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle-core.ko
         BOARD_VENDOR_KERNEL_MODULES += \
-            $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle-core.ko \
             $(KERNEL_OUT)/drivers/media/i2c/ap1302.ko
     endif
 
@@ -225,7 +226,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle_rpmsg_m4.ko
         else
-BOARD_VENDOR_KERNEL_MODULES += \
+IMX_ANDROID_FIRST_STAGE_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/vehicle/vehicle_dummy_hw.ko
         endif
     endif
