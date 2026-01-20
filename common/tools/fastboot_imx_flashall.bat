@@ -78,7 +78,7 @@ set imx8qxp_uboot_feature=dual trusty-dual trusty-rbidx-blob-dual mek-uuu trusty
 set imx8qm_uboot_feature=dual trusty-dual trusty-rbidx-blob-dual mek-uuu trusty-secure-unlock-dual secure-unlock md hdmi xen gbl trusty-gbl-dual
 set imx93_uboot_feature=dual trusty-dual evk-uuu gbl trusty-gbl-dual
 set imx943_uboot_feature=dual trusty-dual lpddr5 lpddr5-dual trusty-lpddr5-dual lpddr5-evk-uuu evk-uuu gbl trusty-gbl-dual
-set imx95_uboot_feature=dual trusty-dual trusty-secure-unlock-dual evk-uuu verdin trusty-verdin-dual verdin-uuu 15x15 15x15-dual trusty-15x15-dual trusty-15x15-rbidx-blob-dual 15x15-evk-uuu rpmsg gbl trusty-gbl-dual 15x15-gbl trusty-15x15-gbl-dual 15x15-frdm 15x15-frdm-uuu trusty-15x15-frdm-dual
+set imx95_uboot_feature=dual trusty-dual trusty-secure-unlock-dual evk-uuu verdin trusty-verdin-dual verdin-uuu 15x15 15x15-dual trusty-15x15-dual trusty-15x15-rbidx-blob-dual 15x15-evk-uuu rpmsg sof gbl trusty-gbl-dual 15x15-gbl trusty-15x15-gbl-dual 15x15-frdm 15x15-frdm-uuu trusty-15x15-frdm-dual
 set imx7ulp_uboot_feature=evk-uuu
 
 set imx8mm_dtb_feature=ddr4 m4 mipi-panel mipi-panel-rm67191
@@ -90,7 +90,7 @@ set imx8qm_dtb_feature=hdmi hdmi-rx mipi-panel mipi-panel-rm67191 md xen sof lvd
 set imx8ulp_dtb_feature=hdmi epdc 9x9 9x9-hdmi sof lpa lpd
 set imx93_dtb_feature=frdm-iw612 iw612 frdm-iw612-tianma-wvga
 set imx943_dtb_feature=sdwifi
-set imx95_dtb_feature=ap1302 ox03c10 mipi-lvds1 mipi-panel lvds0 lvds-dualdisp lvds-panel cs42888 rpmsg mipi4k dsi-serdes verdin verdin-ap1302 verdin-ox03c10 verdin-lt8912 verdin-10inch-panel-lvds verdin-10inch-panel-dsi verdin-mipi-panel verdin-mipi4k 15x15 15x15-ap1302 15x15-ox03c10 15x15-mipi-panel 15x15-aud-hat 15x15-mqs 15x15-mipi4k 15x15-boe-panel-lvds1 15x15-frdm 15x15-frdm-dual-os08a20 15x15-frdm-boe-panel lvds0-dual-os08a20
+set imx95_dtb_feature=ap1302 ox03c10 mipi-lvds1 mipi-panel lvds0 lvds-dualdisp lvds-panel cs42888 rpmsg sof mipi4k dsi-serdes verdin verdin-ap1302 verdin-ox03c10 verdin-lt8912 verdin-10inch-panel-lvds verdin-10inch-panel-dsi verdin-mipi-panel verdin-mipi4k 15x15 15x15-ap1302 15x15-ox03c10 15x15-mipi-panel 15x15-aud-hat 15x15-mqs 15x15-mipi4k 15x15-boe-panel-lvds1 15x15-frdm 15x15-frdm-dual-os08a20 15x15-frdm-boe-panel lvds0-dual-os08a20
 set imx7ulp_dtb_feature=evk-mipi evk mipi
 
 :: an array to collect the supported soc_names
@@ -298,7 +298,7 @@ echo                           ©À©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©à©¤©¤©¤©¤©¤©¤©
 echo                           ©¦   imx943       ©¦  dual trusty-dual lpddr5 lpddr5-dual trusty-lpddr5-dual lpddr5-evk-uuu evk-uuu gbl trusty-gbl-dual   ©¦
 echo                           ©À©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©à©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©È
 echo                           ©¦   imx95        ©¦  dual trusty-dual trusty-secure-unlock-dual evk-uuu verdin trusty-verdin-dual verdin-uuu             ©¦
-echo                           ©¦                ©¦  15x15 15x15-dual trusty-15x15-dual trusty-15x15-rbidx-blob-dual 15x15-evk-uuu rpmsg                 ©¦
+echo                           ©¦                ©¦  15x15 15x15-dual trusty-15x15-dual trusty-15x15-rbidx-blob-dual 15x15-evk-uuu rpmsg sof             ©¦
 echo                           ©¦                ©¦  gbl trusty-gbl-dual 15x15-gbl trusty-15x15-gbl-dual 15x15-frdm 15x15-frdm-uuu trusty-15x15-frdm-dual©¦
 echo                           ©À©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©à©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©È
 echo                           ©¦   imx7ulp      ©¦  evk-uuu                                                                                             ©¦
@@ -338,7 +338,7 @@ echo                           ©¦   imx95        ©¦  ap1302 ox03c10 mipi-lvds1 m
 echo                           ©¦                ©¦  verdin verdin-ap1302 verdin-ox03c10 verdin-lt8912 verdin-10inch-panel-lvds verdin-10inch-panel-dsi  ©¦
 echo                           ©¦                ©¦  verdin-mipi-panel verdin-mipi4k 15x15 15x15-ap1302 15x15-ox03c10 15x15-mipi-panel 15x15-aud-hat     ©¦
 echo                           ©¦                ©¦  15x15-mqs 15x15-mipi4k 15x15-boe-panel-lvds1 15x15-frdm 15x15-frdm-dual-os08a20 lvds0-dual-os08a20  ©¦
-echo                           ©¦                ©¦  15x15-frdm-boe-panel                                                                                ©¦
+echo                           ©¦                ©¦  15x15-frdm-boe-panel sof                                                                            ©¦
 echo                           ©À©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©à©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©È
 echo                           ©¦   imx7ulp      ©¦  evk-mipi evk mipi                                                                                   ©¦
 echo                           ©¸©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©Ø©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¼
