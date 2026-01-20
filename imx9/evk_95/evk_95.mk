@@ -315,6 +315,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_policy=2
 PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_exclusive_policy=1
 
+# Audio SOF firmware and tplg files
+PRODUCT_COPY_FILES += \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/sof/sof-tplg/sof-imx95-wm8962.tplg:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sof-tplg/sof-imx95-wm8962.tplg \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/sof/sof-gcc/sof-imx95.ri:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sof/sof-imx95.ri
+
 # -------@block_camera-------
 
 PRODUCT_COPY_FILES += \
