@@ -156,6 +156,7 @@ TARGET_BOARD_DTS_CONFIG += imx95-cs42888:imx95-19x19-evk-os08a20-isp-adv7535-cs4
 TARGET_BOARD_DTS_CONFIG += imx95-rpmsg:imx95-19x19-evk-adv7535-rpmsg.dtb
 TARGET_BOARD_DTS_CONFIG += imx95-mipi4k:imx95-19x19-evk-lt9611uxc-ap1302.dtb
 TARGET_BOARD_DTS_CONFIG += imx95-dsi-serdes:imx95-19x19-evk-dsi-serdes.dtb
+TARGET_BOARD_DTS_CONFIG += imx95-sof:imx95-19x19-evk-sof-wm8962-adv7535.dtb
 TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-os08a20-isp-adv7535.dtb
 TARGET_BOARD_DTS_CONFIG += imx95-verdin-ox03c10:imx95-19x19-verdin-ox03c10-isp-adv7535.dtb
 TARGET_BOARD_DTS_CONFIG += imx95-verdin-ap1302:imx95-19x19-verdin-adv7535-ap1302.dtb

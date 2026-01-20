@@ -197,6 +197,13 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-cs42xx8.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-cs42xx8-i2c.ko \
+    $(KERNEL_OUT)/drivers/firmware/imx/imx-dsp.ko \
+    $(KERNEL_OUT)/sound/soc/sof/snd-sof-utils.ko \
+    $(KERNEL_OUT)/sound/soc/sof/snd-sof.ko \
+    $(KERNEL_OUT)/sound/soc/sof/snd-sof-of.ko \
+    $(KERNEL_OUT)/sound/soc/sof/xtensa/snd-sof-xtensa-dsp.ko \
+    $(KERNEL_OUT)/sound/soc/sof/imx/imx-common.ko \
+    $(KERNEL_OUT)/sound/soc/sof/imx/snd-sof-imx95.ko \
     $(KERNEL_OUT)/drivers/net/phy/aquantia/aquantia.ko \
     $(KERNEL_OUT)/drivers/pps/pps_core.ko \
     $(KERNEL_OUT)/drivers/ptp/ptp.ko \
