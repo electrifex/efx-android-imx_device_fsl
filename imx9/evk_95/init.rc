@@ -308,6 +308,9 @@ on property:ro.boot.camera.layout=frdm-dual-os08a20
 on property:ro.boot.camera.layout=lvds0-dual-os08a20
     setprop ro.media.xml_variant.profiles _95-lvds0-dual-os08a20
 
+on early-init && property:ro.boot.camera.hdr=true
+    export LIBCAMERA_NXP_NEO_CONFIG_FILE /vendor/etc/configs/libcamera/nxp/neo/config_HDR.yaml
+
 on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
     start vendor.secure-enclave
 
