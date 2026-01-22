@@ -109,9 +109,6 @@ BOARD_BOOTCONFIG += androidboot.hardware=nxp androidboot.hw_timeout_multiplier=3
 # memory config
 BOARD_KERNEL_CMDLINE += cma=640M transparent_hugepage=never
 
-# display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=120
-
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=CN
 BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para_sd416.conf

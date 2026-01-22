@@ -25,9 +25,6 @@ on early-init
     setprop ro.hardware.gatekeeper ${ro.boot.keystore}
     setprop vendor.storageproxyd ${ro.boot.keystore}
 
-    # Use ro.boot.lcd_density to override ro.sf.lcd_density
-    setprop ro.sf.lcd_density ${ro.boot.lcd_density}
-
 # Skip charger_not_need trigger for charger mode
 on early-init && property:ro.boot.mode=charger
     setprop vendor.skip.charger_not_need 1
@@ -248,6 +245,13 @@ service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcbl
 service securedpu_daemon /vendor/bin/secure_dpu
    group system
    user root
+
+# When androidboot.lcd_density is set, use it to override ro.sf.lcd_density. Or set 240 as default
+on property:ro.boot.lcd_density=""
+    setprop ro.sf.lcd_density 240
+
+on property:ro.boot.lcd_density=*
+    setprop ro.sf.lcd_density ${ro.boot.lcd_density}
 
 on property:ro.boot.vendor.sysrq=1 && property:vendor.skip.charger_not_need=0
     write /proc/sys/kernel/sysrq 1

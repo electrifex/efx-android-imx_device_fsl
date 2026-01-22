@@ -120,9 +120,6 @@ BOARD_BOOTCONFIG += androidboot.console=ttymxc1 androidboot.hardware=nxp
 # memory config
 BOARD_KERNEL_CMDLINE += transparent_hugepage=never
 
-# display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=240
-
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=CN
 BOARD_KERNEL_CMDLINE +=  moal.mod_para=wifi_mod_para.conf pci=nomsi

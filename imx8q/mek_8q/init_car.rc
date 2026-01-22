@@ -17,9 +17,6 @@ on early-init
     setprop vendor.storageproxyd ${ro.boot.keystore}
     setprop vendor.all.car true
 
-    # Use ro.boot.lcd_density to override ro.sf.lcd_density
-    setprop ro.sf.lcd_density ${ro.boot.lcd_density}
-
 on init
     start watchdogd
 
@@ -220,6 +217,13 @@ service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcbl
 
 on property:sys.boot_completed=1
     start zygote_late
+
+# When androidboot.lcd_density is set, use it to override ro.sf.lcd_density. Or set 240 as default
+on property:ro.boot.lcd_density=""
+    setprop ro.sf.lcd_density 240
+
+on property:ro.boot.lcd_density=*
+    setprop ro.sf.lcd_density ${ro.boot.lcd_density}
 
 on property:ro.boot.vendor.sysrq=1
     write /proc/sys/kernel/sysrq 1
