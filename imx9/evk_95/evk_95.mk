@@ -412,6 +412,7 @@ PRODUCT_PACKAGES += \
     libcamera-base \
     libcamera \
     libcamera_ipa_sign \
+    libcamera_yaml \
     libyaml \
     libnxp_ipa_cam_helper \
     libcam_helper \
@@ -420,9 +421,8 @@ PRODUCT_PACKAGES += \
     ipa_nxp_neo \
     neo_ipa_uguzzi \
     neo_ipa_uguzzi_dtp \
-    config.yaml \
-    mx95mbcam.yaml \
-    nxpneo_ipa_proxy
+    nxpneo_ipa_proxy \
+    cam
 
 PRODUCT_PACKAGES += \
     ox03c_absolute_32bpp_dewarp_file-1920x1280.bin
@@ -435,6 +435,17 @@ PRODUCT_PACKAGES += \
     lib_imx_opencl_converter \
     ocl_converter.cl \
     ocl_converter_ext.cl
+
+# 2d test
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PACKAGES += \
+    2d-test \
+    libg2d-opencl
+
+PRODUCT_COPY_FILES += \
+    $(IMX_PATH)/imx/opencl-2d/cl_g2d.cl:$(TARGET_COPY_OUT_VENDOR)/etc/cl_g2d.cl
+
+endif
 
 ifeq ($(PRODUCT_IMX_CAR),true)
 PRODUCT_PACKAGES += \

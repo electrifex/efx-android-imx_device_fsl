@@ -31,6 +31,9 @@ PRODUCT_PACKAGES += \
     com.android.hardware.gnss \
     android.hardware.gnss-service.example
 
+PRODUCT_PACKAGES += \
+    liblargeparcelablejni
+
 # broadcast radio feature
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.broadcastradio.xml:system/etc/permissions/android.hardware.broadcastradio.xml \

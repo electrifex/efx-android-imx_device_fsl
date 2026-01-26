@@ -104,7 +104,7 @@ BOARD_KERNEL_BASE := 0x80400000
 
 # NXP default config
 BOARD_KERNEL_CMDLINE := init=/init firmware_class.path=/vendor/firmware loop.max_part=7 bootconfig
-BOARD_BOOTCONFIG += androidboot.hardware=nxp
+BOARD_BOOTCONFIG += androidboot.hardware=nxp androidboot.hw_timeout_multiplier=3
 
 # memory config
 BOARD_KERNEL_CMDLINE += cma=640M transparent_hugepage=never
@@ -126,8 +126,6 @@ ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
 
-# When dtbs was included into vendor_boot image, below dtbs should be aligned
-# with the same sequence in "imx_android_dt_mapping.h" in u-boot.
 # Support MIPI panel
 TARGET_BOARD_DTS_CONFIG := imx8ulp:imx8ulp-watch.dtb
 

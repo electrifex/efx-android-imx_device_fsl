@@ -23,6 +23,9 @@ TARGET_HAVE_VULKAN := false
 
 BOARD_GPU_DRIVERS := angle
 
+SOONG_CONFIG_IMXPLUGIN +=BOARD_GPU_DRIVERS
+SOONG_CONFIG_IMXPLUGIN_BOARD_GPU_DRIVERS = angle
+
 SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX93
 SOONG_CONFIG_IMXPLUGIN_HAVE_FSL_IMX_GPU3D = false
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = false
@@ -132,8 +135,6 @@ ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
 
-# When dtbs was included into vendor_boot image, below dtbs should be aligned
-# with the same sequence in "imx_android_dt_mapping.h" in u-boot.
 TARGET_BOARD_DTS_CONFIG += imx93:imx93-11x11-evk.dtb
 TARGET_BOARD_DTS_CONFIG += imx93-iw612:imx93-11x11-evk-iw612-otbr.dtb
 TARGET_BOARD_DTS_CONFIG += imx93-frdm-iw612:imx93-11x11-frdm-iw612-otbr.dtb

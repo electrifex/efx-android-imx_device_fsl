@@ -28,6 +28,7 @@ $(error kernel arch not supported at present)
 endif
 
 MKDTIMG := $(HOST_OUT_EXECUTABLES)/mkdtimg
+DTBMAPPINGTOOL := device/nxp/common/tools/create_dt_mapping.py
 DTB_OUT_PATH := $(KERNEL_OUT)/arch/$(TARGET_KERNEL_ARCH)/boot/dts/$(DTS_ADDITIONAL_PATH)/
 
 TARGET_DTB :=
@@ -39,14 +40,25 @@ $(foreach dts_config,$(TARGET_BOARD_DTS_CONFIG), \
 ifeq ($(TARGET_INCLUDE_DTB_TO_VENDOR_BOOT), true)
 # Include all dtb into vendor_boot partition
 
+TARGET_DTB_NAME_LIST := $(foreach dts_config,$(TARGET_BOARD_DTS_CONFIG),$(shell echo $(dts_config) | cut -d':' -f1))
+
+# Create a dtb mapping between its name and id, put the mapping to the first entry in the
+# final dtb structure.
+INSTALLED_DT_MAPPING := $(PRODUCT_OUT)/dt_mapping.bin
+$(INSTALLED_DT_MAPPING): | $(DTBMAPPINGTOOL)
+	$(hide) mkdir -p $(PRODUCT_OUT)
+	$(hide) echo "Building dtb mapping..."
+	$(hide) python3 $(DTBMAPPINGTOOL) $(TARGET_DTB_NAME_LIST) -o $(INSTALLED_DT_MAPPING)
+
 INSTALLED_DTBIMAGE_TARGET := $(PRODUCT_OUT)/dtb.img
-$(INSTALLED_DTBIMAGE_TARGET): $(KERNEL_BIN) $(TARGET_DTB) | $(MKDTIMG)
+$(INSTALLED_DTBIMAGE_TARGET): $(KERNEL_BIN) $(TARGET_DTB) $(INSTALLED_DT_MAPPING) | $(MKDTIMG)
 	$(hide) echo "Building $(KERNEL_ARCH) dtb ..."
 	$(hide) dtb_args=""; \
 	i=0; \
+	dtb_args="$$dtb_args $(INSTALLED_DT_MAPPING) --id=0x$$(printf '%08x' $$i)"; \
 	for dtb in $(TARGET_DTB); do \
-		dtb_args="$$dtb_args $$dtb --id=0x$$(printf '%08x' $$i)"; \
 		i=$$((i + 1)); \
+		dtb_args="$$dtb_args $$dtb --id=0x$$(printf '%08x' $$i)"; \
 	done; \
 	echo "Construct dtb image with args: $$dtb_args"; \
 	$(MKDTIMG) create $(INSTALLED_DTBIMAGE_TARGET) $$dtb_args

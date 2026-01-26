@@ -161,6 +161,8 @@ build_imx_uboot()
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all REV=B0 LPDDR_TYPE=lpddr4x OEI=YES || exit 1
 	elif [ `echo $2 | cut -d '-' -f2` = "rpmsg" ]; then
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 REV=B0 MSEL=1 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
+	elif [ `echo $2 | cut -d '-' -f2` = "sof" ]; then
+		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
 	else
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
 	fi

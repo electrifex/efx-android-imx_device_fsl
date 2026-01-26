@@ -31,6 +31,7 @@ else
   TARGET_BOOTLOADER_CONFIG += imx95-trusty-15x15-rbidx-blob-dual:imx95_15x15_evk_android_trusty_rbidx_blob_dual_defconfig
   TARGET_BOOTLOADER_CONFIG += imx95-trusty-15x15-frdm-dual:imx95_15x15_frdm_android_trusty_dual_defconfig
   TARGET_BOOTLOADER_CONFIG += imx95-rpmsg:imx95_19x19_evk_android_rpmsg_defconfig
+  TARGET_BOOTLOADER_CONFIG += imx95-sof:imx95_19x19_evk_android_defconfig
 endif #PRODUCT_IMX_CAR
 
 TARGET_BOOTLOADER_CONFIG += imx95-evk-uuu:imx95_19x19_evk_android_uuu_defconfig

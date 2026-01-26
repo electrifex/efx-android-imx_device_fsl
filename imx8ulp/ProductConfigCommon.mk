@@ -248,8 +248,7 @@ PRODUCT_PACKAGES += \
     libdrm_android \
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.sf.color_saturation=1.0 \
-    ro.hw_timeout_multiplier=2
+    persist.sys.sf.color_saturation=1.0
 
 # -------@block_gpu-------
 # vivante libdrm support
@@ -329,7 +328,7 @@ PRODUCT_PACKAGES += \
     hostapd_cli \
     wpa_supplicant \
     wpa_cli \
-    wpa_supplicant.conf
+    wpa_supplicant.conf.imx
 
 PRODUCT_PACKAGES += \
     mlanutl

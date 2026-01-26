@@ -302,6 +302,9 @@ on property:ro.boot.camera.layout=ap1302
 on property:ro.boot.camera.layout=mbcam
     setprop ro.media.xml_variant.profiles _95-mbcam
 
+on early-init && property:ro.boot.camera.hdr=true
+    export LIBCAMERA_NXP_NEO_CONFIG_FILE /vendor/etc/configs/libcamera/nxp/neo/config_HDR.yaml
+
 on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
     start vendor.secure-enclave
 

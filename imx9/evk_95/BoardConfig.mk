@@ -40,6 +40,8 @@ SOONG_CONFIG_IMXPLUGIN_MEDIA_PIPELINE = NEOISP
 
 BOARD_GPU_DRIVERS := mali
 
+SOONG_CONFIG_IMXPLUGIN +=BOARD_GPU_DRIVERS
+SOONG_CONFIG_IMXPLUGIN_BOARD_GPU_DRIVERS = mali
 # -------@block_storage-------
 
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -150,8 +152,6 @@ ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1
 endif
 
-# When dtbs was included into vendor_boot image, below dtbs should be aligned
-# with the same sequence in "imx_android_dt_mapping.h" in u-boot.
 ifeq ($(PRODUCT_IMX_CAR),true)
   ifeq ($(PRODUCT_IMX_CAR_M7),true)
     TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car-adv7535.dtb
@@ -189,6 +189,7 @@ else
   TARGET_BOARD_DTS_CONFIG += imx95-rpmsg:imx95-19x19-evk-adv7535-rpmsg.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-mipi4k:imx95-19x19-evk-lt9611uxc-ap1302.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-dsi-serdes:imx95-19x19-evk-dsi-serdes.dtb
+TARGET_BOARD_DTS_CONFIG += imx95-sof:imx95-19x19-evk-sof-wm8962-adv7535.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-os08a20-isp-adv7535.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-verdin-ox03c10:imx95-19x19-verdin-ox03c10-isp-adv7535.dtb
   TARGET_BOARD_DTS_CONFIG += imx95-verdin-ap1302:imx95-19x19-verdin-adv7535-ap1302.dtb
