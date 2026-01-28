@@ -306,7 +306,10 @@ on property:ro.boot.camera.layout=ap1302
 on property:ro.boot.camera.layout=mbcam
     setprop ro.media.xml_variant.profiles _95-mbcam
 
-on property:ro.boot.camera.layout=*dual-os08a20
+on property:ro.boot.camera.layout=frdm-dual-os08a20
+    setprop ro.media.xml_variant.profiles _95-dual-os08a20
+
+on property:ro.boot.camera.layout=dual-os08a20
     setprop ro.media.xml_variant.profiles _95-dual-os08a20
 
 on early-init && property:ro.boot.camera.hdr=true
