@@ -68,7 +68,7 @@ service vpu_firmware_load /vendor/bin/firmware_loader /vendor/firmware/wave633c_
     disabled
     oneshot
 
-# setenv append_bootargs androidboot.powersave.uclamp=true
+# androidboot.powersave.uclamp=true
 on init && property:vendor.skip.charger_not_need=0 && property:ro.boot.powersave.uclamp=true
     write /dev/cpuctl/foreground/cpu.uclamp.min 0
     write /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive 0
@@ -256,11 +256,11 @@ on property:ro.boot.lcd_density=*
 on property:ro.boot.vendor.sysrq=1 && property:vendor.skip.charger_not_need=0
     write /proc/sys/kernel/sysrq 1
 
-# setenv append_bootargs androidboot.usb.debugging=1
+# androidboot.usb.debugging=1
 on property:ro.boot.usb.debugging=1
     setprop persist.sys.usb.config adb
 
-# setenv append_bootargs androidboot.powersave.usb=true
+# androidboot.powersave.usb=true
 on property:ro.boot.powersave.usb=true
     # enable platform/32f10100.usb runtime_pm
     write /sys/devices/platform/soc@0/32f10100.usb/38100000.usb/power/control auto
@@ -271,14 +271,14 @@ on property:ro.boot.powersave.usb=true
     write /sys/devices/platform/soc@0/32f10108.usb/38200000.usb/xhci-hcd.1.auto/power/control auto
     write /sys/devices/platform/soc@0/32f10108.usb/38200000.usb/xhci-hcd.2.auto/power/control auto
 
-# setenv append_bootargs androidboot.lpa.enable=1
+# androidboot.lpa.enable=1
 on property:ro.boot.lpa.enable=1
     setprop vendor.audio.lpa.hold_second 20
     setprop vendor.audio.lpa.period_ms 500
     setprop vendor.audio.lpa.enable 1
     setprop audio.timecheck.timeout_duration_ms 300000
 
-# setenv append_bootargs androidboot.powersave.lpa=true
+# androidboot.powersave.lpa=true
 on property:ro.boot.lpa.enable=1 && property:ro.boot.powersave.lpa=true
     write /sys/lpa_ctrl/lpa 1
 
