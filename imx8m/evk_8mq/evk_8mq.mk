@@ -396,12 +396,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     WifiOverlay
 
-# NXP 8997 Wifi and Bluetooth Combo Firmware
+# NXP Wifi and Bluetooth Combo Firmware
 PRODUCT_COPY_FILES += \
     vendor/nxp/imx-firmware/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
-    vendor/nxp/imx-firmware/FwImage_8997_PCIE/pcieuart8997_combo_v4.bin:vendor/firmware/pcieuart8997_combo_v4.bin \
     vendor/nxp/imx-firmware/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
-    vendor/nxp/imx-firmware/FwImage_AW693_PCIE/pcieuartaw693_combo_v1.bin.se:vendor/firmware/pcieuartaw693_combo_v1.bin.se \
     vendor/nxp/imx-firmware/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
     hardware/nxp/libbt/conf/nxp/evk_8mq/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
@@ -416,7 +414,7 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth \
     android.hardware.bluetooth-service.default.nxp
 
-# NXP 8997 Bluetooth vendor config
+# NXP Bluetooth vendor config
 PRODUCT_PACKAGES += \
     bt_vendor.conf
 

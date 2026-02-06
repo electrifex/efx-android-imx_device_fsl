@@ -86,7 +86,7 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(IMX_DEVICE_PATH)/device_framewor
 
 
 # -------@block_wifi-------
-# use NXP 8987 wifi
+# use NXP wifi
 BOARD_WLAN_DEVICE            := nxp
 WPA_SUPPLICANT_VERSION       := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER  := NL80211
@@ -94,20 +94,20 @@ BOARD_HOSTAPD_DRIVER         := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB               := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 
-# NXP 8987 wifi support dual interface
+# NXP wifi support dual interface
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 
 # NXP camera driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko
 
-# NXP 8987 wifi driver module
+# NXP wifi driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
 
 # -------@block_bluetooth-------
-# NXP 8987 bluetooth
+# NXP bluetooth
 BOARD_HAVE_BLUETOOTH_NXP := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 

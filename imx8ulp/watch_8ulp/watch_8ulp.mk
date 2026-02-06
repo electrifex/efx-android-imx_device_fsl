@@ -351,7 +351,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     WifiOverlay
 
-# NXP 8987 WiFi Firmware
+# NXP WiFi Firmware
 PRODUCT_COPY_FILES += \
     vendor/nxp/imx-firmware/FwImage_IW416_SD/sduartiw416_combo.bin:vendor/firmware/sduartiw416_combo.bin \
     vendor/nxp/imx-firmware/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para_sd416.conf \
@@ -373,7 +373,7 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-impl \
     android.hardware.bluetooth@1.0-service
 
-# NXP 8987 Bluetooth vendor config
+# NXP Bluetooth vendor config
 PRODUCT_PACKAGES += \
     bt_vendor.conf
 

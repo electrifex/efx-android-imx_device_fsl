@@ -78,7 +78,7 @@ WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 # -------@block_bluetooth-------
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 
-# NXP 8997 BLUETOOTH
+# NXP BLUETOOTH
 BOARD_HAVE_BLUETOOTH_NXP := true
 
 # -------@block_kernel_bootimg-------
