@@ -98,6 +98,15 @@ function whether_in_array
     done
 }
 
+function file_exist
+{
+    if [ ! -e "$1" ] && [ ${dryrun} -eq 0 ]; then
+        echo
+        echo -e ${RED}Error: `basename $1` not found${STD}
+        exit
+    fi
+}
+
 function uuu_load_uboot
 {
     if [ ${dryrun} -eq 0 ]; then
@@ -109,20 +118,20 @@ function uuu_load_uboot
     echo uuu_version 1.5.179 > /tmp/uuu.lst${randome_part}
     tmp_files_in_uuu+=(uuu.lst${randome_part})
 
+    file_exist "${sym_link_directory}"${bootloader_used_by_uuu}
     ln -sf "${sym_link_directory}"${bootloader_used_by_uuu} /tmp/${bootloader_used_by_uuu}${randome_part}
-    echo ${sdp}: boot -f ${bootloader_used_by_uuu}${randome_part} >> /tmp/uuu.lst${randome_part}
     tmp_files_in_uuu+=(${bootloader_used_by_uuu}${randome_part})
-    # for uboot by uuu which enabled SPL
-    if [[ ${soc_name#imx8q} == ${soc_name} ]]; then
-        # for images need SDPU
-        echo SDPU: delay 1000 >> /tmp/uuu.lst${randome_part}
-        echo SDPU: write -f ${bootloader_used_by_uuu}${randome_part} -offset 0x57c00 >> /tmp/uuu.lst${randome_part}
-        echo SDPU: jump >> /tmp/uuu.lst${randome_part}
-        # for images need SDPV
-        echo SDPV: delay 1000 >> /tmp/uuu.lst${randome_part}
-        echo SDPV: write -f ${bootloader_used_by_uuu}${randome_part} -skipspl >> /tmp/uuu.lst${randome_part}
-        echo SDPV: jump >> /tmp/uuu.lst${randome_part}
-    fi
+
+    echo ${sdp}: boot -f ${bootloader_used_by_uuu}${randome_part} >> /tmp/uuu.lst${randome_part}
+    # for images need SDPU
+    echo SDPU: delay 1000 >> /tmp/uuu.lst${randome_part}
+    echo SDPU: write -f ${bootloader_used_by_uuu}${randome_part} -offset 0x57c00 >> /tmp/uuu.lst${randome_part}
+    echo SDPU: jump >> /tmp/uuu.lst${randome_part}
+    # for images need SDPV
+    echo SDPV: delay 1000 >> /tmp/uuu.lst${randome_part}
+    echo SDPV: write -f ${bootloader_used_by_uuu}${randome_part} -skipspl >> /tmp/uuu.lst${randome_part}
+    echo SDPV: jump >> /tmp/uuu.lst${randome_part}
+
     echo FB: ucmd setenv fastboot_dev mmc >> /tmp/uuu.lst${randome_part}
     echo FB: ucmd setenv mmcdev ${target_num} >> /tmp/uuu.lst${randome_part}
     echo FB: ucmd mmc dev ${target_num} >> /tmp/uuu.lst${randome_part}
@@ -156,6 +165,7 @@ function flash_mcu_sf
     # since imx7ulp use uboot for uuu from BSP team,there is no hardcoded mcu_os partition. If m4 need to be flashed, flash it here.
     if [[ ${soc_name} == imx7ulp ]]; then
         # download m4 image to dram
+        file_exist "${sym_link_directory}"${soc_name}_m4_demo.img
         ln -sf "${sym_link_directory}"${soc_name}_m4_demo.img /tmp/${soc_name}_m4_demo.img${randome_part}
         tmp_files_in_uuu+=(${soc_name}_m4_demo.img${randome_part})
         echo -e generate lines to flash ${RED}${soc_name}_m4_demo.img${STD} to the partition of ${RED}m4_os${STD}
@@ -175,6 +185,8 @@ function flash_mcu_sf
         else
             mcu_demo="sf"
         fi
+
+        file_exist "${sym_link_directory}"${soc_name}_mcu_demo_${mcu_demo}.img
         ln -sf "${sym_link_directory}"${soc_name}_mcu_demo_${mcu_demo}.img /tmp/${soc_name}_mcu_demo_${mcu_demo}.img${randome_part}
         tmp_files_in_uuu+=(${soc_name}_mcu_demo_${mcu_demo}.img${randome_part})
         echo -e generate lines to flash ${RED}${soc_name}_mcu_demo_${mcu_demo}.img${STD} to the external serial flash
@@ -210,21 +222,26 @@ function flash_partition
     elif [ "$(echo ${1} | grep "bootloader")" != "" ]; then
         img_name=${bootloader_flashed_to_board}
 
-    elif [ ${support_dtbo} -eq 1 ] && [ "$(echo ${1} | grep "boot")" != "" ]; then
+    elif [[ (${support_dtbo} -eq 1 || ${support_gbl} -eq 1) ]] && [ "$(echo ${1} | grep "boot")" != "" ]; then
             img_name="boot.img"
     elif [ "$(echo ${1} | grep "mcu_os")" != "" ]; then
         img_name="${soc_name}_mcu_demo.img"
+    elif [ ${support_gbl} -eq 1 ] && [ "$(echo ${1} | grep "vbmeta")" != "" ]; then
+        img_name="vbmeta.img"
     elif [ "$(echo ${1} | grep -E "dtbo|vbmeta|recovery")" != "" -a "${dtb_feature}" != "" ]; then
         img_name="${1%_*}-${soc_name}-${dtb_feature}.img"
     elif [ "$(echo ${1} | grep "gpt")" != "" ]; then
         img_name=${partition_file}
     elif [ "$(echo ${1} | grep "super")" != "" ]; then
         img_name=${super_file}
+    elif [ "$(echo ${1} | grep "efisp")" != "" ]; then
+        img_name="efisp.img"
     else
         img_name="${1%_*}-${soc_name}.img"
     fi
 
     echo -e generate lines to flash ${RED}${img_name}${STD} to the partition of ${RED}${1}${STD}
+    file_exist "${sym_link_directory}"${img_name}
     ln -sf "${sym_link_directory}"${img_name} /tmp/${img_name}${randome_part}
     tmp_files_in_uuu+=(${img_name}${randome_part})
     echo FB[-t 600000]: flash ${1} ${img_name}${randome_part} >> /tmp/uuu.lst${randome_part}
@@ -234,6 +251,9 @@ function flash_userpartitions
 {
     if [ ${support_dual_bootloader} -eq 1 ]; then
         flash_partition ${dual_bootloader_partition}
+    fi
+    if [ ${support_gbl} -eq 1 ]; then
+        flash_partition ${gbl_partition}
     fi
     if [ ${support_dtbo} -eq 1 ]; then
         flash_partition ${dtbo_partition}
@@ -276,6 +296,9 @@ function flash_partition_name
     dtbo_partition="dtbo"${1}
     vendor_boot_partition="vendor_boot"${1}
     init_boot_partition="init_boot"${1}
+    if [ ${support_gbl} -eq 1 ]; then
+        gbl_partition="efisp"${1}
+    fi
     if [ ${support_dual_bootloader} -eq 1 ]; then
         dual_bootloader_partition=bootloader${1}
     fi
@@ -351,10 +374,16 @@ function clean_tmp_files
     else
         for file in ${tmp_files_in_uuu[*]}
         do
+            if [ ${dryrun} -eq 1 ]; then
+                if [[ "${file}" = "uuu.lst"* ]]; then
+                    continue
+                fi
+            fi
             rm -rf /tmp/${file}
         done
     fi
 }
+trap clean_tmp_files EXIT
 
 # parse command line
 soc_name=""
@@ -376,6 +405,7 @@ support_trusty=0
 support_dynamic_partition=0
 support_vendor_boot=0
 support_init_boot=0
+support_gbl=0
 boot_partition="boot"
 recovery_partition="recovery"
 system_partition="system"
@@ -439,7 +469,6 @@ all_cmd_options=(-h -f -c -u -d -a -b -m -mo -e -D -t -y -p -i -daemon -dryrun -
 
 echo -e This script is validated with ${RED}uuu 1.5.201${STD} version, it is recommended to align with this version.
 
-
 if [ $# -eq 0 ]; then
     echo -e >&2 ${RED}please provide more information with command script options${STD}
     help
@@ -487,6 +516,9 @@ if [[ "${uboot_feature}" = *"trusty"* ]] || [[ "${uboot_feature}" = *"secure"* ]
 fi
 if [[ "${uboot_feature}" = *"dual"* ]]; then
     support_dual_bootloader=1;
+fi
+if [[ "${uboot_feature}" = *"gbl"* ]]; then
+    support_gbl=1;
 fi
 
 
@@ -592,6 +624,14 @@ grep "69 00 6e 00 69 00 74 00 5f 00 62 00 6f 00 6f 00 74 00 5f 00" /tmp/partitio
 
 grep "73 00 79 00 73 00 74 00 65 00 6d 00 5f 00 65 00 78 00 74 00" /tmp/partition-table_3.txt${randome_part} > /dev/null \
 && has_system_ext_partition=1 && echo has system_ext partition
+
+if [ ${support_gbl} -eq 1 ]; then
+    support_dtbo=0
+    if [ "${dtb_feature}" != "" ]; then
+        echo -e ${RED}No dtb_feature should be selected when the dtbs are included to vendor_boot image${STD}
+        exit 1
+    fi
+fi
 
 clean_tmp_files "0"
 
@@ -754,6 +794,12 @@ if [ "${soc_name}" = imx8mq ]; then
     fi
 fi
 
+if [ "${soc_name}" = imx8mp ]; then
+    if [[ "${uboot_feature}" = *"frdm"* ]]; then
+        bootloader_used_by_uuu=u-boot-${soc_name}-frdm-uuu.imx
+    fi
+fi
+
 if [ "${soc_name}" = imx8qxp ]; then
     if [[ "${uboot_feature}" = *"c0"* ]]; then
         bootloader_used_by_uuu=u-boot-${soc_name}-${board}-c0-uuu.imx
@@ -775,6 +821,12 @@ fi
 if [ "${soc_name}" = imx95 ]; then
     if [[ "${uboot_feature}" = *"15x15"* ]]; then
         bootloader_used_by_uuu=u-boot-${soc_name}-15x15-evk-uuu.imx
+    fi
+fi
+
+if [ "${soc_name}" = imx95 ]; then
+    if [[ "${uboot_feature}" = *"15x15-frdm"* ]]; then
+        bootloader_used_by_uuu=u-boot-${soc_name}-15x15-frdm-uuu.imx
     fi
 fi
 
@@ -800,6 +852,7 @@ if [[ "${yocto_image}" != "" ]]; then
     echo FB: ucmd setenv mmcdev ${target_num} >> /tmp/uuu.lst${randome_part}
     echo FB: ucmd mmc dev ${target_num} >> /tmp/uuu.lst${randome_part}
     echo -e generate lines to flash ${RED}`basename ${yocto_image}`${STD} to the partition of ${RED}all${STD}
+    file_exist ${yocto_image_sym_link}
     ln -sf ${yocto_image_sym_link} /tmp/`basename ${yocto_image}`${randome_part}
     echo FB[-t 600000]: flash -raw2sparse all `basename ${yocto_image}`${randome_part} >> /tmp/uuu.lst${randome_part}
     # use "mmc part" to reload part info before "fatwrite"
@@ -809,6 +862,7 @@ if [[ "${yocto_image}" != "" ]]; then
 
     # replace uboot from yocto team with the one from android team
     echo -e generate lines to flash ${RED}u-boot-imx8qm-xen-dom0.imx${STD} to the partition of ${RED}bootloader0${STD} on SD card
+    file_exist "${sym_link_directory}"u-boot-imx8qm-xen-dom0.imx
     ln -sf "${sym_link_directory}"u-boot-imx8qm-xen-dom0.imx /tmp/u-boot-imx8qm-xen-dom0.imx${randome_part}
     echo FB: flash bootloader0 u-boot-imx8qm-xen-dom0.imx${randome_part} >> /tmp/uuu.lst${randome_part}
 
@@ -816,6 +870,7 @@ if [[ "${yocto_image}" != "" ]]; then
     xen_uboot_size_hex=`echo "obase=16;${xen_uboot_size_dec}" | bc`
     # write the xen spl from android team to FAT on SD card
     echo -e generate lines to write ${RED}spl-${soc_name}-${dtb_feature}.bin${STD} to ${RED}FAT${STD}
+    file_exist "${sym_link_directory}"spl-${soc_name}-${dtb_feature}.bin
     ln -sf "${sym_link_directory}"spl-${soc_name}-${dtb_feature}.bin /tmp/spl-${soc_name}-${dtb_feature}.bin${randome_part}
     echo FB: ucmd setenv fastboot_buffer ${imx8qm_stage_base_addr} >> /tmp/uuu.lst${randome_part}
     echo FB: download -f spl-${soc_name}-${dtb_feature}.bin${randome_part} >> /tmp/uuu.lst${randome_part}
@@ -823,6 +878,7 @@ if [[ "${yocto_image}" != "" ]]; then
     xen_firmware_size_dec=`wc -c "${image_directory}"xen | cut -d ' ' -f1`
     xen_firmware_size_hex=`echo "obase=16;${xen_firmware_size_dec}" | bc`
     echo -e generate lines to replace the ${RED}xen firmware${STD} on ${RED}FAT${STD}$
+    file_exist "${sym_link_directory}"xen
     ln -sf  "${sym_link_directory}"xen /tmp/xen${randome_part}
     echo FB: ucmd setenv fastboot_buffer ${imx8qm_stage_base_addr} >> /tmp/uuu.lst${randome_part}
     echo FB: download -f xen${randome_part} >> /tmp/uuu.lst${randome_part}
@@ -860,11 +916,9 @@ fi
 
 echo "uuu script generated, start to invoke uuu with the generated uuu script"
 if [ ${daemon_mode} -eq 1 ]; then
-    uuu ${usb_paths} -d /tmp/uuu.lst${randome_part} || clean_tmp_files
-    clean_tmp_files
+    uuu ${usb_paths} -d /tmp/uuu.lst${randome_part}
 else
-    uuu ${usb_paths} /tmp/uuu.lst${randome_part} || clean_tmp_files
-    clean_tmp_files
+    uuu ${usb_paths} /tmp/uuu.lst${randome_part}
 fi
 
 exit 0

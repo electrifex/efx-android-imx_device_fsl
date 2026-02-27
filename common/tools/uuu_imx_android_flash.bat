@@ -28,6 +28,8 @@ set partition_file=partition-table.img
 set super_file=super.img
 set vendorboot_file=vendor_boot.img
 set initboot_file=init_boot.img
+set vbmeta_file=vbmeta.img
+set gbl_file=efisp.img
 set /A support_dtbo=0
 set /A support_recovery=0
 set /A support_dualslot=0
@@ -36,6 +38,7 @@ set /A support_trusty=0
 set /A support_dynamic_partition=0
 set /A support_vendor_boot=0
 set /A support_init_boot=0
+set /A support_gbl=0
 set boot_partition=boot
 set recovery_partition=recovery
 set system_partition=system
@@ -47,6 +50,7 @@ set dtbo_partition=dtbo
 set vendor_boot_partition=vendor_boot
 set init_boot_partition=init_boot
 set mcu_os_partition=mcu_os
+set gbl_partition=efisp
 set mcu_feature=
 set next_parameter=
 set super_partition=super
@@ -154,6 +158,7 @@ set uboot_feature_test=A%uboot_feature%
 if not [%uboot_feature_test:trusty=%] == [%uboot_feature_test%] set /A support_trusty=1
 if not [%uboot_feature_test:secure=%] == [%uboot_feature_test%] set /A support_trusty=1
 if not [%uboot_feature_test:dual=%] == [%uboot_feature_test%] set /A support_dual_bootloader=1
+if not [%uboot_feature_test:gbl=%] == [%uboot_feature_test%] set /A support_gbl=1
 
 :: TrustyOS can't boot from SD card
 if [%target_dev%] == [sd] (
@@ -233,6 +238,18 @@ find "v.e.n.d.o.r._.b.o.o.t." %tmp_dir%partition-table_3.txt > nul && set /A sup
 find "i.n.i.t._.b.o.o.t." %tmp_dir%partition-table_3.txt > nul && set /A support_init_boot=1 && echo init_boot is supported
 :: check whether there is system_ext in partition table
 find "s.y.s.t.e.m._.e.x.t." %tmp_dir%partition-table_3.txt > nul && set /A has_system_ext_partition=1
+
+if %support_gbl% == 1 (
+    if not [%dtb_feature%] == [] (
+        echo No dtb_feature should be selected when the dtbs are included to vendor_boot image
+        set /A error_level=1 && goto :exit
+    )
+
+    if %support_dtbo% == 1 (
+        set /A support_dtbo=1
+
+    )
+)
 
 del %tmp_dir%partition-table_1.txt
 del %tmp_dir%partition-table_2.txt
@@ -437,6 +454,12 @@ if [%soc_name%] == [imx8mq] (
     )
 )
 
+if [%soc_name%] == [imx8mp] (
+    if not [%uboot_feature_test:frdm=%] == [%uboot_feature_test%] (
+        set bootloader_used_by_uuu=u-boot-%soc_name%-frdm-uuu.imx
+    )
+)
+
 if [%soc_name%] == [imx8qxp] (
     if not [%uboot_feature_test:c0=%] == [%uboot_feature_test%] (
         set bootloader_used_by_uuu=u-boot-%soc_name%-%board%-c0-uuu.imx
@@ -458,6 +481,12 @@ if [%soc_name%] == [imx95] (
 if [%soc_name%] == [imx95] (
     if not [%uboot_feature_test:15x15=%] == [%uboot_feature_test%] (
         set bootloader_used_by_uuu=u-boot-%soc_name%-15x15-evk-uuu.imx
+    )
+)
+
+if [%soc_name%] == [imx95] (
+    if not [%uboot_feature_test:frdm=%] == [%uboot_feature_test%] (
+        set bootloader_used_by_uuu=u-boot-%soc_name%-15x15-frdm-uuu.imx
     )
 )
 
@@ -487,6 +516,10 @@ if not [%yocto_image%] == [] (
             if exist %tmp_dir%yocto_image_with_xen_support.link (
                 del %tmp_dir%yocto_image_with_xen_support.link
             )
+            call :file_exist %yocto_image% %yocto_image%
+            if errorlevel 1 (
+                set /A error_level=1 && goto :exit
+            )
             cmd /c mklink %tmp_dir%yocto_image_with_xen_support.link %yocto_image% > nul
             echo FB[-t 600000]: flash -raw2sparse all yocto_image_with_xen_support.link >> %tmp_dir%uuu.lst
             :: use "mmc part" to reload part info before "fatwrite"
@@ -497,6 +530,10 @@ if not [%yocto_image%] == [] (
             echo generate lines to flash u-boot-imx8qm-xen-dom0.imx to the partition of bootloader0 on SD card
             if exist %tmp_dir%u-boot-imx8qm-xen-dom0.imx.link (
                 del %tmp_dir%u-boot-imx8qm-xen-dom0.imx.link
+            )
+            call :file_exist %image_directory%u-boot-imx8qm-xen-dom0.imx u-boot-imx8qm-xen-dom0.imx
+            if errorlevel 1 (
+                set /A error_level=1 && goto :exit
             )
             cmd /c mklink %tmp_dir%u-boot-imx8qm-xen-dom0.imx.link %image_directory%u-boot-imx8qm-xen-dom0.imx > nul
             echo FB: flash bootloader0 u-boot-imx8qm-xen-dom0.imx.link >> %tmp_dir%uuu.lst
@@ -509,6 +546,10 @@ if not [%yocto_image%] == [] (
             if exist %tmp_dir%!xen_uboot_name!.link (
                 del %tmp_dir%!xen_uboot_name!.link
             )
+            call :file_exist %image_directory%!xen_uboot_name! !xen_uboot_name!
+            if errorlevel 1 (
+                set /A error_level=1 && goto :exit
+            )
             cmd /c mklink %tmp_dir%!xen_uboot_name!.link %image_directory%!xen_uboot_name! > nul
             echo FB: ucmd setenv fastboot_buffer %imx8qm_stage_base_addr% >> %tmp_dir%uuu.lst
             echo FB: download -f !xen_uboot_name!.link >> %tmp_dir%uuu.lst
@@ -519,6 +560,10 @@ if not [%yocto_image%] == [] (
             echo generate lines to replace xen firmware on FAT
             if exist %tmp_dir%xen.link (
                 del %tmp_dir%xen.link
+            )
+            call :file_exist %image_directory%xen xen
+            if errorlevel 1 (
+                set /A error_level=1 && goto :exit
             )
             cmd /c mklink %tmp_dir%xen.link %image_directory%xen > nul
             echo FB: ucmd setenv fastboot_buffer %imx8qm_stage_base_addr% >> %tmp_dir%uuu.lst
@@ -618,8 +663,9 @@ echo                           +-------------+----------------------------------
 echo                           ^|   imx95     ^|  evk-uuu secure-unlock verdin verdin-uuu                                                           ^|
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo:
-echo  -d dtbo_feature   flash dtbo, vbmeta and recovery image file with "dtb_feature" in their names
+echo  -d dtbo_feature   flash dtbo, vbmeta and recovery image file with "dtb_feature" in their names (legacy)
 echo                        If not set, default dtbo, vbmeta and recovery image will be flashed
+echo                        This parameter doesn't work if the dtbs are included to the vendor_boot image (with vendor_boot image but no dtbo image)
 echo                        Below table lists the legal value supported now based on the soc_name provided:
 echo                           +-------------+----------------------------------------------------------------------------------------------------+
 echo                           ^|   soc_name  ^|  legal parameter after "-d"                                                                        ^|
@@ -694,27 +740,38 @@ if [%board%] == [] (
 )
 goto :eof
 
+:file_exist
+if [%dryrun%] == [1] (
+    goto :eof
+)
+if not exist %1 (
+    echo.
+    echo Error: %2 not found
+    set /A error_level=1 && goto :exit
+)
+goto :eof
+
 :uuu_load_uboot
 echo uuu_version 1.5.179 > %tmp_dir%uuu.lst
 
 if exist %tmp_dir%%bootloader_used_by_uuu%.link (
     del %tmp_dir%%bootloader_used_by_uuu%.link
 )
-cmd /c mklink %tmp_dir%%bootloader_used_by_uuu%.link %image_directory%%bootloader_used_by_uuu% > nul
-echo %sdp%: boot -f %bootloader_used_by_uuu%.link >> %tmp_dir%uuu.lst
-
-
-:: for uboot by uuu which enabled SPL
-if [%soc_name:imx8q=%] == [%soc_name%] (
-    :: for images need SDPU
-    echo SDPU: delay 1000 >> %tmp_dir%uuu.lst
-    echo SDPU: write -f %bootloader_used_by_uuu%.link -offset 0x57c00 >> %tmp_dir%uuu.lst
-    echo SDPU: jump >> %tmp_dir%uuu.lst
-    :: for images need SDPV
-    echo SDPV: delay 1000 >> %tmp_dir%uuu.lst
-    echo SDPV: write -f %bootloader_used_by_uuu%.link -skipspl >> %tmp_dir%uuu.lst
-    echo SDPV: jump >> %tmp_dir%uuu.lst
+call :file_exist %image_directory%%bootloader_used_by_uuu% %bootloader_used_by_uuu%
+if errorlevel 1 (
+    set /A error_level=1 && goto :exit
 )
+cmd /c mklink %tmp_dir%%bootloader_used_by_uuu%.link %image_directory%%bootloader_used_by_uuu% > nul
+
+echo %sdp%: boot -f %bootloader_used_by_uuu%.link >> %tmp_dir%uuu.lst
+:: for images need SDPU
+echo SDPU: delay 1000 >> %tmp_dir%uuu.lst
+echo SDPU: write -f %bootloader_used_by_uuu%.link -offset 0x57c00 >> %tmp_dir%uuu.lst
+echo SDPU: jump >> %tmp_dir%uuu.lst
+:: for images need SDPV
+echo SDPV: delay 1000 >> %tmp_dir%uuu.lst
+echo SDPV: write -f %bootloader_used_by_uuu%.link -skipspl >> %tmp_dir%uuu.lst
+echo SDPV: jump >> %tmp_dir%uuu.lst
 
 echo FB: ucmd setenv fastboot_dev mmc >> %tmp_dir%uuu.lst
 echo FB: ucmd setenv mmcdev %target_num% >> %tmp_dir%uuu.lst
@@ -757,7 +814,10 @@ if not [%partition_to_be_flashed:bootloader_=%] == [%partition_to_be_flashed%] (
     set img_name=%uboot_proper_to_be_flashed%
     goto :start_to_flash
 )
-
+if not [%partition_to_be_flashed:efisp=%] == [%partition_to_be_flashed%] (
+    set img_name=%gbl_file%
+    goto :start_to_flash
+)
 if not [%partition_to_be_flashed:vendor_boot=%] == [%partition_to_be_flashed%] (
     set img_name=%vendorboot_file%
     goto :start_to_flash
@@ -786,6 +846,10 @@ if not [%partition_to_be_flashed:mcu_os=%] == [%partition_to_be_flashed%] (
     set img_name=%soc_name%_mcu_demo.img
     goto :start_to_flash
 )
+if not [%partition_to_be_flashed:vbmeta=%] == [%partition_to_be_flashed%] if %support_gbl% == 1 (
+    set img_name=%vbmeta_file%
+    goto :start_to_flash
+)
 if not [%partition_to_be_flashed:vbmeta=%] == [%partition_to_be_flashed%] if not [%dtb_feature%] == [] (
     set img_name=%local_str%-%soc_name%-%dtb_feature%.img
     goto :start_to_flash
@@ -807,9 +871,11 @@ if not [%partition_to_be_flashed:super=%] == [%partition_to_be_flashed%] (
     goto :start_to_flash
 )
 
-
-if %support_dtbo% == 1 (
-    if not [%partition_to_be_flashed:boot=%] == [%partition_to_be_flashed%] (
+if not [%partition_to_be_flashed:boot=%] == [%partition_to_be_flashed%] (
+    if %support_dtbo% == 1 (
+        set img_name=%bootimage%
+        goto :start_to_flash
+    ) else if %support_gbl% == 1 (
         set img_name=%bootimage%
         goto :start_to_flash
     )
@@ -825,6 +891,10 @@ echo generate lines to flash %img_name% to the partition of %1
 if exist %tmp_dir%%img_name%.link (
     del %tmp_dir%%img_name%.link
 )
+call :file_exist %image_directory%%img_name% %img_name%
+if errorlevel 1 (
+    set /A error_level=1 && goto :exit
+)
 cmd /c mklink %tmp_dir%%img_name%.link %image_directory%%img_name% > nul
 echo FB[-t 600000]: flash %1 %img_name%.link >> %tmp_dir%uuu.lst
 goto :eof
@@ -832,6 +902,7 @@ goto :eof
 
 :flash_userpartitions
 if %support_dual_bootloader% == 1 call :flash_partition %dual_bootloader_partition% || set /A error_level=1 && goto :exit
+if %support_gbl% == 1 call :flash_partition %gbl_partition% || set /A error_level=1 && goto :exit
 if %support_dtbo% == 1 call :flash_partition %dtbo_partition% || set /A error_level=1 && goto :exit
 if %support_recovery% == 1 call :flash_partition %recovery_partition% || set /A error_level=1 && goto :exit
 if %support_vendor_boot% == 1 call :flash_partition %vendor_boot_partition% || set /A error_level=1 && goto :exit
@@ -861,6 +932,7 @@ set dtbo_partition=dtbo%1
 set vendor_boot_partition=vendor_boot%1
 set init_boot_partition=init_boot%1
 if %support_dual_bootloader% == 1 set dual_bootloader_partition=bootloader%1
+if %support_gbl% == 1 set gbl_partition=efisp%1
 goto :eof
 
 :flash_mcu_sf
@@ -869,6 +941,10 @@ if [%soc_name%] == [imx7ulp] (
     :: download m4 image to sdram
     if exist %tmp_dir%%soc_name%_m4_demo.img.link (
         del %tmp_dir%%soc_name%_m4_demo.img.link
+    )
+    call :file_exist %image_directory%%soc_name%_m4_demo.img %soc_name%_m4_demo.img
+    if errorlevel 1 (
+        set /A error_level=1 && goto :exit
     )
     cmd /c mklink %tmp_dir%%soc_name%_m4_demo.img.link %image_directory%%soc_name%_m4_demo.img > nul
     echo generate lines to flash %soc_name%_m4_demo.img to the partition of m4_os
@@ -888,6 +964,10 @@ if [%soc_name%] == [imx8ulp] (
     )
     if exist %tmp_dir%%soc_name%_mcu_demo_!mcu_demo!.img.link (
         del %tmp_dir%%soc_name%_mcu_demo_!mcu_demo!.img.link
+    )
+    call :file_exist %image_directory%%soc_name%_mcu_demo_!mcu_demo!.img %soc_name%_mcu_demo_!mcu_demo!.img
+    if errorlevel 1 (
+        set /A error_level=1 && goto :exit
     )
     cmd /c mklink %tmp_dir%%soc_name%_mcu_demo_!mcu_demo!.img.link %image_directory%%soc_name%_mcu_demo_!mcu_demo!.img > nul
     echo generate lines to flash %soc_name%_mcu_demo_!mcu_demo!.img to the external serial flash

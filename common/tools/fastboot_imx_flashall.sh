@@ -105,7 +105,7 @@ function flash_partition
         img_name=${product_file}
     elif [ "$(echo ${1} | grep "bootloader")" != "" ]; then
          img_name=${bootloader_flashed_to_board}
-    elif [ ${support_dtbo} -eq 1 ] && [ "$(echo ${1} | grep "boot")" != "" ]; then
+    elif [[ (${support_dtbo} -eq 1 || ${support_gbl} -eq 1) ]] && [ "$(echo ${1} | grep "boot")" != "" ]; then
         img_name="boot.img"
     elif [ "$(echo ${1} | grep `echo ${mcu_os_partition}`)" != "" ]; then
         if [ "${soc_name}" = "imx7ulp" ]; then
@@ -113,12 +113,16 @@ function flash_partition
         else
             img_name="${soc_name}_mcu_demo.img"
         fi
+    elif [ ${support_gbl} -eq 1 ] && [ "$(echo ${1} | grep "vbmeta")" != "" ]; then
+        img_name="vbmeta.img"
     elif [ "$(echo ${1} | grep -E "dtbo|vbmeta|recovery")" != "" -a "${dtb_feature}" != "" ]; then
         img_name="${1%_*}-${soc_name}-${dtb_feature}.img"
     elif [ "$(echo ${1} | grep "gpt")" != "" ]; then
         img_name=${partition_file}
     elif [ "$(echo ${1} | grep "super")" != "" ]; then
         img_name=${super_file}
+    elif [ "$(echo ${1} | grep "efisp")" != "" ]; then
+        img_name="efisp.img"
     else
         img_name="${1%_*}-${soc_name}.img"
     fi
@@ -174,15 +178,30 @@ function flash_partition_name
 
 function flash_android
 {
-    # a precondition: the location of gpt partition and the partition for uboot or spl(in dual bootloader condition)
-    # should be the same for the u-boot just boot up the board and the on to be flashed to the board
-    flash_partition "gpt"
-
     randome_part=$RANDOM
     while [ -f /tmp/fastboot_var.log${randome_part} ]; do
         randome_part=$RANDOM
     done
     fastboot_var_file=fastboot_var.log${randome_part}
+    ${fastboot_tool} getvar all 2>/tmp/${fastboot_var_file}
+
+    # check if we need to set gbl-default-block
+    grep -q "gbl-default-block" /tmp/${fastboot_var_file} && set_gbl_default_block=1
+    rm -rf /tmp/${fastboot_var_file}
+
+    # set gbl default block or gpt partition may not be recognized.
+    if [ ${set_gbl_default_block} -eq 1 ]; then
+        ${fastboot_tool} oem gbl-set-default-block 0
+    fi
+
+    # a precondition: the location of gpt partition and the partition for uboot or spl(in dual bootloader condition)
+    # should be the same for the u-boot just boot up the board and the on to be flashed to the board
+    flash_partition "gpt"
+
+    # reset the gbl default block
+    if [ ${set_gbl_default_block} -eq 1 ]; then
+        ${fastboot_tool} oem gbl-unset-default-block
+    fi
 
     ${fastboot_tool} getvar all 2>/tmp/${fastboot_var_file}
     grep -q "bootloader_a" /tmp/${fastboot_var_file} && support_dual_bootloader=1
@@ -195,6 +214,10 @@ function flash_android
     grep -q "init_boot" /tmp/${fastboot_var_file} && support_init_boot=1
     grep -q "system_ext" /tmp/${fastboot_var_file} && has_system_ext_partition=1
     rm -rf /tmp/${fastboot_var_file}
+
+    if [ ${support_gbl} -eq 1 ] && [ ${support_dtbo} -eq 1 ]; then
+        support_dtbo=0;
+    fi
 
     # some partitions are hard-coded in uboot, flash the uboot first and then reboot to check these partitions
 
@@ -233,6 +256,19 @@ function flash_android
             dual_bootloader_partition="bootloader_b"
             flash_partition ${dual_bootloader_partition}
             ${fastboot_tool} set_active a
+        fi
+    fi
+
+    #if support_gbl feature is enabled, flash the efisp image
+    if [ ${support_gbl} -eq 1 ]; then
+        if [ "${slot}" != "" ]; then
+            gbl_partition="efisp"${slot}
+            flash_partition ${gbl_partition}
+        else
+            gbl_partition="efisp_a"
+            flash_partition ${gbl_partition}
+            gbl_partition="efisp_b"
+            flash_partition ${gbl_partition}
         fi
     fi
 
@@ -295,6 +331,8 @@ support_dual_bootloader=0
 support_dynamic_partition=0
 support_vendor_boot=0
 support_init_boot=0
+support_gbl=0
+set_gbl_default_block=0
 dual_bootloader_partition=""
 bootloader_flashed_to_board=""
 uboot_proper_to_be_flashed=""
@@ -311,6 +349,7 @@ mcu_os_partition="mcu_os"
 super_partition="super"
 vendor_boot_partition="vendor_boot"
 init_boot_partition="init_boot"
+gbl_partition="efisp"
 flash_mcu=0
 lock=0
 erase=0
@@ -378,10 +417,16 @@ if [[ "${uboot_feature}" = *"dual"* ]]; then
     support_dual_bootloader=1;
 fi
 
+# Check if gbl is supported
+if [[ "${uboot_feature}" = *"gbl"* ]]; then
+    support_gbl=1;
+fi
+
 # if directory is specified, make sure there is a slash at the end
 if [[ "${image_directory}" = "" ]]; then
     image_directory=`pwd`
 fi
+
 image_directory="${image_directory%/}/"
 
 # Android Automotive by default support dual bootloader, no "dual" in its partition table name
@@ -442,6 +487,14 @@ fi
 
 if [ ${lock} -eq 1 ]; then
     ${fastboot_tool} oem lock
+fi
+
+if [ ${support_gbl} -eq 1 ]; then
+    if [ -n "${dtb_feature}" ]; then
+        fdt_name="${soc_name}-${dtb_feature}"
+        echo -e setting ${GREEN}fdt_name${STD} to ${GREEN}${fdt_name}${STD}
+        ${fastboot_tool} oem set-fdt-name="${fdt_name}"
+    fi
 fi
 
 if [ ${support_dualslot} -eq 1 ] && [ "${slot}" != "" ]; then

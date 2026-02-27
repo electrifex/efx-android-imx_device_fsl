@@ -27,7 +27,9 @@ set partition_file=partition-table.img
 set super_file=super.img
 set vendorboot_file=vendor_boot.img
 set initboot_file=init_boot.img
+set vbmeta_file=vbmeta.img
 set /A support_dtbo=0
+set efisp_file=efisp.img
 set /A support_recovery=0
 set /A support_dualslot=0
 set /A support_mcu_os=0
@@ -35,6 +37,8 @@ set /A support_dual_bootloader=0
 set /A support_dynamic_partition=0
 set /A support_vendor_boot=0
 set /A support_init_boot=0
+set /A support_gbl=0
+set /A set_gbl_default_block=0
 set dual_bootloader_partition=
 set bootloader_flashed_to_board=
 set uboot_proper_to_be_flashed=
@@ -128,6 +132,9 @@ set uboot_feature_test=A%uboot_feature%
 :: Process of the uboot_feature parameter
 if not [%uboot_feature_test:dual=%] == [%uboot_feature_test%] set /A support_dual_bootloader=1
 
+:: Process of the uboot_feature parameter
+if not [%uboot_feature_test:gbl=%] == [%uboot_feature_test%] set /A support_gbl=1
+
 :: if directory is specified, and the last character is not backslash, add one backslash
 if not [%image_directory%] == [] if not %image_directory:~-1% == \ (
     set image_directory=%image_directory%\
@@ -195,6 +202,14 @@ if %erase% == 1 (
     %fastboot_tool% erase userdata
 )
 if %lock% == 1 %fastboot_tool% oem lock
+
+set fdt_name=%soc_name%-%dtb_feature%
+if %support_gbl% == 1 (
+    if not [%dtb_feature%] == [] (
+        echo setting fdt_name to %fdt_name%
+        %fastboot_tool% oem set-fdt-name="%fdt_name%"
+    )
+)
 
 if not [%slot%] == []  if %support_dualslot% == 1 (
     %fastboot_tool% set_active %slot:~-1%
@@ -341,6 +356,12 @@ if not [%partition_to_be_flashed:mcu_os=%] == [%partition_to_be_flashed%] (
     )
     goto :start_to_flash
 )
+
+if not [%partition_to_be_flashed:vbmeta=%] == [%partition_to_be_flashed%] if %support_gbl% == 1 (
+    set img_name=%vbmeta_file%
+    goto :start_to_flash
+)
+
 if not [%partition_to_be_flashed:vbmeta=%] == [%partition_to_be_flashed%] if not [%dtb_feature%] == [] (
     set img_name=%local_str%-%soc_name%-%dtb_feature%.img
     goto :start_to_flash
@@ -358,9 +379,11 @@ if not [%partition_to_be_flashed:bootloader=%] == [%partition_to_be_flashed%] (
     goto :start_to_flash
 )
 
-
-if %support_dtbo% == 1 (
-    if not [%partition_to_be_flashed:boot=%] == [%partition_to_be_flashed%] (
+if not [%partition_to_be_flashed:boot=%] == [%partition_to_be_flashed%] (
+    if %support_dtbo% == 1 (
+        set img_name=%bootimage%
+        goto :start_to_flash
+    ) else if %support_gbl% == 1 (
         set img_name=%bootimage%
         goto :start_to_flash
     )
@@ -373,6 +396,11 @@ if not [%partition_to_be_flashed:gpt=%] == [%partition_to_be_flashed%] (
 
 if not [%partition_to_be_flashed:super=%] == [%partition_to_be_flashed%] (
     set img_name=%super_file%
+    goto :start_to_flash
+)
+
+if not [%partition_to_be_flashed:efisp=%] == [%partition_to_be_flashed%] (
+    set img_name=%efisp_file%
     goto :start_to_flash
 )
 
@@ -414,7 +442,22 @@ set init_boot_partition=init_boot%1
 goto :eof
 
 :flash_android
+%fastboot_tool% getvar all 2> fastboot_var.log
+:: check if we need to set gbl-default-block
+find "gbl-default-block" fastboot_var.log > nul && set /A set_gbl_default_block=1
+
+:: set gbl default block or gpt partition may not be recognized.
+if %set_gbl_default_block% == 1 (
+    %fastboot_tool% oem gbl-set-default-block 0
+)
+del fastboot_var.log
+
 call :flash_partition gpt || set /A error_level=1 && goto :exit
+
+:: reset the gbl default block
+if %set_gbl_default_block% == 1 (
+    %fastboot_tool% oem gbl-unset-default-block
+)
 
 %fastboot_tool% getvar all 2> fastboot_var.log
 find "bootloader_a" fastboot_var.log > nul && set /A support_dual_bootloader=1
@@ -428,6 +471,11 @@ find "super" fastboot_var.log > nul && set /A support_dynamic_partition=1
 find "vendor_boot" fastboot_var.log > nul && set /A support_vendor_boot=1
 find "init_boot" fastboot_var.log > nul && set /A support_init_boot=1
 find "system_ext" fastboot_var.log > nul && set /A has_system_ext_partition=1
+if %support_gbl% == 1 (
+    if %support_dtbo% == 1 (
+        set /A support_dtbo=0
+    )
+)
 del fastboot_var.log
 
 :: some partitions are hard-coded in uboot, flash the uboot first and then reboot to check these partitions
@@ -461,12 +509,23 @@ if %support_dual_bootloader% == 1 (
         %fastboot_tool% set_active a
     )
 )
+
+:: if support_gbl feature is enabled, flash the efisp image
+if %support_gbl% == 1 (
+    if not [%slot%] == [] (
+        call :flash_partition efisp%slot% || set /A error_level=1 && goto :exit
+    ) else (
+        call :flash_partition efisp_a || set /A error_level=1 && goto :exit
+        call :flash_partition efisp_b || set /A error_level=1 && goto :exit
+    )
+)
+
 :: full uboot is flashed to the board and active slot is set, reboot to u-boot fastboot boot command
 :: XEN images on mek_8qm, it can't reboot
 if not [%dtb_feature%] == [xen] (
     %fastboot_tool% reboot bootloader
-    :: pause for about 5 second
-    ping localhost -n 6 >nul
+    :: pause for about 15 second
+    ping localhost -n 15 >nul
 )
 
 %fastboot_tool% getvar all 2> fastboot_var.log
