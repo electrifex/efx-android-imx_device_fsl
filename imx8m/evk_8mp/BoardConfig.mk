@@ -95,7 +95,7 @@ DEVICE_MATRIX_FILE := $(IMX_DEVICE_PATH)/compatibility_matrix.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(IMX_DEVICE_PATH)/device_framework_matrix.xml
 
 # -------@block_wifi-------
-# NXP 8997 WIFI
+# NXP WIFI
 BOARD_WLAN_DEVICE            := nxp
 WPA_SUPPLICANT_VERSION       := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER  := NL80211
@@ -105,7 +105,7 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 # -------@block_bluetooth-------
-# NXP 8997 BT
+# NXP BT
 BOARD_HAVE_BLUETOOTH_NXP := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 
@@ -119,9 +119,6 @@ BOARD_BOOTCONFIG += androidboot.console=ttymxc1 androidboot.hardware=nxp
 
 # memory config
 BOARD_KERNEL_CMDLINE += transparent_hugepage=never
-
-# display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=240
 
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=CN
@@ -165,8 +162,6 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
     TARGET_BOARD_DTS_CONFIG += imx8mp-basler:imx8mp-evk-basler.dtb
     # Only ov5640
     TARGET_BOARD_DTS_CONFIG += imx8mp-ov5640:imx8mp-evk.dtb
-    # 8MP PCIe interface
-    TARGET_BOARD_DTS_CONFIG += imx8mp-pciewifi:imx8mp-evk-pciewifi.dtb
     # Used to support mcu image
     ifeq ($(POWERSAVE),true)
     TARGET_BOARD_DTS_CONFIG += imx8mp-rpmsg:imx8mp-evk-hifiberry-dacpp-m-rpmsg.dtb

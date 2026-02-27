@@ -26,7 +26,7 @@ else
 endif
 TARGET_KERNEL_ARCH := arm64
 
-# NXP 9098 mxmdriver wifi driver module
+# NXP mxmdriver wifi driver module
 BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko

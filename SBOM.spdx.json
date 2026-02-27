@@ -2,20 +2,20 @@
   "SPDXID": "SPDXRef-DOCUMENT",
   "spdxVersion": "SPDX-2.3",
   "creationInfo": {
-    "created": "2025-11-18T05:13:10Z",
+    "created": "2026-01-26T06:35:58Z",
     "creators": [
       "Organization: NXP"
     ],
-    "licenseListVersion": "3.20"
+    "licenseListVersion": "3.26"
   },
-  "name": "android-imx_device_fsl-android-16.0.0_1.2.0",
+  "name": "android-imx_device_fsl-android-16.0.0_1.4.0",
   "dataLicense": "CC0-1.0",
   "documentNamespace": "https://nxp.com/spdx/680b884c-47b9-4c4b-ad41-82a22edbbb61",
   "packages": [
     {
       "SPDXID": "SPDXRef-package-680b884c-47b9-4c4b-ad41-82a22edbbb61",
       "name": "android-imx_device_fsl",
-      "versionInfo": "android-16.0.0_1.2.0",
+      "versionInfo": "android-16.0.0_1.4.0",
       "licenseConcluded": "(Apache-2.0)",
       "licenseDeclared": "(Apache-2.0)",
       "downloadLocation": "https://github.com/nxp-imx-android/android-imx_device_fsl",

@@ -82,7 +82,7 @@ WIFI_FEATURE_HOSTAPD_11AX := true
 # -------@block_bluetooth-------
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 
-# NXP 8997 BLUETOOTH
+# NXP BLUETOOTH
 BOARD_HAVE_BLUETOOTH_NXP := true
 
 # -------@block_kernel_bootimg-------
@@ -97,9 +97,6 @@ BOARD_BOOTCONFIG += androidboot.fbTileSupport=enable
 # memory config
 BOARD_KERNEL_CMDLINE += cma=928M@0x960M-0xfc0M transparent_hugepage=never
 BOARD_KERNEL_CMDLINE += swiotlb=768
-
-# display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=200
 
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=DE

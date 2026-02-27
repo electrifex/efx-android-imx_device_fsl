@@ -78,7 +78,7 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(IMX_DEVICE_PATH)/device_framewor
 
 
 # -------@block_wifi-------
-# 8ulp LPDDR4 board use NXP 8987 wifi
+# 8ulp LPDDR4 board use NXP wifi
 BOARD_WLAN_DEVICE            := nxp
 WPA_SUPPLICANT_VERSION       := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER  := NL80211
@@ -86,16 +86,16 @@ BOARD_HOSTAPD_DRIVER         := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB               := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 
-# NXP 8987 wifi support dual interface
+# NXP wifi support dual interface
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 
-# NXP 8987 wifi driver module
+# NXP wifi driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
 
 # -------@block_bluetooth-------
-# NXP 8987 bluetooth
+# NXP bluetooth
 BOARD_HAVE_BLUETOOTH_NXP := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 
@@ -108,9 +108,6 @@ BOARD_BOOTCONFIG += androidboot.hardware=nxp androidboot.hw_timeout_multiplier=3
 
 # memory config
 BOARD_KERNEL_CMDLINE += cma=640M transparent_hugepage=never
-
-# display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=120
 
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=CN

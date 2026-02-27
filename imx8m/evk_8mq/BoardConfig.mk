@@ -100,7 +100,7 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB    := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 
 # -------@block_bluetooth-------
-# NXP 8997 BT
+# NXP BT
 BOARD_HAVE_BLUETOOTH_NXP := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 
@@ -121,7 +121,7 @@ BOARD_KERNEL_CMDLINE += transparent_hugepage=never cma=$(CMASIZE)
 BOARD_KERNEL_CMDLINE += swiotlb=512
 
 # display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=240 androidboot.gui_resolution=1080p
+BOARD_BOOTCONFIG += androidboot.gui_resolution=1080p
 
 # wifi config
 BOARD_BOOTCONFIG += androidboot.wificountrycode=CN
@@ -129,9 +129,6 @@ BOARD_KERNEL_CMDLINE += moal.mod_para=wifi_mod_para.conf pci=nomsi
 
 # Add KVM support
 BOARD_BOOTCONFIG += androidboot.hypervisor.vm.supported=true
-
-# Simulate audio input
-BOARD_BOOTCONFIG += androidboot.audio.tinyalsa.simulate_input=true
 
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_BOOTCONFIG += androidboot.vendor.sysrq=1

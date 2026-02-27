@@ -6,13 +6,11 @@ on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
-    write /sys/block/mmcblk0/queue/iostats 0
     write /sys/block/mmcblk0/queue/scheduler kyber
     write /sys/block/mmcblk0/queue/nr_requests 256
     write /sys/block/mmcblk0/queue/read_ahead_kb 1024
 
 on property:sys.boot_completed=1
-    write /sys/block/mmcblk0/queue/iostats 1
     write /sys/block/mmcblk0/queue/scheduler mq-deadline
     write /sys/block/mmcblk0/queue/nr_requests 128
     write /sys/block/mmcblk0/queue/read_ahead_kb 128
@@ -27,9 +25,6 @@ on early-init
     setprop ro.hardware.keystore ${ro.boot.keystore}
     setprop ro.hardware.gatekeeper ${ro.boot.keystore}
     setprop vendor.storageproxyd ${ro.boot.keystore}
-
-    # Use ro.boot.lcd_density to override ro.sf.lcd_density
-    setprop ro.sf.lcd_density ${ro.boot.lcd_density}
 
 on init
     start watchdogd
@@ -271,14 +266,21 @@ service securedpu_daemon /vendor/bin/secure_dpu
    group system
    user root
 
+# When androidboot.lcd_density is set, use it to override ro.sf.lcd_density. Or set 200 as default
+on property:ro.boot.lcd_density=""
+    setprop ro.sf.lcd_density 200
+
+on property:ro.boot.lcd_density=*
+    setprop ro.sf.lcd_density ${ro.boot.lcd_density}
+
 on property:ro.boot.vendor.sysrq=1
     write /proc/sys/kernel/sysrq 1
 
-# setenv append_bootargs androidboot.usb.debugging=1
+# androidboot.usb.debugging=1
 on property:ro.boot.usb.debugging=1
     setprop persist.sys.usb.config adb
 
-# setenv append_bootargs androidboot.powersave.usb=true
+# androidboot.powersave.usb=true
 on property:ro.boot.powersave.usb=true
     # enable platform/32f10100.usb runtime_pm
     write /sys/devices/platform/soc@0/32f10100.usb/38100000.usb/power/control auto
@@ -289,14 +291,14 @@ on property:ro.boot.powersave.usb=true
     write /sys/devices/platform/soc@0/32f10108.usb/38200000.usb/xhci-hcd.1.auto/power/control auto
     write /sys/devices/platform/soc@0/32f10108.usb/38200000.usb/xhci-hcd.2.auto/power/control auto
 
-# setenv append_bootargs androidboot.lpa.enable=1
+# androidboot.lpa.enable=1
 on property:ro.boot.lpa.enable=1
     setprop vendor.audio.lpa.hold_second 20
     setprop vendor.audio.lpa.period_ms 500
     setprop vendor.audio.lpa.enable 1
     setprop audio.timecheck.timeout_duration_ms 300000
 
-# setenv append_bootargs androidboot.powersave.lpa=true
+# androidboot.powersave.lpa=true
 on property:ro.boot.lpa.enable=1 && property:ro.boot.powersave.lpa=true
     write /sys/lpa_ctrl/lpa 1
 

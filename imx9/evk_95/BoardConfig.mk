@@ -101,7 +101,7 @@ DEVICE_MATRIX_FILE := $(IMX_DEVICE_PATH)/compatibility_matrix.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(IMX_DEVICE_PATH)/device_framework_matrix.xml
 
 # -------@block_wifi-------
-# NXP 8997 WIFI
+# NXP WIFI
 BOARD_WLAN_DEVICE            := nxp
 WPA_SUPPLICANT_VERSION       := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER  := NL80211
@@ -118,7 +118,7 @@ WIFI_HAL_INTERFACE_COMBINATIONS := {{{STA}, 1}, {{AP_BRIDGED, AP, P2P}, 1}}, {{{
 WIFI_FEATURE_HOSTAPD_11AX := true
 
 # -------@block_bluetooth-------
-# NXP 8997 BT
+# NXP BT
 BOARD_HAVE_BLUETOOTH_NXP := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 
@@ -135,7 +135,6 @@ BOARD_KERNEL_CMDLINE += transparent_hugepage=never
 BOARD_KERNEL_CMDLINE += cma=$(CMASIZE)@0xBF0M-0xFF0M
 
 # display config
-BOARD_BOOTCONFIG += androidboot.lcd_density=200
 BOARD_BOOTCONFIG += androidboot.dpu_composition=1
 
 # wifi config

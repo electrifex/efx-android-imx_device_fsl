@@ -236,7 +236,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
 endif
 endif
 
-#NXP 8997 wifi driver module
+#NXP wifi driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
