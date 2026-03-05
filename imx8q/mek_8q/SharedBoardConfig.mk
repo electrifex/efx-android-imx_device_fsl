@@ -25,11 +25,14 @@ else
   KERNEL_NAME := Image
 endif
 TARGET_KERNEL_ARCH := arm64
+LOADABLE_KERNEL_MODULE ?= true
 
 # NXP mxmdriver wifi driver module
 BOARD_VENDOR_KERNEL_MODULES_TEMP += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
+
+
 
 # Support SOF modules
 BOARD_VENDOR_KERNEL_MODULES_TEMP += \
