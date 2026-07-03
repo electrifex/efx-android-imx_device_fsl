@@ -9,6 +9,14 @@ ifeq ($(TARGET_PRODUCT),evk_95_car2)
   # the env setting in mek_8q_car to make the build without M4 image
   PRODUCT_IMX_CAR_M7 := false
 endif
+# Electrifex FRDM-iMX95 automotive: same as car2 (Android Auto, no M7) but
+# targets the FRDM-iMX95 (15x15) board. PRODUCT_IMX_FRDM selects FRDM DTB /
+# bootloader in BoardConfig.mk and UbootKernelBoardConfig.mk.
+ifeq ($(TARGET_PRODUCT),efx_frdm_imx95)
+  PRODUCT_IMX_CAR := true
+  PRODUCT_IMX_CAR_M7 := false
+  PRODUCT_IMX_FRDM := true
+endif
 # -------@block_kernel_bootimg-------
 KERNEL_NAME := Image.lz4
 TARGET_KERNEL_ARCH := arm64
@@ -303,7 +311,11 @@ PRODUCT_IMX_TRUSTY := true
 # -------@block_storage-------
 ifeq ($(PRODUCT_IMX_CAR),true)
   # the bootloader image used in dual-bootloader OTA
-  BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95.img
+  ifeq ($(PRODUCT_IMX_FRDM),true)
+    BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-15x15-frdm.img
+  else
+    BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95.img
+  endif
 else
   BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
 endif
