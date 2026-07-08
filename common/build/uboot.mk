@@ -150,7 +150,9 @@ $(UBOOT_BIN): $(UBOOTENVSH) | $(UBOOT_COLLECTION) $(UBOOT_OUT)
 		else \
 			install -D $(UBOOT_OUT)/u-boot$(TARGET_DTB_POSTFIX).$(TARGET_BOOTLOADER_POSTFIX) $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx; \
 		fi; \
-		install -D $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx $(UBOOT_BIN); \
+		if [ -f $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx ]; then \
+			install -D $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx $(UBOOT_BIN); \
+		fi; \
 	done
 
 .PHONY: bootloader $(UBOOT_BIN) $(UBOOTENVSH)

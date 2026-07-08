@@ -50,7 +50,13 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 
 ifneq ($(TARGET_INCLUDE_DTB_TO_VENDOR_BOOT),true)
+# The dtbo recipe names the image after the first TARGET_BOARD_DTS_CONFIG label.
+# FRDM's first label is imx95-15x15-frdm; the 19x19 EVK/Verdin builds use imx95.
+ifeq ($(PRODUCT_IMX_FRDM),true)
+BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx95-15x15-frdm.img
+else
 BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx95.img
+endif
 endif
 
 BOARD_USES_METADATA_PARTITION := true
@@ -164,6 +170,10 @@ ifeq ($(PRODUCT_IMX_CAR),true)
     TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535:imx95-19x19-verdin-car-adv7535.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535-ap1302:imx95-19x19-verdin-car-adv7535-ap1302.dtb
   else #PRODUCT_IMX_CAR_M7
+   ifeq ($(PRODUCT_IMX_FRDM),true)
+    # FRDM-iMX95 (15x15) automotive: native FRDM display + vehicle_core
+    TARGET_BOARD_DTS_CONFIG := imx95-15x15-frdm:imx95-15x15-frdm-car2.dtb
+   else
     TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car2-adv7535.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-ap1302:imx95-19x19-evk-car2-adv7535-ap1302.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-mipi-lvds1:imx95-19x19-evk-car2-adv7535-it6263-lvds1.dtb
@@ -174,6 +184,7 @@ ifeq ($(PRODUCT_IMX_CAR),true)
     TARGET_BOARD_DTS_CONFIG += imx95-verdin:imx95-19x19-verdin-car2-lt8912-ap1302.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535:imx95-19x19-verdin-car2-adv7535.dtb
     TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535-ap1302:imx95-19x19-verdin-car2-adv7535-ap1302.dtb
+   endif #PRODUCT_IMX_FRDM
   endif #PRODUCT_IMX_CAR_M7
 else
   TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-os08a20-isp-adv7535.dtb
