@@ -32,7 +32,7 @@ PRODUCT_MAKEFILES := \
   $(LOCAL_DIR)/evk_95/evk_95.mk \
   $(LOCAL_DIR)/evk_95/evk_95_car.mk \
   $(LOCAL_DIR)/evk_95/evk_95_car2.mk \
-  $(LOCAL_DIR)/evk_95/efx_frdm_imx95.mk
+  $(LOCAL_DIR)/evk_95/frdm_imx95.mk
 
 COMMON_LUNCH_CHOICES := \
   evk_93-nxp_stable-user \
@@ -45,5 +45,5 @@ COMMON_LUNCH_CHOICES := \
   evk_95_car-nxp_stable-userdebug \
   evk_95_car2-nxp_stable-user \
   evk_95_car2-nxp_stable-userdebug \
-  efx_frdm_imx95-nxp_stable-user \
-  efx_frdm_imx95-nxp_stable-userdebug
+  frdm_imx95-nxp_stable-user \
+  frdm_imx95-nxp_stable-userdebug

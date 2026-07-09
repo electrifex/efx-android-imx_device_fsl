@@ -326,7 +326,7 @@ fi
 
 if [ -n "${build_kernel}" ] && [ ${TARGET_PRODUCT} = "evk_95" ] || \
            [ ${TARGET_PRODUCT} = "evk_95_car" ] || [ ${TARGET_PRODUCT} = "evk_95_car2" ] || \
-           [ ${TARGET_PRODUCT} = "efx_frdm_imx95" ]; then
+           [ ${TARGET_PRODUCT} = "frdm_imx95" ]; then
     make -f ${nxp_git_path}/common/build/encrypt_and_sign_firmware.mk manifest build encrypt sign clean< /dev/null || exit
 fi
 

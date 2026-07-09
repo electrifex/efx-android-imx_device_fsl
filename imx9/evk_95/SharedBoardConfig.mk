@@ -9,10 +9,10 @@ ifeq ($(TARGET_PRODUCT),evk_95_car2)
   # the env setting in mek_8q_car to make the build without M4 image
   PRODUCT_IMX_CAR_M7 := false
 endif
-# Electrifex FRDM-iMX95 automotive: same as car2 (Android Auto, no M7) but
+# FRDM-iMX95 automotive: same as car2 (Android Auto, no M7) but
 # targets the FRDM-iMX95 (15x15) board. PRODUCT_IMX_FRDM selects FRDM DTB /
 # bootloader in BoardConfig.mk and UbootKernelBoardConfig.mk.
-ifeq ($(TARGET_PRODUCT),efx_frdm_imx95)
+ifeq ($(TARGET_PRODUCT),frdm_imx95)
   PRODUCT_IMX_CAR := true
   PRODUCT_IMX_CAR_M7 := false
   PRODUCT_IMX_FRDM := true

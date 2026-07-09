@@ -171,7 +171,7 @@ ifeq ($(PRODUCT_IMX_CAR),true)
     TARGET_BOARD_DTS_CONFIG += imx95-verdin-adv7535-ap1302:imx95-19x19-verdin-car-adv7535-ap1302.dtb
   else #PRODUCT_IMX_CAR_M7
    ifeq ($(PRODUCT_IMX_FRDM),true)
-    # Electrifex FRDM-iMX95 (15x15) automotive: native FRDM display + vehicle_core
+    # FRDM-iMX95 (15x15) automotive: native FRDM display + vehicle_core
     TARGET_BOARD_DTS_CONFIG := imx95-15x15-frdm:imx95-15x15-frdm-car2.dtb
    else
     TARGET_BOARD_DTS_CONFIG := imx95:imx95-19x19-evk-car2-adv7535.dtb

@@ -9,7 +9,7 @@ ifeq ($(PRODUCT_IMX_CAR),true)
     TARGET_BOOTLOADER_CONFIG += imx95-verdin:imx95_19x19_verdin_androidauto_trusty_defconfig
   else
    ifeq ($(PRODUCT_IMX_FRDM),true)
-    # Electrifex FRDM-iMX95 (15x15) automotive bootloader (Android Auto, no M7)
+    # FRDM-iMX95 (15x15) automotive bootloader (Android Auto, no M7)
     TARGET_BOOTLOADER_CONFIG := imx95-15x15-frdm:imx95_15x15_frdm_androidauto2_trusty_defconfig
     # UUU flashing loader (RAM helper; non-auto uuu defconfig is fine here)
     TARGET_BOOTLOADER_CONFIG += imx95-15x15-frdm-uuu:imx95_15x15_frdm_android_uuu_defconfig
