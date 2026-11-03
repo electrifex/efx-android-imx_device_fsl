@@ -162,11 +162,18 @@ ifneq ($(filter TRUE true 1,$(IMX_OTA_POSTINSTALL)),)
     POSTINSTALL_OPTIONAL_vendor=false
 
   ifeq ($(PRODUCT_IMX_CAR),true)
+    # FRDM-iMX95 builds its bootloader under the imx95-15x15-frdm label; the
+    # 19x19 EVK/Verdin car build uses the plain imx95 label.
+    ifeq ($(PRODUCT_IMX_FRDM),true)
+      IMX_CAR_BL_TAG := imx95-15x15-frdm
+    else
+      IMX_CAR_BL_TAG := imx95
+    endif
     PRODUCT_COPY_FILES += \
-      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx95.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
+      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-$(IMX_CAR_BL_TAG).bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
     ifeq ($(BUILD_ENCRYPTED_BOOT),true)
       PRODUCT_COPY_FILES += \
-        $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx95.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
+        $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-$(IMX_CAR_BL_TAG).img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
     endif
   else
     PRODUCT_COPY_FILES += \

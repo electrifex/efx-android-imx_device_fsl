@@ -8,9 +8,16 @@ ifeq ($(PRODUCT_IMX_CAR),true)
     TARGET_BOOTLOADER_CONFIG += imx95-secure-unlock:imx95_19x19_evk_androidauto_trusty_secure_unlock_defconfig
     TARGET_BOOTLOADER_CONFIG += imx95-verdin:imx95_19x19_verdin_androidauto_trusty_defconfig
   else
+   ifeq ($(PRODUCT_IMX_FRDM),true)
+    # FRDM-iMX95 (15x15) automotive bootloader (Android Auto, no M7)
+    TARGET_BOOTLOADER_CONFIG := imx95-15x15-frdm:imx95_15x15_frdm_androidauto2_trusty_defconfig
+    # UUU flashing loader (RAM helper; non-auto uuu defconfig is fine here)
+    TARGET_BOOTLOADER_CONFIG += imx95-15x15-frdm-uuu:imx95_15x15_frdm_android_uuu_defconfig
+   else
     TARGET_BOOTLOADER_CONFIG := imx95:imx95_19x19_evk_androidauto2_trusty_defconfig
     TARGET_BOOTLOADER_CONFIG += imx95-secure-unlock:imx95_19x19_evk_androidauto2_trusty_secure_unlock_defconfig
     TARGET_BOOTLOADER_CONFIG += imx95-verdin:imx95_19x19_verdin_androidauto2_trusty_defconfig
+   endif #PRODUCT_IMX_FRDM
   endif #PRODUCT_IMX_CAR_M7
 else
   # u-boot target
@@ -34,8 +41,12 @@ else
   TARGET_BOOTLOADER_CONFIG += imx95-sof:imx95_19x19_evk_android_defconfig
 endif #PRODUCT_IMX_CAR
 
+# The FRDM-iMX95 product is LPDDR4x-only; don't pull in the 19x19 EVK/Verdin
+# (LPDDR5) UUU loaders, which would need an LPDDR5 OEI we don't build for FRDM.
+ifneq ($(PRODUCT_IMX_FRDM),true)
 TARGET_BOOTLOADER_CONFIG += imx95-evk-uuu:imx95_19x19_evk_android_uuu_defconfig
 TARGET_BOOTLOADER_CONFIG += imx95-verdin-uuu:imx95_19x19_verdin_android_uuu_defconfig
+endif
 ifneq ($(PRODUCT_IMX_CAR),true)
   TARGET_BOOTLOADER_CONFIG += imx95-15x15-evk-uuu:imx95_15x15_evk_android_uuu_defconfig
   TARGET_BOOTLOADER_CONFIG += imx95-15x15-frdm-uuu:imx95_15x15_frdm_android_uuu_defconfig
@@ -70,3 +81,4 @@ BOOTLOADER_RBINDEX ?= 0
 
 export PRODUCT_IMX_CAR
 export PRODUCT_IMX_CAR_M7
+export PRODUCT_IMX_FRDM

@@ -66,7 +66,10 @@ fi
 	echo Building imx-oei ...
 	make -C ${BOARD_OEI_PATH} really-clean
 	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 r=b0 oei=tcm d=1 all 1>/dev/null || exit 1
-if echo "$2" | grep -q "15x15" ; then
+# build_pre_image is called without the per-config name, so $2 is empty here.
+# The FRDM-iMX95 (15x15) board is LPDDR4x, so build that DDR OEI when this is
+# the FRDM product (PRODUCT_IMX_FRDM is exported from UbootKernelBoardConfig.mk).
+if echo "$2" | grep -q "15x15" || [ "${PRODUCT_IMX_FRDM}" = "true" ] ; then
 	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp4x-15 r=b0 oei=ddr d=1 all 1>/dev/null || exit 1
 else
 	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 r=b0 oei=ddr d=1 all 1>/dev/null || exit 1
